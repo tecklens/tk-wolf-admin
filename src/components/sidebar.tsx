@@ -1,10 +1,19 @@
-import { useEffect, useState } from 'react'
-import { IconChevronsLeft, IconMenu2, IconX } from '@tabler/icons-react'
-import { Layout, LayoutHeader } from './custom/layout'
-import { Button } from './custom/button'
+import {useEffect, useState} from 'react'
+import {IconChevronsLeft, IconMenu2, IconX} from '@tabler/icons-react'
+import {Layout, LayoutHeader} from './custom/layout'
+import {Button} from './custom/button'
 import Nav from './nav'
-import { cn } from '@/lib/utils'
-import { sidelinks } from '@/data/sidelinks'
+import {cn} from '@/lib/utils'
+import {sidelinks} from '@/data/sidelinks'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select.tsx";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
   isCollapsed: boolean
@@ -12,10 +21,10 @@ interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 export default function Sidebar2({
-  className,
-  isCollapsed,
-  setIsCollapsed,
-}: SidebarProps) {
+                                   className,
+                                   isCollapsed,
+                                   setIsCollapsed,
+                                 }: SidebarProps) {
   const [navOpened, setNavOpened] = useState(false)
 
   /* Make body not scrollable when navBar is opened */
@@ -92,10 +101,26 @@ export default function Sidebar2({
             aria-expanded={navOpened}
             onClick={() => setNavOpened((prev) => !prev)}
           >
-            {navOpened ? <IconX /> : <IconMenu2 />}
+            {navOpened ? <IconX/> : <IconMenu2/>}
           </Button>
         </LayoutHeader>
-
+        {isCollapsed ? null : <div className={'p-3'}>
+          <Select>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select a fruit"/>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Fruits</SelectLabel>
+                <SelectItem value="apple">Apple</SelectItem>
+                <SelectItem value="banana">Banana</SelectItem>
+                <SelectItem value="blueberry">Blueberry</SelectItem>
+                <SelectItem value="grapes">Grapes</SelectItem>
+                <SelectItem value="pineapple">Pineapple</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>}
         {/* Navigation links */}
         <Nav
           id='sidebar-menu'

@@ -17,7 +17,7 @@ import {
   IconSettings,
   IconTruck,
   IconUserShield,
-  IconUsers,
+  IconUsers, IconHierarchy2,
 } from '@tabler/icons-react'
 
 export interface NavLink {
@@ -37,6 +37,12 @@ export const sidelinks: SideLink[] = [
     label: '',
     href: '/',
     icon: <IconLayoutDashboard size={18} />,
+  },
+  {
+    title: 'Workflows',
+    label: '5',
+    href: '/workflow',
+    icon: <IconHierarchy2 size={18} />,
   },
   {
     title: 'Tasks',

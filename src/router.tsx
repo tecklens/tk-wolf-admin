@@ -46,6 +46,13 @@ const router = createBrowserRouter([
         }),
       },
       {
+        path: 'workflow',
+        index: true,
+        lazy: async () => ({
+          Component: (await import('./pages/workflow')).default,
+        }),
+      },
+      {
         path: 'tasks',
         lazy: async () => ({
           Component: (await import('./pages/tasks')).default,
@@ -117,6 +124,14 @@ const router = createBrowserRouter([
             path: 'error-example',
             lazy: async () => ({
               Component: (await import('./pages/settings/error-example'))
+                .default,
+            }),
+            errorElement: <GeneralError className='h-[50svh]' minimal />,
+          },
+          {
+            path: 'keys',
+            lazy: async () => ({
+              Component: (await import('./pages/settings/access-keys'))
                 .default,
             }),
             errorElement: <GeneralError className='h-[50svh]' minimal />,

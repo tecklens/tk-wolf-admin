@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom'
 import {
   IconBrowserCheck,
-  IconExclamationCircle,
+  IconExclamationCircle, IconKey,
   IconNotification,
   IconPalette,
   IconTool,
@@ -81,5 +81,10 @@ const sidebarNavItems = [
     title: 'Error Example',
     icon: <IconExclamationCircle size={18} />,
     href: '/settings/error-example',
+  },
+  {
+    title: 'Personal access keys',
+    icon: <IconKey size={18} />,
+    href: '/settings/keys',
   },
 ]
