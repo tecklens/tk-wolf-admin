@@ -107,3 +107,9 @@
     @apply min-h-svh w-full bg-background text-foreground;
   }
 }
+
+.handle-inner {
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 4px !important;
+}

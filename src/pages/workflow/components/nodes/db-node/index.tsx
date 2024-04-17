@@ -1,24 +1,29 @@
-import {memo} from 'react'
-import {Handle, Position} from 'reactflow'
-import {IconHeart} from "@tabler/icons-react";
+import { memo } from 'react'
+import { Handle, Position, useNodeId } from 'reactflow'
+import { IconDatabase } from '@tabler/icons-react'
+import { useTheme } from '@/components/theme-provider.tsx'
+import { useNode } from '@/lib/store/nodeStore.ts'
 
 // eslint-disable-next-line react-refresh/only-export-components
 export default memo(({ isConnectable }: {isConnectable: boolean }) => {
+  const { theme } = useTheme()
+  const nodeId = useNodeId()
+  const node = useNode(state => state.node)
 
   return (
     <>
       <div
-        className={`bg-white rounded-xl shadow-xl w-[200px] hover:shadow-cyan-300/50 hover:shadow-lg border-2`}
+        className={`${theme === 'dark' ? 'bg-[#13131a]' : 'bg-white'}
+        ${node?.id === nodeId ? 'border-[#66d9e8]' : ''} 
+        rounded-xl shadow-xl w-[250px] hover:shadow-cyan-300/50 hover:shadow-lg border-2`}
       >
         <div className={'flex flex-col space-y-2 divide-y'}>
-          <div className={'inline-flex space-x-2 items-center px-3 pt-2'}>
-            <IconHeart size={28}/>
-            <IconHeart size={28}/>
+          <div className={'inline-flex space-x-2 items-center px-4 pt-2'}>
+            <IconDatabase size={28} color={'rgb(22 163 74)'}/>
+            <div className={'font-bold text-lg'}>Save database</div>
           </div>
           <div className={'flex flex-col px-4 py-2 text-xs'}>
-            <div className={'inline-flex space-x-2'}>
-              <span>URL:</span>
-            </div>
+            Save database
           </div>
         </div>
         <Handle

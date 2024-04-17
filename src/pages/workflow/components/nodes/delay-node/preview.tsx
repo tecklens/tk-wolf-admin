@@ -1,0 +1,23 @@
+import { useTheme } from '@/components/theme-provider.tsx'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip.tsx'
+import { IconBrandDaysCounter } from '@tabler/icons-react'
+
+export default function DelayNodePreview({onDragStart}: any) {
+  const { theme } = useTheme()
+
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+    <div
+      className={`dndnode p-3 border border-dashed ${theme === 'dark' ? 'border-slate-600' : 'border-slate-300'} rounded-lg cursor-pointer`}
+         onDragStart={(event) => onDragStart(event, 'delay')} draggable
+    >
+      <IconBrandDaysCounter size={30} color={'#525266'} />
+    </div>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>Delay</p>
+      </TooltipContent>
+    </Tooltip>
+  )
+}
