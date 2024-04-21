@@ -24,6 +24,7 @@ import ConnectionLine from '@/pages/workflow/components/connection-line.tsx'
 import WebhookNode from '@/pages/workflow/components/nodes/webhook-node'
 import NodeInfo from '@/pages/workflow/components/node-info'
 import { useNode } from '@/lib/store/nodeStore.ts'
+import StarterNode from '@/pages/workflow/components/nodes/starter-node'
 
 const nodeTypes = {
   db: DbNode,
@@ -31,7 +32,8 @@ const nodeTypes = {
   sms: SmsNode,
   delay: DelayNode,
   trigger: TriggerNode,
-  webhook: WebhookNode
+  webhook: WebhookNode,
+  starter: StarterNode,
 }
 const minimapStyle = {
   height: 120,

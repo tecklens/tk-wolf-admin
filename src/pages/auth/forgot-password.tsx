@@ -20,7 +20,7 @@ export default function ForgotPassword() {
             >
               <path d='M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3' />
             </svg>
-            <h1 className='text-xl font-medium'>Shadcn Admin</h1>
+            <h1 className='text-xl font-medium'>Tecklens Wolf</h1>
           </div>
           <Card className='p-6'>
             <div className='mb-2 flex flex-col space-y-2 text-left'>
@@ -28,7 +28,7 @@ export default function ForgotPassword() {
                 Forgot Password
               </h1>
               <p className='text-sm text-muted-foreground'>
-                Enter your registered email and <br /> we will send you a link
+                Enter your registered email and <br /> we will send you a OTP
                 to reset your password.
               </p>
             </div>

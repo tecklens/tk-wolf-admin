@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Handle, Position, useNodeId } from 'reactflow'
-import { IconBolt } from '@tabler/icons-react'
+import { IconBolt, IconBug, IconCheck } from '@tabler/icons-react'
 import { useTheme } from '@/components/theme-provider.tsx'
 import { useNode } from '@/lib/store/nodeStore.ts'
 
@@ -14,12 +14,16 @@ export default memo(({ isConnectable }: {isConnectable: boolean }) => {
     <>
       <div
         className={`${theme === 'dark' ? 'bg-[#13131a]' : 'bg-white'}
-        ${node?.id === nodeId ? 'border-[#66d9e8]' : ''}  
+        ${node?.id === nodeId ? 'border-[#66d9e8]' : 'border-red-500'}  
         rounded-xl shadow-xl w-[250px] hover:shadow-cyan-300/50 hover:shadow-lg border-2`}
       >
+        <div
+          className={'p-1 rounded-full bg-red-600 flex items-center justify-center absolute -right-2.5 -top-2.5'}>
+          <IconBug size={18} />
+        </div>
         <div className={'flex flex-col space-y-2 divide-y'}>
           <div className={'inline-flex space-x-2 items-center px-4 pt-2'}>
-            <IconBolt color={'rgb(244,75,14)'} size={28}/>
+            <IconBolt color={'rgb(244,75,14)'} size={28} />
             <div className={'font-bold text-lg'}>Workflow trigger</div>
           </div>
           <div className={'flex flex-col px-4 py-2 text-xs'}>

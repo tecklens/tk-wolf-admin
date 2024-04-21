@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Handle, Position, useNodeId } from 'reactflow'
-import { IconDatabase } from '@tabler/icons-react'
+import { IconCheck, IconDatabase } from '@tabler/icons-react'
 import { useTheme } from '@/components/theme-provider.tsx'
 import { useNode } from '@/lib/store/nodeStore.ts'
 
@@ -17,6 +17,9 @@ export default memo(({ isConnectable }: {isConnectable: boolean }) => {
         ${node?.id === nodeId ? 'border-[#66d9e8]' : ''} 
         rounded-xl shadow-xl w-[250px] hover:shadow-cyan-300/50 hover:shadow-lg border-2`}
       >
+        <div className={'p-1 rounded-full bg-[rgb(22,163,74)] flex items-center justify-center absolute -right-2.5 -top-2.5'}>
+          <IconCheck size={18}/>
+        </div>
         <div className={'flex flex-col space-y-2 divide-y'}>
           <div className={'inline-flex space-x-2 items-center px-4 pt-2'}>
             <IconDatabase size={28} color={'rgb(22 163 74)'}/>

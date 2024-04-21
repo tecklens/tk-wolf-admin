@@ -6,6 +6,7 @@ import DelayNodePreview from '@/pages/workflow/components/nodes/delay-node/previ
 import EmailNodePreview from '@/pages/workflow/components/nodes/email-node/preview.tsx'
 import SmsNodePreview from '@/pages/workflow/components/nodes/sms-node/preview.tsx'
 import WebhookNodePreview from '@/pages/workflow/components/nodes/webhook-node/preview.tsx'
+import StarterNodePreview from '@/pages/workflow/components/nodes/starter-node/preview.tsx'
 
 export default function WorkflowSidebar() {
   const { theme } = useTheme()
@@ -16,6 +17,7 @@ export default function WorkflowSidebar() {
 
   return (
     <div className={`absolute right-0 ${theme === 'dark' ? 'bg-[#1e1e26]' : 'bg-white'} rounded-l flex flex-col space-y-4 p-2`}>
+      <StarterNodePreview onDragStart={onDragStart} />
       <DbNodePreview onDragStart={onDragStart} />
       <TriggerNodePreview onDragStart={onDragStart} />
       <DelayNodePreview onDragStart={onDragStart} />

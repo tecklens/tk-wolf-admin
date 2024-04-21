@@ -1,24 +1,39 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { IUser } from '@/types/IUser.ts'
+import { RepositoryFactory } from '@/api/repository-factory.ts'
 
-const initState = {
-  userId: null,
-  username: '',
-  user: null,
+const AuthRepository = RepositoryFactory.get('auth')
+const UserRepository = RepositoryFactory.get('user')
+
+export interface IUserStore {
+  user: IUser | null;
+  signIn: (user: IUser) => Promise<boolean>
+  updateUser: (user: IUser) => void
 }
 
-export const useUser = create(
-  persist((set) => ({
+const initState = {
+  user: null
+}
+
+export const useUser = create<IUserStore>(
+  (set) => ({
     ...initState,
-    update: (user: any) => set(() => {
-      return { user, username: user?.username, userId: user?.id }
-    }),
-    reset: () => {
-      set(initState)
-    }
-  }),
-    {
-      name: 'user'
-    }
-  )
+    signIn: async (user: IUser) => {
+      const rsp = await AuthRepository.login(user)
+
+      if (rsp.data?.token) {
+
+        localStorage.setItem('token', rsp.data?.token)
+        const info = await UserRepository.getInfoMe()
+        set({
+          user: info.data,
+        })
+
+        return true
+      }
+
+      return false
+    },
+    updateUser: (user:IUser) => set({user})
+  })
 )
