@@ -1,3 +1,13 @@
+import {Node as NodeFlow, Edge as EdgeFlow} from 'reactflow'
+
+export interface INode extends NodeFlow {
+  _id: string;
+}
+
+export type IEdge = EdgeFlow & {
+  _id: string;
+}
+
 export interface IWorkflowEntity {
   _id: string;
 
@@ -21,4 +31,7 @@ export interface IWorkflowEntity {
   createdAt: string;
 
   updatedAt?: string;
+
+  nodes: INode[];
+  edges: IEdge[];
 }

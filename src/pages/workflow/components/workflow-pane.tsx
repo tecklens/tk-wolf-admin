@@ -5,6 +5,7 @@ import {
   getIncomers,
   getOutgoers,
   MiniMap,
+  Node,
   ReactFlow,
   ReactFlowInstance,
   ReactFlowProvider,
@@ -18,17 +19,20 @@ import SmsNode from '@/pages/workflow/components/nodes/sms-node'
 import DelayNode from '@/pages/workflow/components/nodes/delay-node'
 import TriggerNode from '@/pages/workflow/components/nodes/trigger-node'
 import WorkflowSidebar from '@/pages/workflow/components/sidebar.tsx'
-import {DragEvent, type MouseEvent as ReactMouseEvent, useCallback, useEffect, useRef, useState} from 'react'
+import { DragEvent, type MouseEvent as ReactMouseEvent, useCallback, useEffect, useRef, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import ConnectionLine from '@/pages/workflow/components/connection-line.tsx'
 import WebhookNode from '@/pages/workflow/components/nodes/webhook-node'
 import NodeInfo from '@/pages/workflow/components/node-info'
 import { useNode } from '@/lib/store/nodeStore.ts'
 import StarterNode from '@/pages/workflow/components/nodes/starter-node'
-import {RepositoryFactory} from "@/api/repository-factory.ts";
-import {AxiosResponse, HttpStatusCode} from "axios";
-import {useToast} from "@/components/ui/use-toast.ts";
-import {useWorkflow} from "@/lib/store/workflowStore.ts";
+import { RepositoryFactory } from '@/api/repository-factory.ts'
+import { AxiosResponse, HttpStatusCode } from 'axios'
+import { useToast } from '@/components/ui/use-toast.ts'
+import { useWorkflow } from '@/lib/store/workflowStore.ts'
+import { throttle } from 'lodash'
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet'
+
 const WorkflowRepository = RepositoryFactory.get('wf')
 
 const nodeTypes = {
@@ -45,30 +49,31 @@ const minimapStyle = {
 }
 
 
-let id = 10;
-const getId = () => `dndnode_${id++}`;
+let id = 10
+const getId = () => `dndnode_${id++}`
 
 export default function WorkflowPane() {
-  const {workflow, select} = useWorkflow()
+  const { workflow, select } = useWorkflow()
   const selectNode = useNode((state) => state.select)
-  const {toast} = useToast()
+  const nodeSelected = useNode((state) => state.node)
+  const { toast } = useToast()
   const reactFlowWrapper = useRef(null)
   const [
     nodes,
     setNodes,
     onNodesChange,
-  ] = useNodesState([
-  ])
+  ] = useNodesState([])
   const [
     edges,
     setEdges,
     onEdgesChange,
   ] = useEdgesState([])
+  const [openDrawer, setOpenDrawer] = useState(false);
 
-  const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
+  const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null)
 
   const onConnect = useCallback(
-    (params: any) => {
+    async (params: any) => {
       const es = {
         ...params,
         id: uuidv4(),
@@ -82,25 +87,38 @@ export default function WorkflowPane() {
         className: 'stroke-cyan-500',
       }
 
-      setEdges((eds) => addEdge(es, eds))
+      const addEdgeRsp: AxiosResponse = await WorkflowRepository.addEdge({
+        ...es,
+        workflowId: workflow?._id,
+      })
+
+      if (addEdgeRsp.status === HttpStatusCode.Created) {
+        setEdges((eds) => addEdge(es, eds))
+      } else {
+        toast({
+          title: 'Add Edge to Flow',
+          description: 'Add Edge Failed',
+          variant: 'destructive',
+        })
+      }
     },
     [],
-  );
+  )
 
   const onDragOver = useCallback((event: DragEvent) => {
-    event.preventDefault();
-    event.dataTransfer.dropEffect = 'move';
-  }, []);
+    event.preventDefault()
+    event.dataTransfer.dropEffect = 'move'
+  }, [])
 
   const onDrop = useCallback(
     async (event: DragEvent) => {
-      event.preventDefault();
+      event.preventDefault()
 
-      const type = event.dataTransfer.getData('application/reactflow');
+      const type = event.dataTransfer.getData('application/reactflow')
 
       // check if the dropped element is valid
       if (typeof type === 'undefined' || !type) {
-        return;
+        return
       }
 
       // reactFlowInstance.project was renamed to reactFlowInstance.screenToFlowPosition
@@ -109,28 +127,28 @@ export default function WorkflowPane() {
       const position = reactFlowInstance?.screenToFlowPosition({
         x: event.clientX,
         y: event.clientY,
-      });
+      })
       const addNodeRsp: AxiosResponse = await WorkflowRepository.addNode({
         id: getId(),
         type,
         position,
         data: { label: `${type} node` },
-        workflowId: '66277f5f41fd45f988ebe0dc',
-      });
+        workflowId: workflow?._id,
+      })
 
       if (addNodeRsp.status === HttpStatusCode.Created) {
-        setNodes((nds) => nds.concat(addNodeRsp.data));
+        setNodes((nds) => nds.concat(addNodeRsp.data))
       } else {
         toast({
           title: 'Add Node to Flow',
           description: 'Add Node Failed',
-          variant: 'destructive'
+          variant: 'destructive',
         })
       }
 
     },
     [reactFlowInstance],
-  );
+  )
 
   const getAllIncomers: any = (node: any) => {
     return getIncomers(node, nodes, edges).reduce(
@@ -228,39 +246,76 @@ export default function WorkflowPane() {
     }
   }
 
+  const onNodeDragStop = throttle(async (_event: ReactMouseEvent, node: Node, _nodes: Node[]) => {
+    const rsp = await WorkflowRepository.updateNode([node])
+
+    if (rsp.status !== HttpStatusCode.Ok) {
+
+      toast({
+        title: 'An error occurred',
+        variant: 'destructive',
+      })
+    }
+  }, 100)
+
+  useEffect(() => {
+    if (workflow) {
+      console.log(workflow.nodes)
+      setNodes(() => workflow.nodes?.map(e => ({
+        ...e,
+        id: e._id,
+      })))
+      setEdges(() => workflow.edges?.map(e => ({
+        ...e,
+        id: e._id,
+      })))
+    }
+  }, [workflow])
+
   return (
-      <ReactFlowProvider>
-        <div className="flex-1 h-full flex flex-col" ref={reactFlowWrapper}>
-          <ReactFlow
-            nodes={nodes}
-            edges={edges}
-            connectionLineComponent={ConnectionLine}
-            className={'flex-1'}
-            zoomOnScroll={false}
-            zoomOnDoubleClick={false}
-            zoomOnPinch={false}
-            nodeTypes={nodeTypes}
-            onNodeClick={onNodeClick}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-            onConnect={onConnect}
-            onInit={(e) => setReactFlowInstance(e)}
-            onDrop={onDrop}
-            onDragOver={onDragOver}
-            onPaneClick={() => {
-              selectNode(undefined)
-              resetNodeStyles()
-            }}
-            onNodeMouseEnter={(_event, node) => highlightPath(node, true)}
-            onNodeMouseLeave={() => resetNodeStyles()}
-          >
-            <MiniMap style={minimapStyle} zoomable pannable />
-            <Controls />
-            <Background color="#aaa" gap={16} />
-          </ReactFlow>
-        </div>
-        <WorkflowSidebar />
-        <NodeInfo />
-      </ReactFlowProvider>
+    <ReactFlowProvider>
+      <div className="flex-1 h-full flex flex-col" ref={reactFlowWrapper}>
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          connectionLineComponent={ConnectionLine}
+          className={'flex-1'}
+          zoomOnScroll={false}
+          zoomOnDoubleClick={false}
+          zoomOnPinch={false}
+          nodeTypes={nodeTypes}
+          onNodeClick={onNodeClick}
+          onNodesChange={onNodesChange}
+          onNodeDragStop={onNodeDragStop}
+          onEdgesChange={onEdgesChange}
+          onConnect={onConnect}
+          onInit={(e) => setReactFlowInstance(e)}
+          onDrop={onDrop}
+          onDragOver={onDragOver}
+          onPaneClick={() => {
+            selectNode(undefined)
+            resetNodeStyles()
+          }}
+          onNodeMouseEnter={(_event, node) => highlightPath(node, true)}
+          onNodeMouseLeave={() => resetNodeStyles()}
+        >
+          <MiniMap style={minimapStyle} zoomable pannable />
+          <Controls />
+          <Background color="#aaa" gap={16} />
+        </ReactFlow>
+      </div>
+      <WorkflowSidebar />
+      <Sheet open={nodeSelected} onOpenChange={() => selectNode(null)}>
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle>Edit profile</SheetTitle>
+            <SheetDescription>
+              Make changes to your profile here. Click save when you're done.
+            </SheetDescription>
+          </SheetHeader>
+          <NodeInfo />
+        </SheetContent>
+      </Sheet>
+    </ReactFlowProvider>
   )
 }
