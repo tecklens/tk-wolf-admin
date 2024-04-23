@@ -37,17 +37,16 @@ instance.interceptors.response.use(
     const serverCallUrl = originalRequest.url
     const status = error.response.status
 
-    if (
-      (status === 401 || status === 403) &&
-      !originalRequest._retry &&
-      !serverCallUrl?.includes('/login')
-    ) {
+    if (status === 401 && !window.location.href?.includes('/sign-in')){
       // let token = await refreshAccessToken()
       // setAccessToken(token)
 
       // originalRequest._retry = true
       // originalRequest.headers.authorization = `Bearer ${token}`
 
-      return axios(originalRequest)
+      // return axios(originalRequest)
+      // return errorHandler(error)
+      window.location.href = '/sign-in'
+      // return errorHandler(error)
     } else return errorHandler(error)
   })

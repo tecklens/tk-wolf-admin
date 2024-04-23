@@ -1,28 +1,10 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
-import axios from 'axios'
-import { useUser } from '@/lib/store/userStore.ts'
-import { RepositoryFactory } from '@/api/repository-factory.ts'
-
-const UserRepository = RepositoryFactory.get('user')
+import React, {createContext, useContext, useEffect, useMemo} from 'react'
+import {useUser} from '@/lib/store/userStore.ts'
 
 const AuthContext = createContext<any>(null);
 
 const AuthProvider = ({ children }: {children: React.ReactNode}) => {
-  const [token, setToken] = useState(localStorage.getItem("token"));
-  const updateUser = useUser(state => state.updateUser)
-  useEffect(() => {
-    if (token) {
-      axios.defaults.headers.common["Authorization"] = "Bearer " + token;
-      (async function() {
-        const info = await UserRepository.getInfoMe()
-        updateUser(info.data)
-      })()
-      localStorage.setItem('token',token);
-    } else {
-      delete axios.defaults.headers.common["Authorization"];
-      localStorage.removeItem('token')
-    }
-  }, [token]);
+  const {token, setToken} = useUser(state => state);
 
   const contextValue = useMemo(
     () => ({

@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {IconChevronsLeft, IconMenu2, IconX} from '@tabler/icons-react'
 import {Layout, LayoutHeader} from './custom/layout'
 import {Button} from './custom/button'
@@ -14,6 +14,10 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select.tsx";
+import {Tabs, TabsList, TabsTrigger} from "@/components/ui/tabs.tsx";
+import {useEnv} from "@/lib/store/envStore.ts";
+import {useUser} from "@/lib/store/userStore.ts";
+import {throttle} from "lodash";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
   isCollapsed: boolean
@@ -26,6 +30,8 @@ export default function Sidebar2({
                                    setIsCollapsed,
                                  }: SidebarProps) {
   const [navOpened, setNavOpened] = useState(false)
+  const {env, envs} = useEnv(state => state)
+  const switchEnv = useUser(state => state.switchEnv)
 
   /* Make body not scrollable when navBar is opened */
   useEffect(() => {
@@ -35,6 +41,8 @@ export default function Sidebar2({
       document.body.classList.remove('overflow-hidden')
     }
   }, [navOpened])
+
+  const switchEnvThrottle = throttle(switchEnv, 100)
 
   return (
     <aside
@@ -129,6 +137,15 @@ export default function Sidebar2({
           isCollapsed={isCollapsed}
           links={sidelinks}
         />
+        <Tabs value={env?._id} onValueChange={switchEnvThrottle} className={`w-full p-2 ${isCollapsed || !envs ? 'hidden': 'block'}`}>
+          <TabsList className="grid w-full grid-cols-2">
+            {envs ? envs.map(e => (
+                <TabsTrigger value={e._id}>{e.name} MODE</TabsTrigger>
+              ))
+              : null
+            }
+          </TabsList>
+        </Tabs>
 
         {/* Scrollbar width toggle button */}
         <Button

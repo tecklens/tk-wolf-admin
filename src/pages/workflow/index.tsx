@@ -1,53 +1,83 @@
-import { Button } from '@/components/custom/button'
-import { Search } from '@/components/search'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import {Button} from '@/components/custom/button'
+import {Search} from '@/components/search'
 import ThemeSwitch from '@/components/theme-switch'
-import { TopNav } from '@/components/top-nav'
-import { UserNav } from '@/components/user-nav'
-import { Layout, LayoutBody, LayoutHeader } from '@/components/custom/layout'
+import {TopNav} from '@/components/top-nav'
+import {UserNav} from '@/components/user-nav'
+import {Layout, LayoutBody, LayoutHeader} from '@/components/custom/layout'
 import WorkflowPane from '@/pages/workflow/components/workflow-pane.tsx'
-import { IconDownload } from '@tabler/icons-react'
+import {IconCheck, IconDownload, IconPlus, IconSettings} from '@tabler/icons-react'
+import {Link} from "react-router-dom";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select.tsx";
+import React, {useEffect, useState} from "react";
+import {Input} from "@/components/ui/input.tsx";
+import {throttle} from "lodash";
+import {useWorkflow} from "@/lib/store/workflowStore.ts";
 
-export default function Dashboard() {
+export default function Workflow() {
+  const [wName, setWName] = useState('Workflow')
+
+  const {fetchWf, workflows, workflow} = useWorkflow()
+
+  const saveName = throttle(() => {
+
+  }, 100)
+
+  useEffect(() => {
+    fetchWf()
+  }, [])
+
   return (
     <Layout className={'min-h-[100vh]'}>
       {/* ===== Top Heading ===== */}
       <LayoutHeader>
-        <TopNav links={topNav} />
+        <TopNav links={topNav}/>
         <div className="ml-auto flex items-center space-x-4">
-          <Search />
-          <ThemeSwitch />
-          <UserNav />
+          <Search/>
+          <ThemeSwitch/>
+          <UserNav/>
         </div>
       </LayoutHeader>
 
       {/* ===== Main ===== */}
       <LayoutBody className="space-y-4 h-full flex flex-col">
         <div className="flex items-center justify-between space-y-2">
-          <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
-            Workflows
-          </h1>
+          <div className={'inline-flex space-x-2 items-center'}>
+            <Input className={''} value={workflow?.name} onChange={e => setWName(e.target.value)}></Input>
+            <Button variant={'default'} disabled={wName === 'Workflow'} onClick={saveName}><IconCheck className={'mr-1'}
+                                                                                                      size={18}/>Lưu</Button>
+            <Button variant="default" className={'aspect-square'} size={'icon'}><IconSettings /></Button>
+          </div>
           <div className="flex items-center space-x-2">
-            <Button variant={'outline'}><IconDownload className={'mr-1'} size={18} />Export</Button>
+            <Select>
+              <SelectTrigger className="min-w-[250px]">
+                <SelectValue placeholder="Select a fruit"/>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Fruits</SelectLabel>
+                  {workflows?.map(e => (
+                    <SelectItem value={e._id}>{e.name}</SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            <Link to={'/workflow?create=true'}>
+              <Button variant={'secondary'}><IconPlus className={'mr-1'} size={18}/>Add Workflow</Button>
+            </Link>
+            <Button variant={'outline'}><IconDownload className={'mr-1'} size={18}/>Export</Button>
           </div>
         </div>
-        <Tabs
-          orientation="vertical"
-          defaultValue="overview"
-          className="space-y-4 flex-1 flex flex-col"
-        >
-          <div className="w-full pb-2">
-            <TabsList>
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="analytics">Analytics</TabsTrigger>
-              <TabsTrigger value="reports">Reports</TabsTrigger>
-              <TabsTrigger value="notifications">Notifications</TabsTrigger>
-            </TabsList>
-          </div>
-          <TabsContent value="overview" className="space-y-4 h-full flex flex-col flex-1 relative">
-            <WorkflowPane />
-          </TabsContent>
-        </Tabs>
+        <div className="space-y-4 h-full flex flex-col flex-1 relative">
+          <WorkflowPane/>
+        </div>
       </LayoutBody>
     </Layout>
   )

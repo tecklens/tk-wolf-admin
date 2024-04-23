@@ -23,6 +23,8 @@ import { Textarea } from '@/components/ui/textarea'
 import { toast } from '@/components/ui/use-toast'
 import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
+import {useUser} from "@/lib/store/userStore.ts";
+import {useEffect} from "react";
 
 const profileFormSchema = z.object({
   username: z
@@ -53,13 +55,11 @@ type ProfileFormValues = z.infer<typeof profileFormSchema>
 // This can come from your database or API.
 const defaultValues: Partial<ProfileFormValues> = {
   bio: 'I own a computer.',
-  urls: [
-    { value: 'https://shadcn.com' },
-    { value: 'http://twitter.com/shadcn' },
-  ],
+  urls: [],
 }
 
 export default function ProfileForm() {
+  const {user, sendUpdate} = useUser(state => state)
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues,
@@ -72,15 +72,23 @@ export default function ProfileForm() {
   })
 
   function onSubmit(data: ProfileFormValues) {
-    toast({
-      title: 'You submitted the following values:',
-      description: (
-        <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
-          <code className='text-white'>{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
+    sendUpdate({
+      bio: data.bio,
+      urls: data.urls?.map(e => e.value),
+      email: data.email,
+      username: data.username
     })
   }
+
+  useEffect(() => {
+    if (user) {
+      console.log(user?.email)
+      form.setValue('email', user?.email ?? '')
+      form.setValue('username', user?.username ?? '')
+      form.setValue('bio', user?.bio ?? '')
+      form.setValue('urls', user?.urls?.map(e => ({value: e})))
+    }
+  }, [user, form])
 
   return (
     <Form {...form}>
@@ -92,7 +100,7 @@ export default function ProfileForm() {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input placeholder='shadcn' {...field} />
+                <Input placeholder='Wolf' {...field} />
               </FormControl>
               <FormDescription>
                 This is your public display name. It can be your real name or a
@@ -108,22 +116,9 @@ export default function ProfileForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Email</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder='Select a verified email to display' />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value='m@example.com'>m@example.com</SelectItem>
-                  <SelectItem value='m@google.com'>m@google.com</SelectItem>
-                  <SelectItem value='m@support.com'>m@support.com</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormDescription>
-                You can manage verified email addresses in your{' '}
-                <Link to='/examples/forms'>email settings</Link>.
-              </FormDescription>
+              <FormControl>
+                <Input placeholder='abc@gmail.com' {...field} disabled/>
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}

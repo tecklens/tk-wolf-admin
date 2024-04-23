@@ -1,5 +1,5 @@
 import BaseRepository from '@/api/base-repository.ts'
-import { IUser } from '@/types/IUser.ts'
+import {UserInterface} from "@/types/user.interface.ts";
 
 const resource = '/user'
 
@@ -7,5 +7,8 @@ export default {
 
   getInfoMe() {
     return BaseRepository.get(`${resource}/me`)
+  },
+  update(payload: UserInterface) {
+    return BaseRepository.put(`${resource}/profile`, payload)
   }
 }

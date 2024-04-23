@@ -1,10 +1,10 @@
 import BaseRepository from '@/api/base-repository.ts'
-import { IUser } from '@/types/IUser.ts'
+import { UserInterface } from '@/types/user.interface.ts'
 
 const resource = '/auth'
 
 export default {
-  login(payload: IUser) {
+  login(payload: UserInterface) {
     return BaseRepository.post(`${resource}/login`, payload)
   },
   githubAuth() {
@@ -15,10 +15,13 @@ export default {
       params: payload,
     })
   },
-  sendEmailResetPass(payload: IUser) {
+  sendEmailResetPass(payload: UserInterface) {
     return BaseRepository.post(`${resource}/reset/request`, payload)
   },
-  forgotPass(payload: IUser) {
+  forgotPass(payload: UserInterface) {
     return BaseRepository.post(`${resource}/reset`, payload)
+  },
+  switchEnv(envId: string) {
+    return BaseRepository.post(`${resource}/environments/${envId}/switch`)
   }
 }

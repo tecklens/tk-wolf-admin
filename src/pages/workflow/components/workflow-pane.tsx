@@ -18,13 +18,18 @@ import SmsNode from '@/pages/workflow/components/nodes/sms-node'
 import DelayNode from '@/pages/workflow/components/nodes/delay-node'
 import TriggerNode from '@/pages/workflow/components/nodes/trigger-node'
 import WorkflowSidebar from '@/pages/workflow/components/sidebar.tsx'
-import { DragEvent, type MouseEvent as ReactMouseEvent, useCallback, useRef, useState } from 'react'
+import {DragEvent, type MouseEvent as ReactMouseEvent, useCallback, useEffect, useRef, useState} from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import ConnectionLine from '@/pages/workflow/components/connection-line.tsx'
 import WebhookNode from '@/pages/workflow/components/nodes/webhook-node'
 import NodeInfo from '@/pages/workflow/components/node-info'
 import { useNode } from '@/lib/store/nodeStore.ts'
 import StarterNode from '@/pages/workflow/components/nodes/starter-node'
+import {RepositoryFactory} from "@/api/repository-factory.ts";
+import {AxiosResponse, HttpStatusCode} from "axios";
+import {useToast} from "@/components/ui/use-toast.ts";
+import {useWorkflow} from "@/lib/store/workflowStore.ts";
+const WorkflowRepository = RepositoryFactory.get('wf')
 
 const nodeTypes = {
   db: DbNode,
@@ -44,15 +49,15 @@ let id = 10;
 const getId = () => `dndnode_${id++}`;
 
 export default function WorkflowPane() {
+  const {workflow, select} = useWorkflow()
   const selectNode = useNode((state) => state.select)
+  const {toast} = useToast()
   const reactFlowWrapper = useRef(null)
   const [
     nodes,
     setNodes,
     onNodesChange,
   ] = useNodesState([
-    { id: '1', position: { x: 0, y: 0 }, data: { label: '1' }, type: 'db' },
-    { id: '2', position: { x: 0, y: 100 }, data: { label: '2' }, type: 'db' },
   ])
   const [
     edges,
@@ -88,7 +93,7 @@ export default function WorkflowPane() {
   }, []);
 
   const onDrop = useCallback(
-    (event: DragEvent) => {
+    async (event: DragEvent) => {
       event.preventDefault();
 
       const type = event.dataTransfer.getData('application/reactflow');
@@ -105,14 +110,24 @@ export default function WorkflowPane() {
         x: event.clientX,
         y: event.clientY,
       });
-      const newNode: any = {
+      const addNodeRsp: AxiosResponse = await WorkflowRepository.addNode({
         id: getId(),
         type,
         position,
         data: { label: `${type} node` },
-      };
+        workflowId: '66277f5f41fd45f988ebe0dc',
+      });
 
-      setNodes((nds) => nds.concat(newNode));
+      if (addNodeRsp.status === HttpStatusCode.Created) {
+        setNodes((nds) => nds.concat(addNodeRsp.data));
+      } else {
+        toast({
+          title: 'Add Node to Flow',
+          description: 'Add Node Failed',
+          variant: 'destructive'
+        })
+      }
+
     },
     [reactFlowInstance],
   );
