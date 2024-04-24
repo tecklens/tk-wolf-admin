@@ -8,8 +8,7 @@ export default function WebhookNodeInfo() {
   const { node } = useNode((state) => state)
   return (
     <div
-      className={`${node ? 'flex' : 'hidden'} info-container shadow-lg border rounded-lg ${theme === 'dark' ? 'bg-[#13131a]' : 'bg-white'} p-2 
-      space-x-3`}>
+      className={`flex flex-col space-y-3 my-3`}>
       <div className="grid w-full max-w-sm items-center gap-1.5">
         <Label htmlFor="api-key">
           <div>Title</div>

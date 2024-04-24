@@ -17,7 +17,7 @@ export default function StarterNodePreview({onDragStart}: any) {
         </div>
       </TooltipTrigger>
       <TooltipContent>
-        <p>Database</p>
+        <p>Starter</p>
       </TooltipContent>
     </Tooltip>
   )

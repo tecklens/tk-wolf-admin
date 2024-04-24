@@ -5,6 +5,7 @@ import { Layout, LayoutBody, LayoutHeader } from '@/components/custom/layout'
 import { DataTable } from './components/data-table'
 import { columns } from './components/columns'
 import { tasks } from './data/tasks'
+import {WsStatus} from "@/components/ws-status.tsx";
 
 export default function Tasks() {
   return (
@@ -13,6 +14,7 @@ export default function Tasks() {
       <LayoutHeader>
         <Search />
         <div className='ml-auto flex items-center space-x-4'>
+          <WsStatus />
           <ThemeSwitch />
           <UserNav />
         </div>

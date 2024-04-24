@@ -14,7 +14,7 @@ export default {
   detail(wfId: string) {
     return BaseRepository.get(`${resource}/detail/${wfId}`)
   },
-  addNode(payload: NodeFlow<any, any>) {
+  addNode(payload: NodeFlow<any, any> & {workflowId: string}) {
     return BaseRepository.post(`${resource}/node`, payload)
   },
   updateNode(payload: NodeFlow<any, any>[]) {
@@ -28,5 +28,8 @@ export default {
   },
   setActive(payload: {workflowId: string}) {
     return BaseRepository.put(`${resource}/active`, payload)
+  },
+  delEle(payload: any) {
+    return BaseRepository.post(`${resource}/node/del`, payload)
   },
 }

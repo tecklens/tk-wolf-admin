@@ -1,5 +1,5 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/custom/button'
+import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar'
+import {Button} from '@/components/custom/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,11 +10,13 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { throttle } from 'lodash'
-import { useUser } from '@/lib/store/userStore.ts'
+import {throttle} from 'lodash'
+import {useUser} from '@/lib/store/userStore.ts'
+import {memo} from "react";
 
-export function UserNav() {
+export const UserNav = memo(() => {
   const user = useUser(state => state.user)
+
   const logout = throttle(() => {
     localStorage.clear()
 
@@ -64,4 +66,4 @@ export function UserNav() {
       </DropdownMenuContent>
     </DropdownMenu>
   )
-}
+})

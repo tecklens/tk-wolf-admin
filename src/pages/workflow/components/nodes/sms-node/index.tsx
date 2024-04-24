@@ -3,15 +3,19 @@ import { Handle, Position, useNodeId } from 'reactflow'
 import { IconMessages } from '@tabler/icons-react'
 import { useTheme } from '@/components/theme-provider.tsx'
 import { useNode } from '@/lib/store/nodeStore.ts'
+import {WrapperNode} from "@/pages/workflow/components/WrapperNode.tsx";
+import {NodeDataInterface} from "@/types/node-data.interface.ts";
 
 // eslint-disable-next-line react-refresh/only-export-components
-export default memo(({ isConnectable }: {isConnectable: boolean }) => {
+export default memo(({data, isConnectable}: { isConnectable: boolean, data: NodeDataInterface }) => {
   const { theme } = useTheme()
   const nodeId = useNodeId()
   const node = useNode(state => state.node)
 
   return (
-    <>
+    <WrapperNode onDelete={() => {
+      data.onDelete(nodeId ?? '')
+    }}>
       <div
         className={`${theme === 'dark' ? 'bg-[#13131a]' : 'bg-white'}
         ${node?.id === nodeId ? 'border-[#66d9e8]' : ''}  
@@ -42,6 +46,6 @@ export default memo(({ isConnectable }: {isConnectable: boolean }) => {
           isConnectable={isConnectable}
         />
       </div>
-    </>
+    </WrapperNode>
   )
 })

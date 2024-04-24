@@ -1,4 +1,4 @@
-import React, {createContext, useContext, useEffect, useMemo} from 'react'
+import React, {createContext, useContext, useMemo} from 'react'
 import {useUser} from '@/lib/store/userStore.ts'
 
 const AuthContext = createContext<any>(null);
