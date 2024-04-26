@@ -59,7 +59,7 @@ export const sidelinks: SideLink[] = [
   {
     title: 'Members',
     label: '',
-    href: '/users',
+    href: '/members',
     icon: <IconUsers size={18} />,
   },
   {
