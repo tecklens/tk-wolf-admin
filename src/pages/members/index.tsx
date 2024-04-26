@@ -46,7 +46,7 @@ export default function Members() {
           </div>
         </div>
         {members ? members.map(e => {
-            return (<div className={'w-full inline-flex space-x-3 items-center'}>
+            return (<div className={'w-full inline-flex space-x-3 items-center'} key={e._id}>
               <div>
                 <Avatar>
                   <AvatarImage src={e.user?.profilePicture} alt={e.user?.email} />
