@@ -35,3 +35,10 @@ export interface IWorkflowEntity {
   nodes: INode[];
   edges: IEdge[];
 }
+
+export interface IUpdateWorkflow {
+  workflowId: string;
+  name: string;
+  description?: string;
+  tags?: string[] | null
+}

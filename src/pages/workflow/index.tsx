@@ -22,9 +22,11 @@ import { throttle } from 'lodash'
 import { useWorkflow } from '@/lib/store/workflowStore.ts'
 import { Dialog, DialogFooter } from '@/components/ui/dialog'
 import { DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog.tsx'
+import WorkflowSetting from "@/pages/workflow/components/setting.tsx";
 
 export default function Workflow() {
   const [openCreate, setOpenCreate] = useState(false)
+  const [openSetting, setOpenSetting] = useState(false)
   const [nameCreate, setNameCreate] = useState('')
 
   const { create, select, fetchWf, workflows, workflow } = useWorkflow()
@@ -62,7 +64,7 @@ export default function Workflow() {
             </h1>
           </div>
           <div className="flex items-center space-x-2">
-            <Button variant="default" className={'aspect-square'} size={'icon'}><IconSettings /></Button>
+            <Button variant="default" className={'aspect-square'} size={'icon'} onClick={() => setOpenSetting(true)}><IconSettings /></Button>
 
             <Select value={workflow?._id} onValueChange={(val) => select(val)}>
               <SelectTrigger className="min-w-[250px]">
@@ -111,6 +113,20 @@ export default function Workflow() {
           </DialogContent>
         </Dialog>
 
+
+        <Dialog open={openSetting} onOpenChange={(val) => {
+          setOpenSetting(val)
+        }}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Settings</DialogTitle>
+            </DialogHeader>
+            <WorkflowSetting workflow={workflow} onClose={() =>  setOpenSetting(false)}/>
+            <DialogFooter>
+              <Button type="submit" form={'modal-setting'}>Save changes</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </LayoutBody>
     </Layout>
   )

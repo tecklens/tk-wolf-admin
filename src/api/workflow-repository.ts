@@ -1,12 +1,15 @@
 import BaseRepository from '@/api/base-repository.ts'
 import {Node as NodeFlow, Edge as EdgeFlow} from 'reactflow'
-import { IWorkflowEntity } from '@/types/workflow.interface.ts'
+import {IUpdateWorkflow, IWorkflowEntity} from '@/types/workflow.interface.ts'
 
 const resource = '/wf'
 
 export default {
   create(payload: IWorkflowEntity) {
     return BaseRepository.post(`${resource}/`, payload)
+  },
+  update(payload: IUpdateWorkflow) {
+    return BaseRepository.put(`${resource}/`, payload)
   },
   list() {
     return BaseRepository.get(`${resource}/`)

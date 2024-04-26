@@ -74,6 +74,19 @@ export default function WorkflowPane() {
 
   const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null)
 
+  function mapNode(node: any): Node {
+    return {
+      ...node,
+      id: node._id,
+      data: {
+        ...node?.data,
+        _providerId: node._providerId,
+        _workflowId: node._workflowId,
+        onDelete: (id: string) => deleteNodeById(id)
+      }
+    }
+  }
+
   const onConnect = useCallback(
     async (params: any) => {
       const es = {
@@ -167,13 +180,7 @@ export default function WorkflowPane() {
 
       if (addNodeRsp.status === HttpStatusCode.Created) {
         setNodes((nds) => {
-          const n = {
-            ...addNodeRsp.data,
-            data: {
-              ...addNodeRsp.data?.data,
-              onDelete: (id: string) => deleteNodeById(id)
-            }
-          }
+          const n = mapNode(addNodeRsp.data)
           console.log(n)
           return nds.concat(n)
         })
@@ -325,17 +332,7 @@ export default function WorkflowPane() {
 
   useEffect(() => {
     if (workflow) {
-      setNodes(() => workflow.nodes?.map(e => ({
-        ...e,
-        id: e._id,
-        data: {
-          ...e.data,
-          onDelete: (id: string) => {
-            console.log('kh')
-            deleteNodeById(id)
-          }
-        }
-      })))
+      setNodes(() => workflow.nodes?.map(e => mapNode(e)))
       setEdges(() => workflow.edges?.map(e => ({
         ...e,
         id: e._id,

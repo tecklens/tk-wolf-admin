@@ -56,9 +56,9 @@ const router = createBrowserRouter([
             }),
           },
           {
-            path: 'extra-components',
+            path: 'provider',
             lazy: async () => ({
-              Component: (await import('@/pages/extra-components')).default,
+              Component: (await import('@/pages/provider')).default,
             }),
           },
           {

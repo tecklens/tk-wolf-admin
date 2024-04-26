@@ -1,10 +1,16 @@
 import {memo} from 'react'
 import {Handle, Position, useNodeId} from 'reactflow'
-import {IconCheck, IconDatabase} from '@tabler/icons-react'
+import {IconCheck, IconDatabase, IconLink} from '@tabler/icons-react'
 import {useTheme} from '@/components/theme-provider.tsx'
 import {useNode} from '@/lib/store/nodeStore.ts'
 import {WrapperNode} from "@/pages/workflow/components/WrapperNode.tsx";
 import {NodeDataInterface} from "@/types/node-data.interface.ts";
+import {Button} from "@/components/custom/button.tsx";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card"
 
 // eslint-disable-next-line react-refresh/only-export-components
 export default memo(({data, isConnectable}: { isConnectable: boolean, data: NodeDataInterface }) => {
@@ -33,6 +39,32 @@ export default memo(({data, isConnectable}: { isConnectable: boolean, data: Node
           </div>
           <div className={'flex flex-col px-4 py-2 text-xs'}>
             Save database
+          </div>
+          <div className={'flex flex-col'}>
+            <HoverCard>
+              <HoverCardTrigger asChild>
+                <div className={'inline-flex items-center text-sm px-3 py-1 space-x-1 text-red-400'}
+                     onClick={e => e.stopPropagation()}>
+                  <IconLink size={14}/>
+                  <div>Select primary provider</div>
+                </div>
+              </HoverCardTrigger>
+              <HoverCardContent className="w-80">
+                <div className="flex justify-between space-x-4">
+                  <div className="space-y-1">
+                    <h4 className="text-sm font-semibold">@nextjs</h4>
+                    <p className="text-sm">
+                      The React Framework – created and maintained by @vercel.
+                    </p>
+                    <div className="flex items-center pt-2">
+                      <span className="text-xs text-muted-foreground">
+                Joined December 2021
+              </span>
+                    </div>
+                  </div>
+                </div>
+              </HoverCardContent>
+            </HoverCard>
           </div>
         </div>
         <Handle

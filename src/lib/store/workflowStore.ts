@@ -12,7 +12,8 @@ export interface WorkflowState {
   workflows: IWorkflowEntity[] | null;
   select: (wf: string) => any;
   fetchWf: () => void,
-  create: (name: string) => Promise<boolean>
+  create: (name: string) => Promise<boolean>,
+  reload: () => void
 }
 
 export const useWorkflow = create<WorkflowState>((set, getState) => ({
@@ -74,5 +75,10 @@ export const useWorkflow = create<WorkflowState>((set, getState) => ({
       return false
     }
   },
-
+  reload: async () => {
+    const rspActiveRetry = await WorkflowRepository.getActive()
+    set({
+      workflow: rspActiveRetry.data
+    })
+  }
 }))

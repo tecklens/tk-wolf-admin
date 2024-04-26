@@ -54,6 +54,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   })
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
+    // @ts-ignore
     const rlt = await signIn(data)
     if (rlt) {
       window.location.href = redirectUrl
