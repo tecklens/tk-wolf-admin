@@ -23,7 +23,8 @@ export default function useWs() {
     reconnectAttempts: 10,
     reconnectInterval: 3000,
     queryParams: {
-      token : token
+      token : token,
+      type: 'admin'
     }
   })
 

@@ -4,6 +4,8 @@ import UserRepository from '@/api/user-repository.ts'
 import EnvironmentRepository from "@/api/environment-repository.ts";
 import WorkflowRepository from "@/api/workflow-repository.ts";
 import OrgRepository from '@/api/org-repository.ts'
+import ProviderRepository from '@/api/provider-repository.ts'
+import TriggerRepository from '@/api/trigger-repository.ts'
 
 const repositories = {
   auth: AuthRepository,
@@ -11,6 +13,8 @@ const repositories = {
   env: EnvironmentRepository,
   wf: WorkflowRepository,
   org: OrgRepository,
+  provider: ProviderRepository,
+  trigger: TriggerRepository,
 }
 
 export const RepositoryFactory = {

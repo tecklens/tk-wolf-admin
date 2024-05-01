@@ -8,6 +8,7 @@ import {
   QuestionMarkCircledIcon,
   StopwatchIcon,
 } from '@radix-ui/react-icons'
+import { TaskStatus } from '@/types/task.interface.ts'
 
 export const labels = [
   {
@@ -26,29 +27,34 @@ export const labels = [
 
 export const statuses = [
   {
-    value: 'backlog',
+    value: TaskStatus.backlog,
     label: 'Backlog',
     icon: QuestionMarkCircledIcon,
+    color: '#2DCCFF'
   },
   {
-    value: 'todo',
+    value: TaskStatus.todo,
     label: 'Todo',
     icon: CircleIcon,
+    color: '#FCE83A'
   },
   {
-    value: 'in progress',
+    value: TaskStatus.in_process,
     label: 'In Progress',
     icon: StopwatchIcon,
+    color: '#FFB302'
   },
   {
-    value: 'done',
+    value: TaskStatus.done,
     label: 'Done',
     icon: CheckCircledIcon,
+    color: '#408140'
   },
   {
-    value: 'canceled',
+    value: TaskStatus.cancel,
     label: 'Canceled',
     icon: CrossCircledIcon,
+    color: '#FF3838'
   },
 ]
 

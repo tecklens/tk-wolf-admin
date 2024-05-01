@@ -7,54 +7,48 @@ import { DataTableRowActions } from './data-table-row-actions'
 
 import { labels, priorities, statuses } from '../data/data'
 import { Task } from '../data/schema'
+import { format } from 'date-fns'
 
 export const columns: ColumnDef<Task>[] = [
   {
-    id: 'select',
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && 'indeterminate')
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label='Select all'
-        className='translate-y-[2px]'
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label='Select row'
-        className='translate-y-[2px]'
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: 'id',
+    accessorKey: 'code',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Task' />
     ),
-    cell: ({ row }) => <div className='w-[80px]'>{row.getValue('id')}</div>,
+    cell: ({ row }) => <div className='w-[120px] tracking-wide'>{row.getValue('code')}</div>,
     enableSorting: false,
     enableHiding: false,
   },
   {
-    accessorKey: 'title',
+    accessorKey: 'name',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Title' />
+      <DataTableColumnHeader column={column} title='Name' />
     ),
     cell: ({ row }) => {
-      const label = labels.find((label) => label.value === row.original.label)
+      // const label = labels.find((label) => label.value === row.original.type)?
 
       return (
         <div className='flex space-x-2'>
-          {label && <Badge variant='outline'>{label.label}</Badge>}
+          {row.original.type && <Badge variant='outline'>{row.original.type}</Badge>}
           <span className='max-w-32 truncate font-medium sm:max-w-72 md:max-w-[31rem]'>
-            {row.getValue('title')}
+            {row.getValue('name')}
+          </span>
+        </div>
+      )
+    },
+  },
+  {
+    accessorKey: 'workflowName',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Workflow' />
+    ),
+    cell: ({ row }) => {
+      // const label = labels.find((label) => label.value === row.original.type)?
+
+      return (
+        <div className='flex space-x-2'>
+          <span className='max-w-32 truncate font-medium sm:max-w-72 md:max-w-[31rem]'>
+            {row.getValue('workflowName')}
           </span>
         </div>
       )
@@ -75,9 +69,9 @@ export const columns: ColumnDef<Task>[] = [
       }
 
       return (
-        <div className='flex w-[100px] items-center'>
+        <div className={`flex w-[100px] items-center`} style={{color: status.color}}>
           {status.icon && (
-            <status.icon className='mr-2 h-4 w-4 text-muted-foreground' />
+            <status.icon className={`mr-2 h-4 w-4`} style={{color: status.color}}/>
           )}
           <span>{status.label}</span>
         </div>
@@ -86,6 +80,17 @@ export const columns: ColumnDef<Task>[] = [
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id))
     },
+  },
+  {
+    accessorKey: 'createdAt',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Created At' />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div>{format(row.getValue('createdAt'), "hh:mm:ss MM/dd/yyyy")}</div>
+      )
+    }
   },
   {
     accessorKey: 'priority',

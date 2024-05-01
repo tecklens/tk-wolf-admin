@@ -22,19 +22,23 @@ import SmsNode from '@/pages/workflow/components/nodes/sms-node'
 import DelayNode from '@/pages/workflow/components/nodes/delay-node'
 import TriggerNode from '@/pages/workflow/components/nodes/trigger-node'
 import WorkflowSidebar from '@/pages/workflow/components/sidebar.tsx'
-import {DragEvent, type MouseEvent as ReactMouseEvent, useCallback, useEffect, useRef, useState} from 'react'
-import {v4 as uuidv4} from 'uuid'
+import { DragEvent, type MouseEvent as ReactMouseEvent, useCallback, useEffect, useRef, useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 import ConnectionLine from '@/pages/workflow/components/connection-line.tsx'
 import WebhookNode from '@/pages/workflow/components/nodes/webhook-node'
 import NodeInfo from '@/pages/workflow/components/node-info'
-import {useNode} from '@/lib/store/nodeStore.ts'
+import { useNode } from '@/lib/store/nodeStore.ts'
 import StarterNode from '@/pages/workflow/components/nodes/starter-node'
-import {RepositoryFactory} from '@/api/repository-factory.ts'
-import {AxiosResponse, HttpStatusCode} from 'axios'
-import {useToast} from '@/components/ui/use-toast.ts'
-import {useWorkflow} from '@/lib/store/workflowStore.ts'
-import {throttle} from 'lodash'
-import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from '@/components/ui/sheet'
+import { RepositoryFactory } from '@/api/repository-factory.ts'
+import { AxiosResponse, HttpStatusCode } from 'axios'
+import { useToast } from '@/components/ui/use-toast.ts'
+import { useWorkflow } from '@/lib/store/workflowStore.ts'
+import { throttle } from 'lodash'
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import EditEmail from '@/pages/workflow/components/edit-email.tsx'
+import SelectProvider from '@/pages/workflow/components/select-provider.tsx'
+import EdgeWithClose from '@/pages/workflow/components/edges/EdgeWithClose.tsx'
 
 const WorkflowRepository = RepositoryFactory.get('wf')
 
@@ -47,6 +51,10 @@ const nodeTypes = {
   webhook: WebhookNode,
   starter: StarterNode,
 }
+
+const edgeTypes = {
+  closeable: EdgeWithClose,
+}
 const minimapStyle = {
   height: 120,
 }
@@ -56,10 +64,11 @@ let id = 10
 const getId = () => `dndnode_${id++}`
 
 export default function WorkflowPane() {
-  const {workflow, select} = useWorkflow()
+  const { workflow, select, selectingProvider, openModalProvider } = useWorkflow()
   const selectNode = useNode((state) => state.select)
   const nodeSelected = useNode((state) => state.node)
-  const {toast} = useToast()
+  const { emailEdit, openEmailEdit } = useNode((state) => state)
+  const { toast } = useToast()
   const reactFlowWrapper = useRef(null)
   const [
     nodes,
@@ -82,8 +91,9 @@ export default function WorkflowPane() {
         ...node?.data,
         _providerId: node._providerId,
         _workflowId: node._workflowId,
-        onDelete: (id: string) => deleteNodeById(id)
-      }
+        name: node.name,
+        onDelete: (id: string) => deleteNodeById(id),
+      },
     }
   }
 
@@ -92,7 +102,7 @@ export default function WorkflowPane() {
       const es = {
         ...params,
         id: uuidv4(),
-        type: 'smoothstep',
+        type: 'closeable',
         marker: 'edge-marker-red',
         style: {
           strokeWidth: 2.5,
@@ -124,7 +134,7 @@ export default function WorkflowPane() {
     const node = reactFlowInstance?.getNodes().find(e => e.id === id)
     if (!node || !workflow) return
 
-    const connectedEdges = getConnectedEdges([node], edges);
+    const connectedEdges = getConnectedEdges([node], edges)
 
     const rsp = await WorkflowRepository.delEle({
       nodeIds: [id],
@@ -134,12 +144,12 @@ export default function WorkflowPane() {
     if (rsp.status === HttpStatusCode.Created) {
       setNodes((nds: Node[]) => nds.filter((node) => node.id !== id))
       setEdges((eds) => {
-        return eds.filter((edge: Edge) => !connectedEdges.includes(edge));
+        return eds.filter((edge: Edge) => !connectedEdges.includes(edge))
       })
     } else {
       toast({
-        title: "Delete from flow failed",
-        variant: 'destructive'
+        title: 'Delete from flow failed',
+        variant: 'destructive',
       })
     }
   }
@@ -152,7 +162,7 @@ export default function WorkflowPane() {
   const onDrop = useCallback(
     async (event: DragEvent) => {
       event.preventDefault()
-      if (!workflow) return;
+      if (!workflow) return
 
       const type = event.dataTransfer.getData('application/reactflow')
 
@@ -309,26 +319,26 @@ export default function WorkflowPane() {
       if (!reactFlowInstance) return false
       // we are using getNodes and getEdges helpers here
       // to make sure we create isValidConnection function only once
-      const nodes = reactFlowInstance.getNodes();
-      const edges = reactFlowInstance.getEdges();
-      const target: Node | undefined = nodes.find((node) => node.id === connection.target);
+      const nodes = reactFlowInstance.getNodes()
+      const edges = reactFlowInstance.getEdges()
+      const target: Node | undefined = nodes.find((node) => node.id === connection.target)
       const hasCycle = (node: Node | undefined, visited = new Set()) => {
         if (node === undefined) return true
-        if (visited.has(node.id)) return false;
+        if (visited.has(node.id)) return false
 
-        visited.add(node.id);
+        visited.add(node.id)
 
         for (const outgoer of getOutgoers(node, nodes, edges)) {
-          if (outgoer.id === connection.source) return true;
-          if (hasCycle(outgoer, visited)) return true;
+          if (outgoer.id === connection.source) return true
+          if (hasCycle(outgoer, visited)) return true
         }
-      };
+      }
 
-      if (target?.id === connection.source) return false;
-      return !hasCycle(target);
+      if (target?.id === connection.source) return false
+      return !hasCycle(target)
     },
     [reactFlowInstance?.getNodes, reactFlowInstance?.getEdges],
-  );
+  )
 
   useEffect(() => {
     if (workflow) {
@@ -352,6 +362,7 @@ export default function WorkflowPane() {
           zoomOnDoubleClick={false}
           zoomOnPinch={false}
           nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
           onNodeClick={onNodeClick}
           onNodesChange={onNodesChange}
           onNodeDragStop={onNodeDragStop}
@@ -368,23 +379,79 @@ export default function WorkflowPane() {
           onNodeMouseEnter={(_event, node) => highlightPath(node, true)}
           onNodeMouseLeave={() => resetNodeStyles()}
         >
-          <MiniMap style={minimapStyle} zoomable pannable/>
-          <Controls/>
-          <Background color="#aaa" gap={16}/>
+          <MiniMap style={minimapStyle} zoomable pannable />
+          <Controls />
+          <Background color="#aaa" gap={16} />
         </ReactFlow>
       </div>
-      <WorkflowSidebar/>
+      <WorkflowSidebar />
       <Sheet open={nodeSelected} onOpenChange={() => selectNode(null)}>
-        <SheetContent>
-          <SheetHeader>
-            <SheetTitle>Edit Node</SheetTitle>
-            <SheetDescription>
-              Make changes to your node of flow here. Click save when you're done.
-            </SheetDescription>
-          </SheetHeader>
-          <NodeInfo/>
+        <SheetContent className={'p-0'}>
+          <NodeInfo
+            reloadNode={async (nodeId: string) => {
+              const rsp = await WorkflowRepository.getOneNode(nodeId)
+
+              if (rsp.status === HttpStatusCode.Ok) {
+                setNodes(nds => nds.map(e => e.id === nodeId ? mapNode(rsp.data) : e))
+              } else {
+                toast({
+                  variant: 'destructive',
+                  title: 'An error occurred when update data node',
+                })
+              }
+            }}
+            onClose={() => {
+              selectNode(null)
+            }}
+          />
         </SheetContent>
       </Sheet>
+      <Sheet open={selectingProvider.open} onOpenChange={() => openModalProvider({
+        open: false,
+        nodeId: null,
+        channel: null,
+      })}>
+        <SheetContent className={''}>
+          <SheetHeader>
+            <SheetTitle>Select provider for step</SheetTitle>
+            <SheetDescription>
+              Make changes to provider here. Click save when you're done.
+            </SheetDescription>
+          </SheetHeader>
+          <SelectProvider onSuccess={(nodeId, providerId) => {
+            setNodes(nds => nds.map(e => e.id === nodeId ? ({
+              ...e,
+              data: {
+                ...e.data,
+                providerId: providerId,
+              },
+            }) : e))
+            openModalProvider({
+              open: false,
+              nodeId: null,
+              channel: null,
+            })
+          }} />
+        </SheetContent>
+      </Sheet>
+      <Dialog open={emailEdit.open} onOpenChange={(val) => {
+        openEmailEdit({
+          open: val,
+          data: null,
+        })
+      }}>
+        <DialogContent className="min-w-[90vw] min-h-[90vh] flex flex-col">
+          <DialogHeader>
+            <DialogTitle>Edit email template</DialogTitle>
+          </DialogHeader>
+          <div className={'flex-1 flex flex-col'}>
+            <EditEmail onClose={() => openEmailEdit({
+              open: false,
+              data: null,
+            })} />
+          </div>
+        </DialogContent>
+      </Dialog>
     </ReactFlowProvider>
   )
 }

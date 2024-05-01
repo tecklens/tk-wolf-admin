@@ -14,8 +14,26 @@ import { UserNav } from '@/components/user-nav'
 import { Layout, LayoutBody, LayoutHeader } from '@/components/custom/layout'
 import { RecentSales } from './components/recent-sales'
 import { Overview } from './components/overview'
+import { useEffect, useState } from 'react'
+import { RepositoryFactory } from '@/api/repository-factory.ts'
+import { HttpStatusCode } from 'axios'
+const AuthS = RepositoryFactory.get('auth')
 
 export default function Dashboard() {
+  const [rReq, setRRequest] = useState(0)
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      const rep = await AuthS.getRemainingRequest()
+
+      if (rep.status === HttpStatusCode.Ok) {
+        setRRequest(rep.data)
+      }
+    }, 3500)
+
+    return () => clearInterval(interval)
+  }, [])
+
   return (
     <Layout>
       {/* ===== Top Heading ===== */}
@@ -46,7 +64,6 @@ export default function Dashboard() {
           <div className='w-full overflow-x-scroll pb-2'>
             <TabsList>
               <TabsTrigger value='overview'>Overview</TabsTrigger>
-              <TabsTrigger value='analytics'>Analytics</TabsTrigger>
               <TabsTrigger value='reports'>Reports</TabsTrigger>
               <TabsTrigger value='notifications'>Notifications</TabsTrigger>
             </TabsList>
@@ -56,7 +73,7 @@ export default function Dashboard() {
               <Card>
                 <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
                   <CardTitle className='text-sm font-medium'>
-                    Total Revenue
+                    Total Call Api
                   </CardTitle>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
@@ -107,7 +124,7 @@ export default function Dashboard() {
               </Card>
               <Card>
                 <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-                  <CardTitle className='text-sm font-medium'>Sales</CardTitle>
+                  <CardTitle className='text-sm font-medium'>Total Money</CardTitle>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     viewBox='0 0 24 24'
@@ -132,7 +149,7 @@ export default function Dashboard() {
               <Card>
                 <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
                   <CardTitle className='text-sm font-medium'>
-                    Active Now
+                    Remaining Request
                   </CardTitle>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
@@ -148,22 +165,15 @@ export default function Dashboard() {
                   </svg>
                 </CardHeader>
                 <CardContent>
-                  <div className='text-2xl font-bold'>+573</div>
+                  <div className='text-2xl font-bold'>+{rReq}</div>
                   <p className='text-xs text-muted-foreground'>
-                    +201 since last hour
+                    per month
                   </p>
                 </CardContent>
               </Card>
             </div>
             <div className='grid grid-cols-1 gap-4 lg:grid-cols-7'>
-              <Card className='col-span-1 lg:col-span-4'>
-                <CardHeader>
-                  <CardTitle>Overview</CardTitle>
-                </CardHeader>
-                <CardContent className='pl-2'>
-                  <Overview />
-                </CardContent>
-              </Card>
+              <Overview />
               <Card className='col-span-1 lg:col-span-3'>
                 <CardHeader>
                   <CardTitle>Recent Sales</CardTitle>
@@ -190,13 +200,8 @@ const topNav = [
     isActive: true,
   },
   {
-    title: 'Customers',
-    href: 'dashboard/customers',
-    isActive: false,
-  },
-  {
-    title: 'Products',
-    href: 'dashboard/products',
+    title: 'Document',
+    href: 'Document',
     isActive: false,
   },
   {

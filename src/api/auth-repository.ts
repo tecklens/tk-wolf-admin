@@ -23,5 +23,8 @@ export default {
   },
   switchEnv(envId: string) {
     return BaseRepository.post(`${resource}/environments/${envId}/switch`)
-  }
+  },
+  getRemainingRequest() {
+    return BaseRepository.get(`${resource}/limit/remaining`)
+  },
 }

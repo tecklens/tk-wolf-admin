@@ -4,6 +4,7 @@ export enum ChannelTypeEnum {
   SMS = 'sms',
   CHAT = 'chat',
   PUSH = 'push',
+  DELAY = 'delay',
 }
 
 export enum StepTypeEnum {

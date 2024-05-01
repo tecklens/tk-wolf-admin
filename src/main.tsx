@@ -1,13 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import {RouterProvider} from 'react-router-dom'
-import {Toaster} from '@/components/ui/toaster'
-import {ThemeProvider} from '@/components/theme-provider'
+import { RouterProvider } from 'react-router-dom'
+import { Toaster } from '@/components/ui/toaster'
+import { ThemeProvider } from '@/components/theme-provider'
 import router from '@/router'
 import '@/index.css'
-import {TooltipProvider} from '@/components/ui/tooltip.tsx'
+import { TooltipProvider } from '@/components/ui/tooltip.tsx'
 import AuthProvider from '@/context/auth.tsx'
-import EventProvider from "@/context/event.tsx";
+import EventProvider from '@/context/event.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -15,11 +15,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <TooltipProvider>
         <AuthProvider>
           <EventProvider>
-            <RouterProvider router={router}/>
+              <RouterProvider router={router} />
           </EventProvider>
         </AuthProvider>
       </TooltipProvider>
-      <Toaster/>
+      <Toaster />
     </ThemeProvider>
   </React.StrictMode>,
 )

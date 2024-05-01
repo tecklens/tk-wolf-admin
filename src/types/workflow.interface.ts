@@ -2,6 +2,7 @@ import {Node as NodeFlow, Edge as EdgeFlow} from 'reactflow'
 
 export interface INode extends NodeFlow {
   _id: string;
+  _providerId: string;
 }
 
 export type IEdge = EdgeFlow & {

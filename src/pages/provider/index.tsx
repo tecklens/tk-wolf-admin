@@ -1,16 +1,15 @@
-import {Search} from '@/components/search'
+import { Search } from '@/components/search'
 import ThemeSwitch from '@/components/theme-switch'
-import {UserNav} from '@/components/user-nav'
-import {Layout, LayoutBody, LayoutHeader} from '@/components/custom/layout'
-import {DataTable} from './components/data-table'
-import {columns} from './components/columns'
-import {tasks} from './data/tasks'
-import {WsStatus} from "@/components/ws-status.tsx";
-import {IconMailBolt, IconPlus} from "@tabler/icons-react";
-import {Button} from "@/components/custom/button.tsx";
-import {initialProvidersList} from "@/utils/providers.ts";
-import {useState} from "react";
-import {IIntegratedProvider} from "@/types";
+import { UserNav } from '@/components/user-nav'
+import { Layout, LayoutBody, LayoutHeader } from '@/components/custom/layout'
+import { DataTable } from './components/data-table'
+import { columns } from './components/columns'
+import { WsStatus } from '@/components/ws-status.tsx'
+import { IconMailBolt, IconPlus } from '@tabler/icons-react'
+import { Button } from '@/components/custom/button.tsx'
+import { initialProvidersList } from '@/utils/providers.ts'
+import { useCallback, useEffect, useState } from 'react'
+import { IIntegratedProvider } from '@/types'
 import {
   Dialog,
   DialogContent,
@@ -18,8 +17,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
-} from "@/components/ui/dialog.tsx";
+  DialogTrigger,
+} from '@/components/ui/dialog.tsx'
 import {
   Command,
   CommandEmpty,
@@ -28,21 +27,30 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@/components/ui/command"
-import {useTheme} from "@/components/theme-provider.tsx";
-import UpdateProvider from "@/pages/provider/components/update-provider.tsx";
+} from '@/components/ui/command'
+import { useTheme } from '@/components/theme-provider.tsx'
+import UpdateProvider from '@/pages/provider/components/update-provider.tsx'
+import { useProvider } from '@/lib/store/providerStore.ts'
 
 export default function Providers() {
   const [providersList, setProvidersList] = useState(initialProvidersList);
-  console.log(initialProvidersList)
   const [selectedProvider, setSelectedProvider] = useState<IIntegratedProvider | null>(null);
   const [openSelect, setOpenSelect] = useState(false)
   const [openEdit, setOpenEdit] = useState(false)
   const {theme} = useTheme()
+  const {providers, fetchProvider} = useProvider()
 
   function getLogoFileName(providerId: string) {
     return `/images/providers/${theme}/square/${providerId}.svg`;
   }
+
+  const fetchData = useCallback(() => {
+    fetchProvider({})
+  }, [fetchProvider])
+
+  useEffect(() => {
+    fetchData()
+  }, [fetchData])
 
   return (
     <Layout>
@@ -120,17 +128,20 @@ export default function Providers() {
                     </div>
                   </DialogDescription>
                 </DialogHeader>
-                <UpdateProvider selected={selectedProvider}/>
+                <UpdateProvider selected={selectedProvider} onCreateSuccess={() => {
+                  fetchData()
+                  setOpenEdit(false)
+                }}/>
                 <DialogFooter>
                   <Button type="button" onClick={() => setOpenEdit(false)} variant={'destructive'}>Cancel</Button>
-                  <Button type="submit">Save changes</Button>
+                  <Button type="submit" form={'edit-provider'}>Save changes</Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
           </div>
         </div>
         <div className='-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-x-12 lg:space-y-0'>
-          <DataTable data={tasks} columns={columns}/>
+          <DataTable data={providers} columns={columns}/>
         </div>
       </LayoutBody>
     </Layout>

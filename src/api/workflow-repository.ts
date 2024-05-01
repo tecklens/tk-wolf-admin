@@ -17,11 +17,17 @@ export default {
   detail(wfId: string) {
     return BaseRepository.get(`${resource}/detail/${wfId}`)
   },
+  getOneNode(payload: string) {
+    return BaseRepository.get(`${resource}/node/${payload}`)
+  },
   addNode(payload: NodeFlow<any, any> & {workflowId: string}) {
     return BaseRepository.post(`${resource}/node`, payload)
   },
-  updateNode(payload: NodeFlow<any, any>[]) {
+  updateNode(payload: any) {
     return BaseRepository.put(`${resource}/node`, payload)
+  },
+  setProviderNode(payload: any) {
+    return BaseRepository.post(`${resource}/node/provider`, payload)
   },
   addEdge(payload: EdgeFlow<any>) {
     return BaseRepository.post(`${resource}/edge`, payload)
@@ -34,5 +40,10 @@ export default {
   },
   delEle(payload: any) {
     return BaseRepository.post(`${resource}/node/del`, payload)
+  },
+  listEmailTemplate(payload: any) {
+    return BaseRepository.get(`${resource}/email/templates`, {
+      params: payload
+    })
   },
 }

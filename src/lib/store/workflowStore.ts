@@ -4,12 +4,25 @@ import { RepositoryFactory } from '@/api/repository-factory.ts'
 import { useUser } from '@/lib/store/userStore.ts'
 import { HttpStatusCode } from 'axios'
 import { useToastGlobal } from '@/lib/store/toastStore.ts'
+import { ChannelTypeEnum } from '@/types/channel'
 
 const WorkflowRepository = RepositoryFactory.get('wf')
+
+interface ISelectProvider {
+  open: boolean;
+  channel: ChannelTypeEnum | null;
+  nodeId: string | null;
+}
 
 export interface WorkflowState {
   workflow: IWorkflowEntity | null;
   workflows: IWorkflowEntity[] | null;
+  selectingProvider: ISelectProvider;
+  openModalProvider: ({
+                        open,
+                        channel,
+                        nodeId,
+                      }: ISelectProvider) => void;
   select: (wf: string) => any;
   fetchWf: () => void,
   create: (name: string) => Promise<boolean>,
@@ -19,12 +32,18 @@ export interface WorkflowState {
 export const useWorkflow = create<WorkflowState>((set, getState) => ({
   workflow: null,
   workflows: null,
+  selectingProvider: {
+    open: false,
+    nodeId: null,
+    channel: null,
+  },
+  openModalProvider: (d: ISelectProvider) => set({ selectingProvider: d }),
   select: async (wf) => {
-    const rsp = await WorkflowRepository.setActive({workflowId: wf})
+    const rsp = await WorkflowRepository.setActive({ workflowId: wf })
     if (rsp.status === HttpStatusCode.Ok) {
       const rspActiveRetry = await WorkflowRepository.getActive()
       set({
-        workflow: rspActiveRetry.data
+        workflow: rspActiveRetry.data,
       })
     } else {
       useToastGlobal.getState().update({
@@ -45,11 +64,11 @@ export const useWorkflow = create<WorkflowState>((set, getState) => ({
         })
 
         if (!rspActive.data && rsp.data?.data?.length > 0) {
-          await WorkflowRepository.setActive({workflowId: rsp.data?.data[0]._id})
+          await WorkflowRepository.setActive({ workflowId: rsp.data?.data[0]._id })
 
           const rspActiveRetry = await WorkflowRepository.getActive()
           set({
-            workflow: rspActiveRetry.data
+            workflow: rspActiveRetry.data,
           })
         }
       } else {
@@ -78,7 +97,7 @@ export const useWorkflow = create<WorkflowState>((set, getState) => ({
   reload: async () => {
     const rspActiveRetry = await WorkflowRepository.getActive()
     set({
-      workflow: rspActiveRetry.data
+      workflow: rspActiveRetry.data,
     })
-  }
+  },
 }))
