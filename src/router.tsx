@@ -100,9 +100,9 @@ const router = createBrowserRouter([
                 }),
               },
               {
-                path: 'error-example',
+                path: 'billing',
                 lazy: async () => ({
-                  Component: (await import('./pages/settings/error-example'))
+                  Component: (await import('./pages/settings/billing'))
                     .default,
                 }),
                 errorElement: <GeneralError className='h-[50svh]' minimal />,

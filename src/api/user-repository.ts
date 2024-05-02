@@ -10,5 +10,8 @@ export default {
   },
   update(payload: UserInterface) {
     return BaseRepository.put(`${resource}/profile`, payload)
+  },
+  createPaymentIndent(payload: any) {
+    return BaseRepository.post(`/payment/create-payment-indent`, payload)
   }
 }

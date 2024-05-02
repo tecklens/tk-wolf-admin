@@ -78,9 +78,9 @@ const sidebarNavItems = [
     href: '/settings/display',
   },
   {
-    title: 'Error Example',
+    title: 'Billing',
     icon: <IconExclamationCircle size={18} />,
-    href: '/settings/error-example',
+    href: '/settings/billing',
   },
   {
     title: 'Personal access keys',
