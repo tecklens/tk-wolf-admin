@@ -87,7 +87,7 @@ export default function BillingSetting() {
         ...options,
         appearance: {
           ...options.appearance,
-          theme: theme === 'light' ? options.appearance.theme : 'night',
+          theme: theme === 'light' ? appearance.theme : 'night',
         }
       })
     }
