@@ -205,8 +205,8 @@ const topNav = [
     isActive: false,
   },
   {
-    title: 'Settings',
-    href: 'dashboard/settings',
+    title: 'Pricing',
+    href: 'pricing',
     isActive: false,
   },
 ]
