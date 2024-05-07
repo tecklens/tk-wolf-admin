@@ -3,6 +3,14 @@ import { create } from 'zustand'
 export interface NodeState {
   node: any;
   nodeChanging: any;
+  smsEdit: {
+    open: boolean;
+    data: any;
+  };
+  openSmsEdit: (d: {
+    open: boolean;
+    data: any;
+  }) => void,
   emailEdit: {
     open: boolean;
     data: any;
@@ -21,6 +29,10 @@ export const useNode = create<NodeState>((set) => ({
     open: false,
     data: null
   },
+  smsEdit: {
+    open: false,
+    data: null
+  },
   nodeChanging: null,
   select: (node) => set(() => {
     return { node }
@@ -31,5 +43,9 @@ export const useNode = create<NodeState>((set) => ({
   openEmailEdit: (d: {
     open: boolean;
     data: any;
-  }) => set({emailEdit: d})
+  }) => set({emailEdit: d}),
+  openSmsEdit: (d: {
+    open: boolean;
+    data: any;
+  }) => set({smsEdit: d})
 }))

@@ -1,6 +1,6 @@
 import BaseRepository from '@/api/base-repository.ts'
 import {Node as NodeFlow, Edge as EdgeFlow} from 'reactflow'
-import {IUpdateWorkflow, IWorkflowEntity} from '@/types/workflow.interface.ts'
+import { IUpdateWorkflow, IVariable, IWorkflowEntity } from '@/types/workflow.interface.ts'
 
 const resource = '/wf'
 
@@ -46,4 +46,11 @@ export default {
       params: payload
     })
   },
+  variables(wfId: number) {
+    return BaseRepository.get(`${resource}/variable/${wfId}`, )
+  },
+  changeVariables(variables: IVariable[]) {
+    return BaseRepository.post(`${resource}/variable`, variables)
+  },
+
 }

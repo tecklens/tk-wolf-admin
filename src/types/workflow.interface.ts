@@ -43,3 +43,15 @@ export interface IUpdateWorkflow {
   description?: string;
   tags?: string[] | null
 }
+
+export interface IVariable {
+  _id?: string;
+  _workflowId: string;
+  type: 'string' | 'number' | 'boolean' | 'date';
+  defaultValue?: any;
+  name?: string;
+  isDefault: boolean;
+
+  createdAt: string;
+  updatedAt?: string;
+}

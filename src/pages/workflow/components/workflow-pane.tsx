@@ -39,6 +39,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import EditEmail from '@/pages/workflow/components/edit-email.tsx'
 import SelectProvider from '@/pages/workflow/components/select-provider.tsx'
 import EdgeWithClose from '@/pages/workflow/components/edges/EdgeWithClose.tsx'
+import EditSms from '@/pages/workflow/components/edit-sms.tsx'
 
 const WorkflowRepository = RepositoryFactory.get('wf')
 
@@ -67,7 +68,7 @@ export default function WorkflowPane() {
   const { workflow, select, selectingProvider, openModalProvider } = useWorkflow()
   const selectNode = useNode((state) => state.select)
   const nodeSelected = useNode((state) => state.node)
-  const { emailEdit, openEmailEdit } = useNode((state) => state)
+  const { emailEdit, openEmailEdit, smsEdit, openSmsEdit } = useNode((state) => state)
   const { toast } = useToast()
   const reactFlowWrapper = useRef(null)
   const [
@@ -450,6 +451,22 @@ export default function WorkflowPane() {
               data: null,
             })} />
           </div>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={smsEdit.open} onOpenChange={(val) => {
+        openSmsEdit({
+          open: val,
+          data: null,
+        })
+      }}>
+        <DialogContent className="min-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Edit sms template</DialogTitle>
+          </DialogHeader>
+          <EditSms onClose={() => openSmsEdit({
+            open: false,
+            data: null,
+          })} />
         </DialogContent>
       </Dialog>
     </ReactFlowProvider>

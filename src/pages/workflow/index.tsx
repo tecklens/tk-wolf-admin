@@ -5,7 +5,7 @@ import { TopNav } from '@/components/top-nav'
 import { UserNav } from '@/components/user-nav'
 import { Layout, LayoutBody, LayoutHeader } from '@/components/custom/layout'
 import WorkflowPane from '@/pages/workflow/components/workflow-pane.tsx'
-import { IconCheck, IconDownload, IconPlus, IconSettings } from '@tabler/icons-react'
+import { IconCheck, IconDownload, IconPlus, IconSettings, IconVariable } from '@tabler/icons-react'
 import { Link } from 'react-router-dom'
 import {
   Select,
@@ -23,10 +23,12 @@ import { useWorkflow } from '@/lib/store/workflowStore.ts'
 import { Dialog, DialogFooter } from '@/components/ui/dialog'
 import { DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog.tsx'
 import WorkflowSetting from "@/pages/workflow/components/setting.tsx";
+import ManageVariables from '@/pages/workflow/components/variables.tsx'
 
 export default function Workflow() {
   const [openCreate, setOpenCreate] = useState(false)
   const [openSetting, setOpenSetting] = useState(false)
+  const [openEditVariable, setOpenEditVariable] = useState(false)
   const [nameCreate, setNameCreate] = useState('')
 
   const { create, select, fetchWf, workflows, workflow } = useWorkflow()
@@ -64,6 +66,7 @@ export default function Workflow() {
             </h1>
           </div>
           <div className="flex items-center space-x-2">
+            <Button variant="default" className={'aspect-square'} size={'icon'} onClick={() => setOpenEditVariable(true)}><IconVariable /></Button>
             <Button variant="default" className={'aspect-square'} size={'icon'} onClick={() => setOpenSetting(true)}><IconSettings /></Button>
 
             <Select value={workflow?._id} onValueChange={(val) => select(val)}>
@@ -125,6 +128,16 @@ export default function Workflow() {
             <DialogFooter>
               <Button type="submit" form={'modal-setting'}>Save changes</Button>
             </DialogFooter>
+          </DialogContent>
+        </Dialog>
+        <Dialog open={openEditVariable} onOpenChange={(val) => {
+          setOpenEditVariable(val)
+        }}>
+          <DialogContent className="sm:max-w-[725px]">
+            <DialogHeader>
+              <DialogTitle>Variables</DialogTitle>
+            </DialogHeader>
+            <ManageVariables workflow={workflow} onClose={() =>  setOpenEditVariable(false)}/>
           </DialogContent>
         </Dialog>
       </LayoutBody>

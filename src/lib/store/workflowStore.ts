@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { IWorkflowEntity } from '@/types/workflow.interface.ts'
+import { IVariable, IWorkflowEntity } from '@/types/workflow.interface.ts'
 import { RepositoryFactory } from '@/api/repository-factory.ts'
 import { useUser } from '@/lib/store/userStore.ts'
 import { HttpStatusCode } from 'axios'
@@ -18,6 +18,8 @@ export interface WorkflowState {
   workflow: IWorkflowEntity | null;
   workflows: IWorkflowEntity[] | null;
   selectingProvider: ISelectProvider;
+  variables: IVariable[],
+
   openModalProvider: ({
                         open,
                         channel,
@@ -25,6 +27,7 @@ export interface WorkflowState {
                       }: ISelectProvider) => void;
   select: (wf: string) => any;
   fetchWf: () => void,
+  fetchVariable: () => void,
   create: (name: string) => Promise<boolean>,
   reload: () => void
 }
@@ -32,6 +35,7 @@ export interface WorkflowState {
 export const useWorkflow = create<WorkflowState>((set, getState) => ({
   workflow: null,
   workflows: null,
+  variables: [],
   selectingProvider: {
     open: false,
     nodeId: null,
@@ -70,6 +74,17 @@ export const useWorkflow = create<WorkflowState>((set, getState) => ({
           set({
             workflow: rspActiveRetry.data,
           })
+          WorkflowRepository.variables(rspActiveRetry.data._id).then((rep: any) => {
+            set({
+              variables: rep.data,
+            })
+          })
+        } else {
+          WorkflowRepository.variables(rspActive.data._id).then((rep: any) => {
+            set({
+              variables: rep.data,
+            })
+          })
         }
       } else {
         useToastGlobal.getState().update({
@@ -78,6 +93,19 @@ export const useWorkflow = create<WorkflowState>((set, getState) => ({
         })
       }
     }
+  },
+  fetchVariable: async () => {
+    if (!getState().workflow) return
+    WorkflowRepository.variables(getState().workflow?._id).then((rep: any) => {
+      set({
+        variables: rep.data,
+      })
+    }).catch((_: any) => {
+      useToastGlobal.getState().update({
+        variant: 'destructive',
+        title: 'Get Variable of Workflow is failed',
+      })
+    })
   },
   create: async (name: string) => {
     const rsp = await WorkflowRepository.create({ name })

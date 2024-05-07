@@ -1,0 +1,9 @@
+.editor {
+    textarea {
+        padding: 8px;
+    }
+
+    .border__highlighter {
+        padding: 8px;
+    }
+}

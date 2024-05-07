@@ -21,7 +21,7 @@ export default function NodeInfo({ onClose, reloadNode }: {
           : node?.type === ChannelTypeEnum.DELAY
             ? <DelayNodeInfo onClose={onClose} reloadNode={() => reloadNode(node.id)} />
             : node?.type === ChannelTypeEnum.SMS
-              ? <SmsNodeInfo onClose={onClose} reloadNode={() => reloadNode(node.id)} />
+              ? <SmsNodeInfo />
             : null}
     </div>
   )
