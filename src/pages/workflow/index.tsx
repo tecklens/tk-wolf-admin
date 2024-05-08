@@ -28,10 +28,9 @@ import ManageVariables from '@/pages/workflow/components/variables.tsx'
 export default function Workflow() {
   const [openCreate, setOpenCreate] = useState(false)
   const [openSetting, setOpenSetting] = useState(false)
-  const [openEditVariable, setOpenEditVariable] = useState(false)
   const [nameCreate, setNameCreate] = useState('')
 
-  const { create, select, fetchWf, workflows, workflow } = useWorkflow()
+  const { openEditVariable, setOpenEditVariable, create, select, fetchWf, workflows, workflow } = useWorkflow()
 
   const createWf = throttle(async () => {
     const check = await create(nameCreate)

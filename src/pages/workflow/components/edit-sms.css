@@ -6,4 +6,11 @@
     .border__highlighter {
         padding: 8px;
     }
+
+    .border__suggestions {
+        border: 1px solid rgb(14 116 144);
+        border-radius: 5px;
+
+        box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    }
 }

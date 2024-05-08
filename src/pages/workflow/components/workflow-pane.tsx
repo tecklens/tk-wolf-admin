@@ -341,6 +341,19 @@ export default function WorkflowPane() {
     [reactFlowInstance?.getNodes, reactFlowInstance?.getEdges],
   )
 
+  const reloadNode = async (nodeId: string) => {
+    const rsp = await WorkflowRepository.getOneNode(nodeId)
+
+    if (rsp.status === HttpStatusCode.Ok) {
+      setNodes(nds => nds.map(e => e.id === nodeId ? mapNode(rsp.data) : e))
+    } else {
+      toast({
+        variant: 'destructive',
+        title: 'An error occurred when update data node',
+      })
+    }
+  }
+
   useEffect(() => {
     if (workflow) {
       setNodes(() => workflow.nodes?.map(e => mapNode(e)))
@@ -389,18 +402,7 @@ export default function WorkflowPane() {
       <Sheet open={nodeSelected} onOpenChange={() => selectNode(null)}>
         <SheetContent className={'p-0'}>
           <NodeInfo
-            reloadNode={async (nodeId: string) => {
-              const rsp = await WorkflowRepository.getOneNode(nodeId)
-
-              if (rsp.status === HttpStatusCode.Ok) {
-                setNodes(nds => nds.map(e => e.id === nodeId ? mapNode(rsp.data) : e))
-              } else {
-                toast({
-                  variant: 'destructive',
-                  title: 'An error occurred when update data node',
-                })
-              }
-            }}
+            reloadNode={reloadNode}
             onClose={() => {
               selectNode(null)
             }}
@@ -463,10 +465,14 @@ export default function WorkflowPane() {
           <DialogHeader>
             <DialogTitle>Edit sms template</DialogTitle>
           </DialogHeader>
-          <EditSms onClose={() => openSmsEdit({
-            open: false,
-            data: null,
-          })} />
+          <EditSms onClose={() => {
+            reloadNode(nodeSelected._id)
+            selectNode(null)
+            openSmsEdit({
+              open: false,
+              data: null,
+            })
+          }} />
         </DialogContent>
       </Dialog>
     </ReactFlowProvider>

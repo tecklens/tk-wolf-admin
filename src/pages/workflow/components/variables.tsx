@@ -23,6 +23,8 @@ import {
 } from '@/components/ui/select.tsx'
 import { CrossCircledIcon } from '@radix-ui/react-icons'
 import { reduce } from 'lodash'
+import { Switch } from '@/components/ui/switch.tsx'
+import { Label } from '@/components/ui/label.tsx'
 
 const WorkflowRepository = RepositoryFactory.get('wf')
 
@@ -36,6 +38,7 @@ const formSchema = z.object({
       name: z.string(),
       defaultValue: z.any().optional(),
       isDefault: z.boolean().default(false),
+      required: z.boolean().default(false).optional(),
     })).optional(),
 })
 
@@ -94,8 +97,9 @@ export default function ManageVariables({ workflow, onClose }: {
             ? <div className={'flex flex-col space-y-2'}>
               <div className={'grid grid-cols-12 gap-3 font-bold text-sm text-slate-900'}>
                 <div className={'col-span-2'}>Type</div>
-                <div className={'col-span-5'}>Name</div>
+                <div className={'col-span-4'}>Name</div>
                 <div className={'col-span-4'}>Default Value</div>
+                <div className={'col-span-1'}>Required</div>
                 <div className={'col-span-1'}></div>
               </div>
               {
@@ -105,11 +109,11 @@ export default function ManageVariables({ workflow, onClose }: {
                       render={({ field: f }) => (
                         <Select value={f.value} onValueChange={f.onChange} disabled={field.isDefault}>
                           <SelectTrigger className="col-span-2 w-full min-w-auto">
-                            <SelectValue placeholder="Select a fruit" />
+                            <SelectValue placeholder="Select a var type" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
-                              <SelectLabel>Fruits</SelectLabel>
+                              <SelectLabel>{f.value}</SelectLabel>
                               {varTypes.map(e => (
                                 <SelectItem key={e} value={e}>{e}</SelectItem>
                               ))}
@@ -121,7 +125,7 @@ export default function ManageVariables({ workflow, onClose }: {
                       control={control}
                     />
                     <Input
-                      className={'col-span-5'}
+                      className={'col-span-4'}
                       placeholder={'Variable name'}
                       disabled={field.isDefault}
                       {...register(`variables.${index}.name`)}
@@ -131,6 +135,14 @@ export default function ManageVariables({ workflow, onClose }: {
                       disabled={field.isDefault}
                       placeholder={'Default value'}
                       {...register(`variables.${index}.defaultValue`)}
+                    />
+                    <Controller render={({ field: f }) => (
+                      <div className="col-span-1 flex items-center space-x-2">
+                        <Switch checked={f.value} onCheckedChange={f.onChange} />
+                      </div>
+                    )}
+                                name={`variables.${index}.required`}
+                                control={control}
                     />
                     <Button
                       disabled={field.isDefault}
@@ -156,6 +168,7 @@ export default function ManageVariables({ workflow, onClose }: {
               type: 'string',
               defaultValue: '',
               isDefault: false,
+              required: false,
             })
           }}>Add variable</Button>
           <Button type="submit" form={'modal-edit-variable'}>Save changes</Button>

@@ -29,7 +29,9 @@ export interface WorkflowState {
   fetchWf: () => void,
   fetchVariable: () => void,
   create: (name: string) => Promise<boolean>,
-  reload: () => void
+  reload: () => void,
+  openEditVariable: boolean,
+  setOpenEditVariable: (val: boolean) => void
 }
 
 export const useWorkflow = create<WorkflowState>((set, getState) => ({
@@ -48,6 +50,12 @@ export const useWorkflow = create<WorkflowState>((set, getState) => ({
       const rspActiveRetry = await WorkflowRepository.getActive()
       set({
         workflow: rspActiveRetry.data,
+      })
+
+      WorkflowRepository.variables(rspActiveRetry.data._id).then((rep: any) => {
+        set({
+          variables: rep.data,
+        })
       })
     } else {
       useToastGlobal.getState().update({
@@ -128,4 +136,6 @@ export const useWorkflow = create<WorkflowState>((set, getState) => ({
       workflow: rspActiveRetry.data,
     })
   },
+  openEditVariable: false,
+  setOpenEditVariable: (val: boolean) => set({openEditVariable: val})
 }))

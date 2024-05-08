@@ -3,10 +3,22 @@ import { SheetHeader, SheetTitle } from '@/components/ui/sheet.tsx'
 import { IconMessages } from '@tabler/icons-react'
 import { Button } from '@/components/custom/button.tsx'
 import { useNode } from '@/lib/store/nodeStore.ts'
+import { useCallback } from 'react'
+import { replace } from 'lodash'
 
-export default function SmsNodeInfo() {
-  const { theme } = useTheme()
-  const {smsEdit, openSmsEdit} = useNode()
+interface ISmsNodeInfoProps {
+  content: {
+    source: string;
+    plainText: string;
+  };
+}
+
+export default function SmsNodeInfo({ content }: ISmsNodeInfoProps) {
+  const { openSmsEdit } = useNode()
+
+  const parseContent = useCallback(() => {
+    return content?.plainText
+  }, [content])
 
   return (
     <>
@@ -26,14 +38,14 @@ export default function SmsNodeInfo() {
         <Button onClick={() => {
           openSmsEdit({
             open: true,
-            data: {}
+            data: content,
           })
         }}>Edit Message</Button>
         <div className={'font-semibold text-lg'}>Preview</div>
         <div className={'border-2 rounded-lg p-3'}>
           <div className={'flex flex-col h-full justify-end items-end'}>
             <div className={'bg-slate-200 rounded-xl px-4 py-2'}>
-              <span>AIO: Quy khach nhap ma OTP 123456 de dang nhap tai khoan tren ung dung AIO</span>
+              <span>{parseContent()}</span>
             </div>
             <div className={'text-xs text-slate-700 pr-3'}>14:50</div>
           </div>

@@ -10,6 +10,10 @@ export interface NodeDataInterface {
   delayTime?: number;
   period?: number;
 
+  // * webhook
   webhookUrl?: string;
   method?: string;
+
+  //  * sms
+  content?: string;
 }
