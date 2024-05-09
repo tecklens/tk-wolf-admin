@@ -9,6 +9,6 @@ export const validateNode = (nodeData: NodeDataInterface, type: string) => {
   } else if (type === 'trigger') {
     return nodeData?.webhookUrl && nodeData?.method
   } else if (type === ChannelTypeEnum.SMS) {
-    return nodeData?.content
+    return nodeData?._providerId && nodeData?.content
   } else return true
 }
