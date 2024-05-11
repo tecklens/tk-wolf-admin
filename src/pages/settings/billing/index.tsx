@@ -8,7 +8,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -63,6 +62,7 @@ const appearance: Appearance = {
 export default function BillingSetting() {
   const { theme } = useTheme()
   const [clientSecret, setClientSecret] = useState('')
+  const [loadingSecret, setLoadingSecret] = useState(false)
   const [options, setOptions] = useState<StripeElementsOptions>({
     // passing the client secret obtained from the server
     clientSecret,
@@ -73,27 +73,28 @@ export default function BillingSetting() {
   })
 
   useEffect(() => {
-    if (clientSecret) return
+    if (loadingSecret || clientSecret) return
+    setLoadingSecret(true)
     UserRepository.createPaymentIndent({})
       .then(async (result: AxiosResponse) => {
         const clientSecret = result.data
         setClientSecret(clientSecret)
       })
+      .finally(() => setLoadingSecret(false))
   }, [])
 
-  useEffect(() => {
-    if (clientSecret) {
-      setOptions({
-        ...options,
-        appearance: {
-          ...options.appearance,
-          theme: theme === 'light' ? appearance.theme : 'night',
-        }
-      })
-    }
-  }, [options])
-
-  if (!clientSecret || !stripePromise) return null
+  // useEffect(() => {
+  //   if (clientSecret) {
+  //     setOptions({
+  //       clientSecret: clientSecret,
+  //       ...options,
+  //       appearance: {
+  //         ...options.appearance,
+  //         theme: theme === 'light' ? appearance.theme : 'night',
+  //       }
+  //     })
+  //   }
+  // }, [options])
 
   return (
     <Dialog>
@@ -108,9 +109,13 @@ export default function BillingSetting() {
               Make changes to your profile here. Click save when you're done.
             </DialogDescription>
           </DialogHeader>
-          <Elements stripe={stripePromise} options={options}>
-            <CheckoutForm />
-          </Elements>
+          {clientSecret && clientSecret != '' ? <Elements stripe={stripePromise} options={{
+              ...options,
+              clientSecret: clientSecret ?? '',
+            }}>
+              <CheckoutForm />
+            </Elements>
+            : null}
         </div>
         <div className={'w-[300px] h-full'}>
           <div className={'text-xl font-bold'}>Order summary</div>

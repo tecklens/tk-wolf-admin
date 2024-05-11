@@ -1,17 +1,28 @@
-import {Input} from "@/components/ui/input.tsx";
-import {Label} from "@/components/ui/label.tsx";
-import {Button} from "@/components/custom/button.tsx";
-import {IconCopy, IconEye, IconEyeOff} from "@tabler/icons-react";
-import {useEffect, useState} from "react";
-import {useEnv} from "@/lib/store/envStore.ts";
+import { Input } from '@/components/ui/input.tsx'
+import { Label } from '@/components/ui/label.tsx'
+import { Button } from '@/components/custom/button.tsx'
+import { IconCopy, IconEye, IconEyeOff } from '@tabler/icons-react'
+import { useEffect, useState } from 'react'
+import { useEnv } from '@/lib/store/envStore.ts'
+import { useToast } from '@/components/ui/use-toast.ts'
 
 export default function AccessKeys() {
-  const [show, setShow] = useState(false);
-  const {fetchEnv, env, apiKey} = useEnv(state => state)
+  const [show, setShow] = useState(false)
+  const { toast } = useToast()
+  const { fetchEnv, env, apiKey } = useEnv(state => state)
 
   useEffect(() => {
     fetchEnv()
   }, [fetchEnv])
+
+  const copyWorkflowIdentifier = (text: string, titleNoti: string) => {
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        toast({
+          title: titleNoti,
+        })
+      })
+  }
 
   return <div className={'flex flex-col space-y-8'}>
     <div className="grid w-full max-w-sm items-center gap-1.5">
@@ -22,7 +33,7 @@ export default function AccessKeys() {
       <div className={'flex items-center space-x-2'}>
         <Input
           id={'api-key'}
-          type={show ? "text" : "password"}
+          type={show ? 'text' : 'password'}
           placeholder="API KEY"
           className={'min-w-[350px]'}
           disabled
@@ -32,10 +43,12 @@ export default function AccessKeys() {
           variant="outline" size="icon" className={'aspect-square'}
           onClick={() => setShow(!show)}
         >
-          {show ? <IconEye size={18}/> : <IconEyeOff size={18}/>}
+          {show ? <IconEye size={18} /> : <IconEyeOff size={18} />}
         </Button>
-        <Button variant="outline" size="icon" className={'aspect-square'}>
-          <IconCopy size={18}/>
+        <Button variant="outline" size="icon" className={'aspect-square'} onClick={() => {
+          copyWorkflowIdentifier(apiKey ?? '', 'API Key copied to clipboard')
+        }}>
+          <IconCopy size={18} />
         </Button>
         <Button type="submit">Regenerate</Button>
       </div>
@@ -56,8 +69,12 @@ export default function AccessKeys() {
           className={'min-w-[350px]'}
           value={env?.identifier ?? ''}
         />
-        <Button variant="outline" size="icon" className={'aspect-square'}>
-          <IconCopy size={18}/>
+        <Button variant="outline" size="icon" className={'aspect-square'}
+                onClick={() => {
+                  copyWorkflowIdentifier(env?.identifier ?? '', 'Application Identifier copied to clipboard')
+                }}
+        >
+          <IconCopy size={18} />
         </Button>
       </div>
     </div>
@@ -70,15 +87,19 @@ export default function AccessKeys() {
       </Label>
       <div className={'flex items-center space-x-2'}>
         <Input
-          id={'api-key'}
+          id={'env-id'}
           disabled
           type="text"
           placeholder="Environment ID"
           className={'min-w-[350px]'}
           value={env?._id}
         />
-        <Button variant="outline" size="icon" className={'aspect-square'}>
-          <IconCopy size={18}/>
+        <Button variant="outline" size="icon" className={'aspect-square'}
+                onClick={() => {
+                  copyWorkflowIdentifier(env?._id ?? '', 'Environment Id copied to clipboard')
+                }}
+        >
+          <IconCopy size={18} />
         </Button>
       </div>
     </div>

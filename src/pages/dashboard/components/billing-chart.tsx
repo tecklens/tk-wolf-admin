@@ -1,16 +1,5 @@
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts'
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from 'recharts'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.tsx'
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import { camelCase } from 'lodash'
-import { useState } from 'react'
 
 const data = [
   {
@@ -70,54 +59,22 @@ const periodsType = [
 ]
 
 export function BillingChart() {
-  const [period, setPeriod] = useState('month')
 
   return (
     <Card className="col-span-1">
       <CardHeader>
         <CardTitle className={'flex justify-between'}>
-          <div>Overview</div>
-          <div>
-            <Select onValueChange={(val) => setPeriod(val)} value={period}>
-              <SelectTrigger className="w-[100px] capitalize">
-                <SelectValue className={'capitalize'}/>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel className={'capitalize'}>{camelCase(period)}</SelectLabel>
-                  {periodsType.map(e =>
-                    <SelectItem key={e} value={e} className={'capitalize'}>{camelCase(e)}</SelectItem>,
-                  )}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
+          <div>Billing</div>
         </CardTitle>
       </CardHeader>
       <CardContent className="pl-2">
         <ResponsiveContainer width="100%" height={350}>
-          <BarChart data={data}>
-            <XAxis
-              dataKey="name"
-              stroke="#888888"
-              fontSize={12}
-              tickLine={false}
-              axisLine={false}
-            />
-            <YAxis
-              stroke="#888888"
-              fontSize={12}
-              tickLine={false}
-              axisLine={false}
-              tickFormatter={(value) => `$${value}`}
-            />
-            <Bar
-              dataKey="total"
-              fill="currentColor"
-              radius={[4, 4, 0, 0]}
-              className="fill-primary"
-            />
-          </BarChart>
+          <LineChart width={600} height={300} data={data} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+            <Line type="monotone" dataKey="total" stroke="#8884d8" />
+            <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+            <XAxis dataKey="name" />
+            <YAxis />
+          </LineChart>
         </ResponsiveContainer>
       </CardContent>
     </Card>

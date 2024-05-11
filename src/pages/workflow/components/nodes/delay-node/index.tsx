@@ -18,9 +18,12 @@ export default memo(({data, isConnectable}: { isConnectable: boolean, data: Node
   const validNode = useMemo(() => validateNode(data, 'delay'), [data])
 
   return (
-    <WrapperNode onDelete={() => {
+    <WrapperNode
+      onDelete={() => {
       data.onDelete(nodeId ?? '')
-    }}>
+    }}
+      disableMenu={['change-provider']}
+    >
       <div
         className={`${theme === 'dark' ? 'bg-[#13131a]' : 'bg-white'}
         ${validNode ? 'border-[rgb(22,163,74)]' : 'border-red-500'}  

@@ -421,12 +421,13 @@ export default function WorkflowPane() {
               Make changes to provider here. Click save when you're done.
             </SheetDescription>
           </SheetHeader>
-          <SelectProvider onSuccess={(nodeId, providerId) => {
+          <SelectProvider onSuccess={(nodeId, providerId, pName) => {
             setNodes(nds => nds.map(e => e.id === nodeId ? ({
               ...e,
               data: {
                 ...e.data,
                 providerId: providerId,
+                providerName: pName,
               },
             }) : e))
             openModalProvider({
@@ -448,10 +449,13 @@ export default function WorkflowPane() {
             <DialogTitle>Edit email template</DialogTitle>
           </DialogHeader>
           <div className={'flex-1 flex flex-col'}>
-            <EditEmail onClose={() => openEmailEdit({
-              open: false,
-              data: null,
-            })} />
+            <EditEmail onClose={() => {
+              reloadNode(nodeSelected._id)
+              openEmailEdit({
+                open: false,
+                data: null,
+              })
+            }} />
           </div>
         </DialogContent>
       </Dialog>

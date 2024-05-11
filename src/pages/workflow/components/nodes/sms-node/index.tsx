@@ -1,6 +1,13 @@
 import React, { memo, useMemo } from 'react'
 import { Handle, Position, useNodeId } from 'reactflow'
-import { IconBug, IconCheck, IconMessages, IconPlugX } from '@tabler/icons-react'
+import {
+  IconBug,
+  IconCheck,
+  IconCircleCheckFilled,
+  IconCircleDashed,
+  IconMessages,
+  IconPlugX,
+} from '@tabler/icons-react'
 import { useTheme } from '@/components/theme-provider.tsx'
 import { useNode } from '@/lib/store/nodeStore.ts'
 import { WrapperNode } from '@/pages/workflow/components/WrapperNode.tsx'
@@ -17,11 +24,21 @@ export default memo(({ data, isConnectable }: { isConnectable: boolean, data: No
   const openModalProvider = useWorkflow(state => state.openModalProvider)
 
   const validNode = useMemo(() => validateNode(data, ChannelTypeEnum.SMS), [data])
+  const openProvider = () => {
+    openModalProvider({
+      nodeId: nodeId,
+      channel: ChannelTypeEnum.SMS,
+      open: true,
+    })
+  }
 
   return (
-    <WrapperNode onDelete={() => {
-      data.onDelete(nodeId ?? '')
-    }}>
+    <WrapperNode
+      onDelete={() => {
+        data.onDelete(nodeId ?? '')
+      }}
+      openProvider={openProvider}
+    >
       <div
         className={`${theme === 'dark' ? 'bg-[#13131a]' : 'bg-white'}
         ${validNode ? 'border-[rgb(22,163,74)]' : 'border-red-500'}  
@@ -49,19 +66,18 @@ export default memo(({ data, isConnectable }: { isConnectable: boolean, data: No
                 </div>
                 <button
                   onClick={e => {
-                    console.log('open select provider')
                     e.stopPropagation()
-                    openModalProvider({
-                      nodeId: nodeId,
-                      channel: ChannelTypeEnum.SMS,
-                      open: true,
-                    })
+                    openProvider()
                   }}
                   className={'py-0.5 border px-2 border-red-500 rounded'}>
                   Select
                 </button>
               </div>
-              : null}
+              : <div className={'inline-flex items-center text-xs space-x-1 text-green-500'}>
+                <IconCircleCheckFilled size={12} />
+                <div>{data?.providerName} (Provider)</div>
+              </div>
+            }
             {!data?.content ? <div className={'inline-flex space-x-2'}>
                 <span className={'text-red-500'}>Message content is missing</span>
               </div>

@@ -31,7 +31,7 @@ export default function Dashboard() {
       if (rep.status === HttpStatusCode.Ok) {
         setRRequest(rep.data)
       }
-    }, 3500)
+    }, 5000)
 
     return () => clearInterval(interval)
   }, [])

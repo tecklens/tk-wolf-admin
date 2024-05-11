@@ -13,6 +13,8 @@ import { toast } from '@/components/ui/use-toast.ts'
 import { RepositoryFactory } from '@/api/repository-factory.ts'
 import { useNode } from '@/lib/store/nodeStore.ts'
 import { HttpStatusCode } from 'axios'
+import { useWorkflow } from '@/lib/store/workflowStore.ts'
+import { reduce } from 'lodash'
 
 const WorkflowRepository = RepositoryFactory.get('wf')
 
@@ -32,6 +34,7 @@ export default function EditEmail({ onClose }: { onClose: () => void }) {
   const ref = useRef<HTMLDivElement>(null)
   const [openSelectTemplates, setOpenSelectTemplates] = useState(false)
   const { node } = useNode((state) => state)
+  const { variables } = useWorkflow(state => state)
 
   const exportHtml = () => {
     const unlayer = emailEditorRef.current?.editor
@@ -174,21 +177,14 @@ export default function EditEmail({ onClose }: { onClose: () => void }) {
             business_name: 'Tesla Inc',
             current_user_name: 'Elon Musk',
           },
-          mergeTags: {
-            first_name: {
-              name: 'First Name',
-              value: '{{first_name}}',
-              sample: 'John',
+          mergeTags: reduce(variables, (rlt, val) => ({
+            ...rlt,
+            [val.name ?? '']: {
+              name: val.name,
+              value: `{{${val.name}}`,
+              sample: val.defaultValue ?? val.name,
             },
-            last_name: {
-              name: 'Last Name',
-              value: '{{last_name}}',
-              sample: 'Doe',
-            },
-          },
-          designTagsConfig: {
-            delimiter: ['--', '--'],
-          },
+          }), {}),
         }}
                      minHeight={height}
                      ref={emailEditorRef}

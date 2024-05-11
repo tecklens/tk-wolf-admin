@@ -12,9 +12,22 @@ import {
   ContextMenuSubContent,
   ContextMenuSubTrigger,
   ContextMenuTrigger,
-} from "@/components/ui/context-menu"
+} from '@/components/ui/context-menu'
+import React from 'react'
 
-export function WrapperNode({children, onDelete}: {children: React.ReactNode, onDelete: () => void}) {
+export interface IWrapperNodeProps {
+  children: React.ReactNode;
+  onDelete: () => void,
+  disableMenu?: string[] | undefined
+  openProvider?: () => void
+}
+
+export function WrapperNode({
+                              children,
+                              onDelete,
+                              disableMenu = [],
+                              openProvider = () => {}
+}: IWrapperNodeProps) {
   return (
     <ContextMenu>
       <ContextMenuTrigger>
@@ -53,12 +66,13 @@ export function WrapperNode({children, onDelete}: {children: React.ReactNode, on
         </ContextMenuCheckboxItem>
         <ContextMenuCheckboxItem>Show Full URLs</ContextMenuCheckboxItem>
         <ContextMenuSeparator />
-        <ContextMenuRadioGroup value="pedro">
-          <ContextMenuLabel inset>People</ContextMenuLabel>
+        <ContextMenuRadioGroup value="config">
+          <ContextMenuLabel inset>Config</ContextMenuLabel>
           <ContextMenuSeparator />
-          <ContextMenuRadioItem value="pedro">
-            Pedro Duarte
-          </ContextMenuRadioItem>
+          {disableMenu?.includes('change-provider') ? null
+            : <ContextMenuRadioItem value="change-provider" onClick={openProvider}>
+              Change Provider
+            </ContextMenuRadioItem>}
           <ContextMenuRadioItem value="delete" onClick={onDelete}>Delete</ContextMenuRadioItem>
         </ContextMenuRadioGroup>
       </ContextMenuContent>

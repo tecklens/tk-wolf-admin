@@ -13,7 +13,7 @@ function getLogoFileName(providerId: string) {
   return `/images/providers/light/square/${providerId}.svg`
 }
 
-export default function SelectProvider({ onSuccess }: { onSuccess: (id: string, pId: string) => void }) {
+export default function SelectProvider({ onSuccess }: { onSuccess: (id: string, pId: string, pNam: string) => void }) {
   const { providersSelectNode, fetchProviderNode } = useProvider()
   const selectingProvider = useWorkflow(state => state.selectingProvider)
   const { toast } = useToast()
@@ -29,10 +29,11 @@ export default function SelectProvider({ onSuccess }: { onSuccess: (id: string, 
     const rsp = await WorkflowRepository.setProviderNode({
       id: selectingProvider.nodeId,
       providerId: e._id,
+      providerName: e.name,
     })
 
     if (rsp.status === HttpStatusCode.Created) {
-      onSuccess(selectingProvider.nodeId ?? '', e._id)
+      onSuccess(selectingProvider.nodeId ?? '', e._id, e.name)
     } else {
       toast({
         variant: 'destructive',

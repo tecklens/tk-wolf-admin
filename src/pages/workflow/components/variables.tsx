@@ -22,9 +22,10 @@ import {
   SelectValue,
 } from '@/components/ui/select.tsx'
 import { CrossCircledIcon } from '@radix-ui/react-icons'
-import { reduce } from 'lodash'
+import { get, reduce } from 'lodash'
 import { Switch } from '@/components/ui/switch.tsx'
 import { Label } from '@/components/ui/label.tsx'
+import { useTheme } from '@/components/theme-provider.tsx'
 
 const WorkflowRepository = RepositoryFactory.get('wf')
 
@@ -35,7 +36,10 @@ const formSchema = z.object({
     .array(z.object({
       _id: z.string().optional(),
       type: z.enum(['string', ...varTypes]),
-      name: z.string(),
+      name: z.string()
+        .min(1, {message: 'Variable name has a min length of 6'})
+        .max(50, {message: 'Variable name has a max length of 6'})
+        .regex(new RegExp('^[a-zA-Z_]*$'), { message: 'Invalid variable name. Regex: [a-zA-Z_]' }),
       defaultValue: z.any().optional(),
       isDefault: z.boolean().default(false),
       required: z.boolean().default(false).optional(),
@@ -47,6 +51,7 @@ export default function ManageVariables({ workflow, onClose }: {
   onClose: () => void
 }) {
   const { toast } = useToast()
+  const { theme } = useTheme()
   const { fetchVariable, variables } = useWorkflow()
   const { control, register, ...form } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -55,7 +60,7 @@ export default function ManageVariables({ workflow, onClose }: {
     },
   })
 
-  const { fields, append, prepend, remove, swap, move, insert } = useFieldArray({
+  const { fields, append, remove, swap, move, insert } = useFieldArray({
     control, // control props comes from useForm (optional: if you are using FormProvider)
     name: 'variables', // unique name for your Field Array
   })
@@ -95,7 +100,8 @@ export default function ManageVariables({ workflow, onClose }: {
         <div className={'border min-h-[200px] mb-3 rounded-lg border-dashed p-2'}>
           {fields.length > 0
             ? <div className={'flex flex-col space-y-2'}>
-              <div className={'grid grid-cols-12 gap-3 font-bold text-sm text-slate-900'}>
+              <div
+                className={`grid grid-cols-12 gap-3 font-bold text-sm ${theme === 'light' ? 'text-slate-900' : 'text-slate-200'}`}>
                 <div className={'col-span-2'}>Type</div>
                 <div className={'col-span-4'}>Name</div>
                 <div className={'col-span-4'}>Default Value</div>
@@ -124,12 +130,16 @@ export default function ManageVariables({ workflow, onClose }: {
                       name={`variables.${index}.type`}
                       control={control}
                     />
-                    <Input
-                      className={'col-span-4'}
-                      placeholder={'Variable name'}
-                      disabled={field.isDefault}
-                      {...register(`variables.${index}.name`)}
-                    />
+                    <div className={'col-span-4 flex flex-col'}>
+                      <Input
+                        className={'w-full'}
+                        placeholder={'Variable name'}
+                        disabled={field.isDefault}
+                        {...register(`variables.${index}.name`)}
+                      />
+                      {/*@ts-ignore*/}
+                      <div className={'text-red-500 text-xs'}>{get(form.formState.errors, `variables.${index}.name`)?.message}</div>
+                    </div>
                     <Input
                       className={'col-span-4'}
                       disabled={field.isDefault}
