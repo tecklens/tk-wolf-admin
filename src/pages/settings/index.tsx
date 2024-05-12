@@ -41,7 +41,7 @@ export default function Settings() {
             <SidebarNav items={sidebarNavItems} />
           </aside>
           <div className='w-full p-1 pr-4 lg:max-w-xl'>
-            <div className='pb-16'>
+            <div className='pb-16 w-full'>
               <Outlet />
             </div>
           </div>
