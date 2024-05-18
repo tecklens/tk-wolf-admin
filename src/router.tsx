@@ -125,15 +125,21 @@ const router = createBrowserRouter([
   {
     path: '/sign-in',
     lazy: async () => ({
-      Component: (await import('./pages/auth/sign-in')).default,
-    }),
-  },
-  {
-    path: '/sign-in-2',
-    lazy: async () => ({
       Component: (await import('./pages/auth/sign-in-2')).default,
     }),
   },
+  {
+    path: '/auth/invitation/:id',
+    lazy: async () => ({
+      Component: (await import('./pages/auth/invitation')).default,
+    }),
+  },
+  // {
+  //   path: '/sign-in-2',
+  //   lazy: async () => ({
+  //     Component: (await import('./pages/auth/sign-in-2')).default,
+  //   }),
+  // },
   {
     path: '/sign-up',
     lazy: async () => ({

@@ -21,6 +21,7 @@ const formSchema = z.object({
     .boolean(),
   name: z.string().min(1, { message: 'Name not found. Please input name' }),
   identifier: z.string().min(5, { message: 'Identifier not found. Please reset browser' }),
+  credentials: z.any(),
 })
 
 export default function UpdateProvider({ selected, onCreateSuccess }: {

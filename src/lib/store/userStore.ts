@@ -12,7 +12,7 @@ export interface IUserStore {
   user: UserInterface | null;
   token: string | undefined;
   signIn: (user: UserInterface) => Promise<boolean>
-  updateUser: (user: UserInterface) => void
+  updateUser: () => void
   sendUpdate: (user: UserInterface) => void
   switchEnv: (envId: string) => void
   setToken: (token: string) => void
@@ -38,10 +38,12 @@ export const useUser = create<IUserStore>(
 
       return false
     },
-    updateUser: (user: UserInterface) => {
+    updateUser: async () => {
+      const info = await UserRepository.getInfoMe()
+      console.log(info.data)
       useEnv.getState().fetchEnv()
       useEnv.getState().fetchAllEnv()
-      set({user})
+      set({user: info.data})
     },
     sendUpdate: async (user: UserInterface) => {
       const rsp = await UserRepository.update(user)
@@ -76,8 +78,7 @@ export const useUser = create<IUserStore>(
 
       if (token && token.length > 128) {
         localStorage.setItem('token', token);
-        const info = await UserRepository.getInfoMe()
-        getState().updateUser(info.data)
+        getState().updateUser()
       } else {
         localStorage.removeItem('token')
       }

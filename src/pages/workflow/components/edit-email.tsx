@@ -68,6 +68,7 @@ export default function EditEmail({ onClose }: { onClose: () => void }) {
     if (!node) return
 
     emailEditorRef.current?.editor?.exportHtml(async (d) => {
+      console.log(d.html)
       const rsp = await WorkflowRepository.updateNode([{
         id: node.id,
         data: {

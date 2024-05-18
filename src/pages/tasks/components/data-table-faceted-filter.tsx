@@ -20,14 +20,18 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { Separator } from '@/components/ui/separator'
+import { ForwardRefExoticComponent, RefAttributes } from 'react'
+import { IconProps } from '@radix-ui/react-icons/dist/types'
+import { TaskStatus } from '@/types/task.interface.ts'
 
 interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>
   title?: string
   options: {
     label: string
-    value: string
-    icon?: React.ComponentType<{ className?: string }>
+    value: string | TaskStatus
+    icon: ForwardRefExoticComponent<IconProps & RefAttributes<SVGSVGElement>>
+    color?: string
   }[]
 }
 
@@ -37,7 +41,7 @@ export function DataTableFacetedFilter<TData, TValue>({
   options,
 }: DataTableFacetedFilterProps<TData, TValue>) {
   const facets = column?.getFacetedUniqueValues()
-  const selectedValues = new Set(column?.getFilterValue() as string[])
+  const selectedValues = new Set(column?.getFilterValue() as any[])
 
   return (
     <Popover>

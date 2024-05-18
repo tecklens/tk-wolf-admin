@@ -6,51 +6,23 @@ import { RepositoryFactory } from '@/api/repository-factory.ts'
 import { AxiosResponse } from 'axios'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { useTheme } from '@/components/theme-provider.tsx'
-import { throttle } from 'lodash'
-import PricingPage from '@/pages/settings/billing/tier/pricing-page.tsx'
+import { find, get, throttle } from 'lodash'
+import PricingPage, { tiers } from '@/pages/settings/billing/tier/pricing-page.tsx'
 import { toast } from '@/components/ui/use-toast.ts'
+import { UserPlan } from '@/constant'
 
 const UserRepository = RepositoryFactory.get('user')
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
 
 const appearance: Appearance = {
-  theme: 'stripe',
+  theme: 'night',
   variables: {
     fontFamily: ' "Gill Sans", sans-serif',
     fontLineHeight: '1.5',
     borderRadius: '10px',
-    colorBackground: '#F6F8FA',
-    accessibleColorOnColorPrimary: '#262626',
-  },
-  rules: {
-    '.Block': {
-      backgroundColor: 'var(--colorBackground)',
-      boxShadow: 'none',
-      padding: '12px',
-    },
-    '.Input': {
-      padding: '12px',
-    },
-    '.Input:disabled, .Input--invalid:disabled': {
-      color: 'lightgray',
-    },
-    '.Tab': {
-      padding: '10px 12px 8px 12px',
-      border: 'none',
-    },
-    '.Tab:hover': {
-      border: 'none',
-      boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.03), 0px 3px 7px rgba(18, 42, 66, 0.04)',
-    },
-    '.Tab--selected, .Tab--selected:focus, .Tab--selected:hover': {
-      border: 'none',
-      backgroundColor: '#fff',
-      boxShadow: '0 0 0 1.5px var(--colorPrimaryText), 0px 1px 1px rgba(0, 0, 0, 0.03), 0px 3px 7px rgba(18, 42, 66, 0.04)',
-    },
-    '.Label': {
-      fontWeight: '500',
-    },
+    // colorBackground: '#F6F8FA',
+    // accessibleColorOnColorPrimary: '#262626',
   },
 }
 
@@ -59,21 +31,21 @@ export default function BillingSetting() {
   const [clientSecret, setClientSecret] = useState('')
   const [loadingSecret, setLoadingSecret] = useState(false)
   const [openPayment, setOpenPayment] = useState(false)
-  const [options, setOptions] = useState<StripeElementsOptions>({
-    // passing the client secret obtained from the server
-    clientSecret,
-    appearance: {
-      ...appearance,
-      theme: theme === 'light' ? appearance.theme : 'night',
-    },
-  })
+  const [selectedPlan, setSelectedPlan] = useState({
+    plan: 0,
+    frequency: '1'
+  });
 
-  const fetchSecret = throttle(() => {
+  const fetchSecret = throttle((plan: number, frequency: string) => {
     if (loadingSecret || clientSecret) return
     setLoadingSecret(true)
     UserRepository.createPaymentIndent({
-      plan: 'free',
-
+      plan: plan === UserPlan.free ? 'free'
+        : plan === UserPlan.gold ? 'gold'
+          : plan === UserPlan.silver ? 'silver'
+            : plan === UserPlan.diamond ? 'diamond'
+              : '',
+      frequency,
     })
       .then(async (result: AxiosResponse) => {
         const clientSecret = result.data
@@ -90,22 +62,17 @@ export default function BillingSetting() {
       .finally(() => setLoadingSecret(false))
   }, 300)
 
-  // useEffect(() => {
-  //   if (clientSecret) {
-  //     setOptions({
-  //       clientSecret: clientSecret,
-  //       ...options,
-  //       appearance: {
-  //         ...options.appearance,
-  //         theme: theme === 'light' ? appearance.theme : 'night',
-  //       }
-  //     })
-  //   }
-  // }, [options])
+  const tier = get(find(tiers, e => e.value === selectedPlan.plan), ['price', selectedPlan.frequency])
 
   return (
     <div className={'w-full'}>
-      <PricingPage open={fetchSecret}/>
+      <PricingPage open={(plan, frequency) => {
+        setSelectedPlan({
+          plan,
+          frequency,
+        })
+        fetchSecret(plan, frequency)
+      }} />
       <Dialog open={openPayment} onOpenChange={setOpenPayment}>
         <DialogContent className="sm:max-w-[885px] flex space-x-4">
           <div className={'flex-1'}>
@@ -116,8 +83,11 @@ export default function BillingSetting() {
               </DialogDescription>
             </DialogHeader>
             {clientSecret && clientSecret != '' ? <Elements stripe={stripePromise} options={{
-                ...options,
-                clientSecret: clientSecret ?? '',
+                appearance: {
+                  ...appearance,
+                  theme: 'night',
+                },
+                clientSecret: clientSecret,
               }}>
                 <CheckoutForm />
               </Elements>
@@ -127,17 +97,21 @@ export default function BillingSetting() {
             <div className={'text-xl font-bold'}>Order summary</div>
             <div className={'flex flex-col'}>
               <div className={'flex justify-between font-semibold'}>
-                <div>Monthly package</div>
-                <div>$250</div>
+                <div>{selectedPlan?.frequency === '1' ? 'Monthly': 'Annually'} package</div>
+                <div>{tier}</div>
               </div>
               <div className={'flex justify-between text-xs text-slate-500'}>
                 <div>250,000 events per month</div>
                 <div>billed monthy</div>
               </div>
-              <div className={'bg-gray-100 p-3 rounded-lg my-3'}>
+              <div className={`${theme === 'light' ? 'bg-gray-100' : 'bg-gray-900'} p-3 rounded-lg my-3 text-xs`}>
                 If you consume over 250,000 events per month, you will be billed monthly for an overage based on the
                 table
                 below
+              </div>
+              <div className={'inline-flex space-x-1 items-center text-sm justify-center'}>
+                <span>Questions?</span>
+                <a href={'#'} className={'underline'}>Contact our sales team</a>
               </div>
             </div>
           </div>

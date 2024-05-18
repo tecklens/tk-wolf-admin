@@ -7,6 +7,8 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/custom/button.tsx'
 import PricingSectionCards from '@/pages/settings/billing/tier/pricing-plan-include.tsx'
+import { useUser } from '@/lib/store/userStore.ts'
+import { UserPlan } from '@/constant'
 
 export interface PricingTierFrequency {
   id: string;
@@ -27,6 +29,7 @@ export interface PricingTier {
   highlighted?: boolean;
   cta: string;
   soldOut?: boolean;
+  value: number;
 }
 
 export const frequencies: PricingTierFrequency[] = [
@@ -50,7 +53,8 @@ export const tiers: PricingTier[] = [
     featured: false,
     highlighted: false,
     soldOut: false,
-    cta: `Sign up`,
+    cta: `Get started`,
+    value: UserPlan.free,
   },
   {
     name: 'Pro',
@@ -67,7 +71,8 @@ export const tiers: PricingTier[] = [
     featured: false,
     highlighted: true,
     soldOut: false,
-    cta: `Get started`,
+    cta: `Upgrade`,
+    value: UserPlan.silver
   },
   {
     name: 'Scaler',
@@ -84,7 +89,8 @@ export const tiers: PricingTier[] = [
     featured: true,
     highlighted: false,
     soldOut: false,
-    cta: `Get started`,
+    cta: `Upgrade`,
+    value: UserPlan.gold,
   },
 ];
 
@@ -105,10 +111,10 @@ const CheckIcon = ({ className }: { className?: string }) => {
   );
 };
 
-export default function PricingPage({open}: {open: Function}) {
+export default function PricingPage({open}: {open: (plan: number, frequency: string) => void}) {
   const [frequency, setFrequency] = useState(frequencies[0]);
-
-  const bannerText = 'Pricing';
+  const {user} = useUser()
+  console.log(user)
 
   return (
     <div
@@ -239,8 +245,8 @@ export default function PricingPage({open}: {open: Function}) {
                 >
                   <Button
                     size="lg"
-                    disabled={tier.soldOut}
-                    onClick={() => open()}
+                    disabled={user?.plan === tier.value}
+                    onClick={() => open(tier.value, frequency.value)}
                     className={cn(
                       'w-full text-black dark:text-white',
                       !tier.highlighted && !tier.featured
@@ -250,7 +256,7 @@ export default function PricingPage({open}: {open: Function}) {
                     )}
                     variant={tier.highlighted ? 'default' : 'outline'}
                   >
-                    {tier.soldOut ? 'Sold out' : tier.cta}
+                    {user?.plan === tier.value ? 'Current plan' : tier.cta}
                   </Button>
                 </div>
 
