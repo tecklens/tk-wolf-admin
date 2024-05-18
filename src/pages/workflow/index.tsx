@@ -65,7 +65,12 @@ export default function Workflow() {
             </h1>
           </div>
           <div className="flex items-center space-x-2">
-            <Button variant="default" className={'aspect-square'} size={'icon'} onClick={() => setOpenEditVariable(true)}><IconVariable /></Button>
+            <Button
+              disabled={!workflow}
+              variant="default"
+              className={'aspect-square'}
+              size={'icon'}
+                    onClick={() => setOpenEditVariable(true)}><IconVariable /></Button>
             <Button variant="default" className={'aspect-square'} size={'icon'} onClick={() => setOpenSetting(true)}><IconSettings /></Button>
 
             <Select value={workflow?._id} onValueChange={(val) => select(val)}>

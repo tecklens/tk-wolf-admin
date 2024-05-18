@@ -1,6 +1,7 @@
 import { Card } from '@/components/ui/card'
 import { UserAuthForm } from './components/user-auth-form'
 import { useTheme } from '@/components/theme-provider.tsx'
+import { Link } from 'react-router-dom'
 
 export default function SignIn2() {
   const { theme } = useTheme()
@@ -28,6 +29,16 @@ export default function SignIn2() {
               </p>
             </div>
             <UserAuthForm />
+            <p className='mt-4 px-8 text-center text-sm text-muted-foreground'>
+              Don't have an account?{' '}
+              <Link
+                to='/sign-up'
+                className='underline underline-offset-4 hover:text-primary'
+              >
+                Sign up
+              </Link>
+              .
+            </p>
             <p className="mt-4 px-8 text-center text-sm text-muted-foreground">
               By clicking login, you agree to our{' '}
               <a

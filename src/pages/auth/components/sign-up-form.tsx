@@ -1,7 +1,7 @@
 import { HTMLAttributes, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IconBrandFacebook, IconBrandGithub } from '@tabler/icons-react'
+import { IconBrandFacebook, IconBrandGithub, IconBrandGoogle } from '@tabler/icons-react'
 import { z } from 'zod'
 import {
   Form,
@@ -15,8 +15,15 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/custom/button'
 import { PasswordInput } from '@/components/custom/password-input'
 import { cn } from '@/lib/utils'
+import { RepositoryFactory } from '@/api/repository-factory.ts'
+import { useToast } from '@/components/ui/use-toast.ts'
+import { AxiosResponse, HttpStatusCode } from 'axios'
+import { useAuth } from '@/context/auth.tsx'
 
-interface SignUpFormProps extends HTMLAttributes<HTMLDivElement> {}
+const AuthRepository = RepositoryFactory.get('auth')
+
+interface SignUpFormProps extends HTMLAttributes<HTMLDivElement> {
+}
 
 const formSchema = z
   .object({
@@ -24,55 +31,81 @@ const formSchema = z
       .string()
       .min(1, { message: 'Please enter your email' })
       .email({ message: 'Invalid email address' }),
+    firstName: z.string().min(1, { message: 'Please enter your name' }),
     password: z
       .string()
       .min(1, {
         message: 'Please enter your password',
       })
-      .min(7, {
-        message: 'Password must be at least 7 characters long',
+      .min(6, {
+        message: 'Password must be at least 64 characters long',
+      })
+      .max(64, {
+        message: 'Maximum password length is 64',
       }),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match.",
+    message: 'Passwords don\'t match.',
     path: ['confirmPassword'],
   })
 
 export function SignUpForm({ className, ...props }: SignUpFormProps) {
   const [isLoading, setIsLoading] = useState(false)
+  const { toast } = useToast()
+  const { setToken } = useAuth()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: '',
+      firstName: '',
       password: '',
       confirmPassword: '',
     },
   })
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsLoading(true)
-    console.log(data)
+    try {
+      const rsp: AxiosResponse = await AuthRepository.register(data)
 
-    setTimeout(() => {
+      if (rsp.status === HttpStatusCode.Created) {
+        setToken(rsp.data.token)
+
+        window.location.href = '/'
+      } else {
+        toast({
+          variant: 'destructive',
+          title: 'Register failed',
+        })
+      }
+    } catch (e: any) {
+      console.log(e)
+      toast({
+        variant: 'destructive',
+        title: e.response?.data?.message,
+      })
+    } finally {
       setIsLoading(false)
-    }, 3000)
+
+    }
+
   }
 
   return (
     <div className={cn('grid gap-6', className)} {...props}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className='grid gap-2'>
+          <div className="grid gap-2">
             <FormField
               control={form.control}
-              name='email'
+              name="email"
               render={({ field }) => (
-                <FormItem className='space-y-1'>
+                <FormItem className="space-y-1">
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder='name@example.com' {...field} />
+                    <Input placeholder="name@example.com" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -80,12 +113,25 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
             />
             <FormField
               control={form.control}
-              name='password'
+              name="firstName"
               render={({ field }) => (
-                <FormItem className='space-y-1'>
+                <FormItem className="space-y-1">
+                  <FormLabel>Full Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Johnson" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem className="space-y-1">
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <PasswordInput placeholder='********' {...field} />
+                    <PasswordInput placeholder="********" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -93,50 +139,50 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
             />
             <FormField
               control={form.control}
-              name='confirmPassword'
+              name="confirmPassword"
               render={({ field }) => (
-                <FormItem className='space-y-1'>
+                <FormItem className="space-y-1">
                   <FormLabel>Confirm Password</FormLabel>
                   <FormControl>
-                    <PasswordInput placeholder='********' {...field} />
+                    <PasswordInput placeholder="********" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button className='mt-2' loading={isLoading}>
+            <Button className="mt-2" loading={isLoading}>
               Create Account
             </Button>
 
-            <div className='relative my-2'>
-              <div className='absolute inset-0 flex items-center'>
-                <span className='w-full border-t' />
+            <div className="relative my-2">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
               </div>
-              <div className='relative flex justify-center text-xs uppercase'>
-                <span className='bg-background px-2 text-muted-foreground'>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
                   Or continue with
                 </span>
               </div>
             </div>
 
-            <div className='flex items-center gap-2'>
+            <div className="flex items-center gap-2">
               <Button
-                variant='outline'
-                className='w-full'
-                type='button'
+                variant="outline"
+                className="w-full"
+                type="button"
                 loading={isLoading}
-                leftSection={<IconBrandGithub className='h-4 w-4' />}
+                leftSection={<IconBrandGithub className="h-4 w-4" />}
               >
                 GitHub
               </Button>
               <Button
-                variant='outline'
-                className='w-full'
-                type='button'
+                variant="outline"
+                className="w-full"
+                type="button"
                 loading={isLoading}
-                leftSection={<IconBrandFacebook className='h-4 w-4' />}
+                leftSection={<IconBrandGoogle className="h-4 w-4" />}
               >
-                Facebook
+                Google
               </Button>
             </div>
           </div>

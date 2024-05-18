@@ -94,32 +94,32 @@ export const sidelinks: SideLink[] = [
     href: '/provider',
     icon: <IconComponents size={18} />,
   },
-  {
-    title: 'Error Pages',
-    label: '',
-    href: '',
-    icon: <IconExclamationCircle size={18} />,
-    sub: [
-      {
-        title: 'Not Found',
-        label: '',
-        href: '/404',
-        icon: <IconError404 size={18} />,
-      },
-      {
-        title: 'Internal Server Error',
-        label: '',
-        href: '/500',
-        icon: <IconServerOff size={18} />,
-      },
-      {
-        title: 'Maintenance Error',
-        label: '',
-        href: '/503',
-        icon: <IconBarrierBlock size={18} />,
-      },
-    ],
-  },
+  // {
+  //   title: 'Error Pages',
+  //   label: '',
+  //   href: '',
+  //   icon: <IconExclamationCircle size={18} />,
+  //   sub: [
+  //     {
+  //       title: 'Not Found',
+  //       label: '',
+  //       href: '/404',
+  //       icon: <IconError404 size={18} />,
+  //     },
+  //     {
+  //       title: 'Internal Server Error',
+  //       label: '',
+  //       href: '/500',
+  //       icon: <IconServerOff size={18} />,
+  //     },
+  //     {
+  //       title: 'Maintenance Error',
+  //       label: '',
+  //       href: '/503',
+  //       icon: <IconBarrierBlock size={18} />,
+  //     },
+  //   ],
+  // },
   {
     title: 'Settings',
     label: '',

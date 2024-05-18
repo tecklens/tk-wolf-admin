@@ -23,6 +23,8 @@ const formSchema = z.object({
     .string(),
   identifier: z
     .string(),
+  _id: z
+    .string(),
 })
 
 export default function WorkflowSetting({ workflow, onClose }: {
@@ -37,6 +39,7 @@ export default function WorkflowSetting({ workflow, onClose }: {
       name: '',
       identifier: '',
       description: '',
+      _id: '',
     },
   })
 
@@ -45,6 +48,15 @@ export default function WorkflowSetting({ workflow, onClose }: {
       .then(() => {
         toast({
           title: 'Workflow identifier copied to clipboard',
+        })
+      })
+  }
+
+  const copyWorkflowId = () => {
+    navigator.clipboard.writeText(form.getValues()?._id)
+      .then(() => {
+        toast({
+          title: 'Workflow Id copied to clipboard',
         })
       })
   }
@@ -100,6 +112,29 @@ export default function WorkflowSetting({ workflow, onClose }: {
                 <FormLabel>Description</FormLabel>
                 <FormControl>
                   <Textarea placeholder="Please input workflow description" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="_id"
+            render={({ field }) => (
+              <FormItem className="space-y-1">
+                <FormLabel>Workflow Id</FormLabel>
+                <FormControl>
+                  <div className={'flex items-center space-x-2'}>
+                    <Input
+                      disabled
+                      {...field}
+                      placeholder="Workflow Id"
+                    />
+                    <Button variant="outline" size="icon" type={'button'}
+                            className={'aspect-square'} onClick={copyWorkflowId}>
+                      <IconCopy size={18} />
+                    </Button>
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -7,6 +7,9 @@ export default {
   login(payload: UserInterface) {
     return BaseRepository.post(`${resource}/login`, payload)
   },
+  register(payload: UserInterface) {
+    return BaseRepository.post(`${resource}/register`, payload)
+  },
   githubAuth() {
     return BaseRepository.get(`${resource}/github`)
   },

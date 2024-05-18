@@ -52,11 +52,13 @@ export const useWorkflow = create<WorkflowState>((set, getState) => ({
         workflow: rspActiveRetry.data,
       })
 
-      WorkflowRepository.variables(rspActiveRetry.data._id).then((rep: any) => {
-        set({
-          variables: rep.data,
+      if (rspActiveRetry.data) {
+        WorkflowRepository.variables(rspActiveRetry.data._id).then((rep: any) => {
+          set({
+            variables: rep.data,
+          })
         })
-      })
+      }
     } else {
       useToastGlobal.getState().update({
         variant: 'destructive',
@@ -82,17 +84,20 @@ export const useWorkflow = create<WorkflowState>((set, getState) => ({
           set({
             workflow: rspActiveRetry.data,
           })
-          WorkflowRepository.variables(rspActiveRetry.data._id).then((rep: any) => {
-            set({
-              variables: rep.data,
+          if (rspActiveRetry.data) {
+            WorkflowRepository.variables(rspActiveRetry.data._id).then((rep: any) => {
+              set({
+                variables: rep.data,
+              })
             })
-          })
+          }
         } else {
-          WorkflowRepository.variables(rspActive.data._id).then((rep: any) => {
-            set({
-              variables: rep.data,
+          if (rspActive.data)
+            WorkflowRepository.variables(rspActive.data._id).then((rep: any) => {
+              set({
+                variables: rep.data,
+              })
             })
-          })
         }
       } else {
         useToastGlobal.getState().update({
@@ -137,5 +142,5 @@ export const useWorkflow = create<WorkflowState>((set, getState) => ({
     })
   },
   openEditVariable: false,
-  setOpenEditVariable: (val: boolean) => set({openEditVariable: val})
+  setOpenEditVariable: (val: boolean) => set({ openEditVariable: val }),
 }))

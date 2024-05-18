@@ -94,8 +94,8 @@ export default function Sidebar2({
             <div
               className={`flex flex-col justify-end truncate ${isCollapsed ? 'invisible w-0' : 'visible w-auto'}`}
             >
-              <span className='font-medium'>Tecklens Wolf</span>
-              <span className='text-xs'>Vite + ShadcnUI</span>
+              <span className='font-medium'>WOLF</span>
+              <span className='text-xs'>Notification Flow</span>
             </div>
           </div>
 

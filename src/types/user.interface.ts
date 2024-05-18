@@ -12,3 +12,13 @@ export interface UserInterface {
 
   plan?: number;
 }
+
+export interface ICreateUserDto {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName?: string;
+  organizationName?: string;
+  origin?: string;
+  jobTitle?: string;
+}

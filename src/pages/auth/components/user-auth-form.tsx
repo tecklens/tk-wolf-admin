@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { Link, useLocation, useSearchParams } from 'react-router-dom'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IconBrandFacebook, IconBrandGithub } from '@tabler/icons-react'
+import { IconBrandFacebook, IconBrandGithub, IconBrandGoogle } from '@tabler/icons-react'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/custom/button'
@@ -150,9 +150,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                 className="w-full"
                 type="button"
                 loading={isLoading}
-                leftSection={<IconBrandFacebook className="h-4 w-4" />}
+                leftSection={<IconBrandGoogle className="h-4 w-4" />}
               >
-                Facebook
+                Google
               </Button>
             </div>
           </div>
