@@ -14,9 +14,13 @@ export interface TaskState {
     data: any[]
   };
   fetchTask: (payload: any) => void;
+  errorDetail: any | undefined;
+  showError: (e: any) => void;
 }
 
 export const useTask = create<TaskState>((set) => ({
+  errorDetail: undefined,
+  showError: (e: any) => set({errorDetail: e}),
   tasks: {
     page: 0,
     pageSize: 10,

@@ -140,7 +140,7 @@ export default function Sidebar2({
         <Tabs value={env?._id} onValueChange={switchEnvThrottle} className={`w-full p-2 ${isCollapsed || !envs ? 'hidden': 'block'}`}>
           <TabsList className="grid w-full grid-cols-2">
             {envs ? envs.map(e => (
-                <TabsTrigger value={e._id}>{e.name} MODE</TabsTrigger>
+                <TabsTrigger value={e._id} key={e._id}>{e.name} MODE</TabsTrigger>
               ))
               : null
             }

@@ -11,6 +11,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { providerSchema } from '../data/schema'
+import { throttle } from 'lodash'
+import { useProvider } from '@/lib/store/providerStore.ts'
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>
@@ -19,7 +21,12 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
+  const {setOpenEdit} = useProvider()
   const provider = providerSchema.parse(row.original)
+  const onEdit = throttle(() => {
+    // @ts-ignore
+    setOpenEdit({ open: true, data: row.original })
+  }, 100)
 
   return (
     <DropdownMenu>
@@ -33,15 +40,15 @@ export function DataTableRowActions<TData>({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end' className='w-[160px]'>
-        <DropdownMenuItem onClick={() => {}}>Edit</DropdownMenuItem>
+        <DropdownMenuItem onClick={onEdit}>Edit</DropdownMenuItem>
         <DropdownMenuItem>Make a copy</DropdownMenuItem>
-        <DropdownMenuItem>Favorite</DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          Delete
-          <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
-        </DropdownMenuItem>
+        {/*<DropdownMenuItem>Favorite</DropdownMenuItem>*/}
+        {/*<DropdownMenuSeparator />*/}
+        {/*<DropdownMenuSeparator />*/}
+        {/*<DropdownMenuItem>*/}
+        {/*  Delete*/}
+        {/*  <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>*/}
+        {/*</DropdownMenuItem>*/}
       </DropdownMenuContent>
     </DropdownMenu>
   )

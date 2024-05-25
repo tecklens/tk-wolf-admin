@@ -5,23 +5,23 @@ import {IConfigCredentials, ILogoFileName} from "@/providers/provider.interface.
 
 export interface IIntegratedProvider {
   providerId: ProvidersIdEnum;
-  integrationId: string;
-  displayName: string;
-  channel: ChannelTypeEnum;
+  integrationId?: string;
+  displayName?: string;
+  channel?: ChannelTypeEnum;
   hasCredentials?: boolean;
-  credentials: IConfigCredentials[];
-  docReference: string;
-  comingSoon: boolean;
-  active: boolean;
-  connected: boolean;
+  credentials?: IConfigCredentials[];
+  docReference?: string;
+  comingSoon?: boolean;
+  active?: boolean;
+  connected?: boolean;
   conditions?: IConditions[];
-  logoFileName: ILogoFileName;
-  betaVersion: boolean;
+  logoFileName?: ILogoFileName;
+  betaVersion?: boolean;
   novu?: boolean;
   environmentId?: string;
   name?: string;
   identifier?: string;
-  primary: boolean;
+  primary?: boolean;
 }
 
 export interface IConditions {

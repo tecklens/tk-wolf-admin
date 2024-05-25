@@ -2,21 +2,13 @@ import { Label } from '@/components/ui/label.tsx'
 import { Input } from '@/components/ui/input.tsx'
 import { useTheme } from '@/components/theme-provider.tsx'
 import { useNode } from '@/lib/store/nodeStore.ts'
-import { SheetClose, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from '@/components/ui/sheet.tsx'
+import { SheetFooter, SheetHeader, SheetTitle } from '@/components/ui/sheet.tsx'
 import { IconSailboat } from '@tabler/icons-react'
 import { Button } from '@/components/custom/button.tsx'
 import { allExpanded, darkStyles, defaultStyles, JsonView } from 'react-json-view-lite'
 
 import 'react-json-view-lite/dist/index.css'
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form.tsx'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form.tsx'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -32,6 +24,7 @@ const json = {
   _workflowId: '<workflow id>',
   _userId: '<user id>',
   requestData: '<data api sent>',
+  taskId: '<task id>'
 }
 
 const methods = ['put', 'post', 'get', 'delete', 'patch']
@@ -103,7 +96,7 @@ export default function WebhookNodeInfo({ onClose, reloadNode }: { onClose: () =
       </SheetHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} id={'update-webhook-node'}
-              className={'p-3 flex flex-col space-y-3'}>
+          className={'p-3 flex flex-col space-y-3'}>
           <FormField
             control={form.control}
             name="webhookUrl"
@@ -148,9 +141,14 @@ export default function WebhookNodeInfo({ onClose, reloadNode }: { onClose: () =
             <div>Payload</div>
           </Label>
           <div className={'rounded overflow-hidden'}>
-            <JsonView data={json} shouldExpandNode={allExpanded} style={{
-              ...(theme === 'light' ? defaultStyles : darkStyles),
-            }} />
+            <JsonView
+              data={json}
+              shouldExpandNode={allExpanded}
+              style={{
+                ...(theme === 'light' ? defaultStyles : darkStyles),
+              }}
+              
+            />
           </div>
         </div>
       </div>

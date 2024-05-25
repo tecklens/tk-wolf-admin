@@ -2,6 +2,7 @@ import useWebSocket from 'react-use-websocket'
 import {useEffect, useMemo, useRef} from 'react'
 import {useWsStore} from "@/lib/store/wsStore.ts";
 import {useAuth} from "@/context/auth.tsx";
+import { IEvent } from '@/types/event.interface.ts'
 
 const socketUrl = import.meta.env.VITE_WS_URL
 export default function useWs() {
@@ -44,7 +45,7 @@ export default function useWs() {
   // }, [sendMessage, token])
 
   return useMemo(() => {
-    const data = (lastMessage && lastMessage.data) ? JSON.parse(lastMessage.data) : null
+    const data: IEvent = (lastMessage && lastMessage.data) ? JSON.parse(lastMessage.data) : null
     return {
       sendMessage,
       readyState,

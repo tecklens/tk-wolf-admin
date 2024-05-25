@@ -14,6 +14,7 @@ export const taskSchema = z.object({
   code: z.string(),
   name: z.string(),
   type: z.string(),
+  errorDetail: z.string().optional(),
   priority: z.string(),
   email: z.string(),
   status: z.nativeEnum(TaskStatus),

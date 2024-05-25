@@ -11,7 +11,7 @@ export default function EmailNodeInfo({ designHtml }: { designHtml: string }) {
   const openEmailEdit = useNode(state => state.openEmailEdit)
 
   return (
-    <>
+    <div className={'overflwo-y-auto'}>
       <SheetHeader>
         <SheetTitle>
           <div className={'inline-flex space-x-2 items-center p-4'}>
@@ -38,6 +38,6 @@ export default function EmailNodeInfo({ designHtml }: { designHtml: string }) {
           })
         }}>Edit Message</Button>
       </div>
-    </>
+    </div>
   )
 }

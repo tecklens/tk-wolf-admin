@@ -28,7 +28,7 @@ export default function EmailTemplates({ callback }: { callback: (design: string
     })()
   }, [])
   return (
-    <div className={'grid grid-cols-3 gap-4'}>
+    <div className={'grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-4'}>
       {templates.map(e => (
         <EmailPreviewItem key={e._id} preview={e.preview} name={e.name} onSelect={() => callback(e.design)} />
       ))}

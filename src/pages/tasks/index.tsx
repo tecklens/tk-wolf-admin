@@ -4,15 +4,17 @@ import { UserNav } from '@/components/user-nav'
 import { Layout, LayoutBody, LayoutHeader } from '@/components/custom/layout'
 import { DataTable } from './components/data-table'
 import { columns } from './components/columns'
-import { WsStatus } from '@/components/ws-status.tsx'
 import { useTask } from '@/lib/store/taskStore.ts'
-import { useEffect, useRef, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useEffect, useRef } from 'react'
 import { throttle } from 'lodash'
 import { PaginationState } from '@tanstack/react-table'
+import { Dialog, DialogContent } from '@/components/ui/dialog.tsx'
+import { allExpanded, darkStyles, defaultStyles, JsonView } from 'react-json-view-lite'
+import { useTheme } from '@/components/theme-provider.tsx'
 
 export default function Tasks() {
-  const { tasks, fetchTask } = useTask()
+  const { theme } = useTheme()
+  const { tasks, fetchTask, errorDetail, showError } = useTask()
   const page = useRef<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
@@ -38,7 +40,6 @@ export default function Tasks() {
       <LayoutHeader>
         <Search />
         <div className="ml-auto flex items-center space-x-4">
-          <WsStatus />
           <ThemeSwitch />
           <UserNav />
         </div>
@@ -60,8 +61,6 @@ export default function Tasks() {
             totalCount={tasks.totalCount}
             page={page.current}
             onPageChange={throttle((p: PaginationState) => {
-              console.log(p)
-
               page.current = {
                 pageSize: p.pageSize,
                 pageIndex: p.pageIndex,
@@ -70,6 +69,14 @@ export default function Tasks() {
             }, 300)}
           />
         </div>
+        <Dialog open={errorDetail} onOpenChange={() => showError(undefined)}>
+          <DialogContent className="sm:max-w-[885px] flex space-x-4">
+            {typeof errorDetail === 'string' ? <div>{errorDetail}</div>
+              : <JsonView data={errorDetail} shouldExpandNode={allExpanded} style={{
+                ...(theme === 'light' ? defaultStyles : darkStyles),
+              }} />}
+          </DialogContent>
+        </Dialog>
       </LayoutBody>
     </Layout>
   )

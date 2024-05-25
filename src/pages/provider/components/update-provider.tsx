@@ -7,16 +7,18 @@ import { Input } from '@/components/ui/input.tsx'
 import { Switch } from '@/components/ui/switch.tsx'
 import { Button } from '@/components/custom/button.tsx'
 import { IconCopy } from '@tabler/icons-react'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { get, reduce } from 'lodash'
 import { makeid } from '@/utils'
 import { RepositoryFactory } from '@/api/repository-factory.ts'
-import { HttpStatusCode } from 'axios'
+import { AxiosResponse, HttpStatusCode } from 'axios'
 import { useToast } from '@/components/ui/use-toast.ts'
+import { IProvider } from '@/types/provider.interface.ts'
 
 const ProviderRepository = RepositoryFactory.get('provider')
 
 const formSchema = z.object({
+  _id: z.string().optional(),
   status: z
     .boolean(),
   name: z.string().min(1, { message: 'Name not found. Please input name' }),
@@ -24,9 +26,10 @@ const formSchema = z.object({
   credentials: z.any(),
 })
 
-export default function UpdateProvider({ selected, onCreateSuccess }: {
-  selected: IIntegratedProvider | null,
-  onCreateSuccess: () => void
+export default function UpdateProvider({ selected, defaultData, onCreateSuccess }: {
+  selected: IIntegratedProvider | undefined,
+  onCreateSuccess: () => void,
+  defaultData: IProvider | undefined,
 }) {
   const { toast } = useToast()
   const validationSchema = useMemo(() => {
@@ -43,7 +46,7 @@ export default function UpdateProvider({ selected, onCreateSuccess }: {
               ...acc,
               [val.key]: req(),
             }
-          }, {})
+          }, {}),
         }),
       })
     } else return formSchema
@@ -60,15 +63,25 @@ export default function UpdateProvider({ selected, onCreateSuccess }: {
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     if (!selected) return
-    console.log(data)
 
-    const rsp = await ProviderRepository.create({
-      ...data,
-      active: true,
-      providerId: selected?.providerId,
-      channel: selected.channel,
-    })
-    if (rsp.status === HttpStatusCode.Created) {
+    let rsp: AxiosResponse;
+    if (defaultData && defaultData._id) {
+      rsp = await ProviderRepository.update(defaultData._id, {
+        ...data,
+        active: true,
+        providerId: selected?.providerId,
+        channel: selected.channel,
+      })
+    } else {
+      rsp = await ProviderRepository.create({
+        ...data,
+        active: true,
+        providerId: selected?.providerId,
+        channel: selected.channel,
+      })
+    }
+
+    if (rsp.status === HttpStatusCode.Created || rsp.status === HttpStatusCode.Ok) {
       onCreateSuccess()
     } else {
       toast({
@@ -77,6 +90,12 @@ export default function UpdateProvider({ selected, onCreateSuccess }: {
       })
     }
   }
+
+  useEffect(() => {
+    if (defaultData) {
+      form.reset(defaultData)
+    }
+  }, [defaultData])
 
   if (!selected) return null
 

@@ -152,22 +152,21 @@ export default function Workflow() {
 const topNav = [
   {
     title: 'Overview',
-    href: 'dashboard/overview',
+    href: 'overview',
     isActive: true,
+    target: '_blank'
   },
   {
-    title: 'Customers',
-    href: 'dashboard/customers',
+    title: 'Document',
+    href: 'https://docs.wolf.app',
     isActive: false,
+    target: '_blank'
   },
   {
-    title: 'Products',
-    href: 'dashboard/products',
+    title: 'Pricing',
+    href: 'pricing',
     isActive: false,
-  },
-  {
-    title: 'Settings',
-    href: 'dashboard/settings',
-    isActive: false,
+    target: '_blank'
   },
 ]
+

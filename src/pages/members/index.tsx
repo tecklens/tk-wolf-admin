@@ -1,6 +1,5 @@
 import { Layout, LayoutBody, LayoutHeader } from '@/components/custom/layout.tsx'
 import { Search } from '@/components/search.tsx'
-import { WsStatus } from '@/components/ws-status.tsx'
 import ThemeSwitch from '@/components/theme-switch.tsx'
 import { UserNav } from '@/components/user-nav.tsx'
 import { useOrg } from '@/lib/store/orgStore.ts'
@@ -10,8 +9,8 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { AvatarImage } from '@/components/ui/avatar.tsx'
 import { Input } from '@/components/ui/input.tsx'
 import { Button } from '@/components/custom/button.tsx'
-import { IconSend, IconSend2 } from '@tabler/icons-react'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form.tsx'
+import { IconSend } from '@tabler/icons-react'
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form.tsx'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -22,7 +21,8 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator, DropdownMenuShortcut,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu.tsx'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
@@ -134,7 +134,6 @@ export default function Members() {
       <LayoutHeader>
         <Search />
         <div className="ml-auto flex items-center space-x-4">
-          <WsStatus />
           <ThemeSwitch />
           <UserNav />
         </div>

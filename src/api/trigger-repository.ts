@@ -7,4 +7,7 @@ export default {
   listTask(payload: any) {
     return BaseRepository.get(`${resource}/task`, { params: payload })
   },
+  delTask(id: string) {
+    return BaseRepository.delete(`${resource}/task/${id}`)
+  },
 }

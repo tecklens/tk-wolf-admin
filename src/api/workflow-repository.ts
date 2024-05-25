@@ -52,5 +52,7 @@ export default {
   changeVariables(variables: IVariable[]) {
     return BaseRepository.post(`${resource}/variable`, variables)
   },
-
+  createEmailTemplate(payload: any) {
+    return BaseRepository.post(`${resource}/email/template`, payload)
+  },
 }

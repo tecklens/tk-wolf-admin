@@ -38,9 +38,15 @@ const router = createBrowserRouter([
             }),
           },
           {
-            path: 'chats',
+            path: 'layout',
             lazy: async () => ({
-              Component: (await import('@/components/coming-soon')).default,
+              Component: (await import('@/pages/layout')).default,
+            }),
+          },
+          {
+            path: 'layout/create',
+            lazy: async () => ({
+              Component: (await import('@/pages/layout/create-layout')).default,
             }),
           },
           {
@@ -59,6 +65,12 @@ const router = createBrowserRouter([
             path: 'provider',
             lazy: async () => ({
               Component: (await import('@/pages/provider')).default,
+            }),
+          },
+          {
+            path: 'overview',
+            lazy: async () => ({
+              Component: (await import('@/pages/overview')).default,
             }),
           },
           {
