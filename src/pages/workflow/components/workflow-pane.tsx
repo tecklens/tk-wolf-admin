@@ -38,7 +38,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import EditEmail from '@/pages/workflow/components/edit-email.tsx'
 import SelectProvider from '@/pages/workflow/components/select-provider.tsx'
-import EdgeWithClose from '@/pages/workflow/components/edges/EdgeWithClose.tsx'
+import EdgeWithClose from '@/pages/workflow/components/edges/edge-with-close.tsx'
 import EditSms from '@/pages/workflow/components/edit-sms.tsx'
 import ViewportChangeLogger from '@/pages/workflow/components/viewport-change-logger.ts'
 

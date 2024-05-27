@@ -10,7 +10,7 @@ import {
 } from '@tabler/icons-react'
 import { useTheme } from '@/components/theme-provider.tsx'
 import { useNode } from '@/lib/store/nodeStore.ts'
-import { WrapperNode } from '@/pages/workflow/components/WrapperNode.tsx'
+import { WrapperNode } from '@/pages/workflow/components/wrapper-node.tsx'
 import { NodeDataInterface } from '@/types/node-data.interface.ts'
 import { validateNode } from '@/pages/workflow/components/nodes/validate.ts'
 import { ChannelTypeEnum } from '@/types/channel'
