@@ -1,6 +1,5 @@
 import {
   ContextMenu,
-  ContextMenuCheckboxItem,
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuLabel,
@@ -20,21 +19,27 @@ export interface IWrapperNodeProps {
   onDelete: () => void,
   disableMenu?: string[] | undefined
   openProvider?: () => void
+  openSetting: () => void
+  reloadNode: () => void
 }
 
 export function WrapperNode({
                               children,
                               onDelete,
                               disableMenu = [],
-                              openProvider = () => {}
-}: IWrapperNodeProps) {
+                              openProvider = () => {
+                              },
+                              openSetting,
+                              reloadNode,
+                            }: IWrapperNodeProps) {
+
   return (
     <ContextMenu>
       <ContextMenuTrigger>
         {children}
       </ContextMenuTrigger>
       <ContextMenuContent className="w-64" onClick={e => e.stopPropagation()}>
-        <ContextMenuItem inset>
+        <ContextMenuItem inset onClick={openSetting}>
           Setting
           <ContextMenuShortcut>⌘+Shift+S</ContextMenuShortcut>
         </ContextMenuItem>
@@ -42,7 +47,7 @@ export function WrapperNode({
           Forward
           <ContextMenuShortcut>⌘]</ContextMenuShortcut>
         </ContextMenuItem>
-        <ContextMenuItem inset>
+        <ContextMenuItem inset onClick={reloadNode}>
           Reload
           <ContextMenuShortcut>⌘R</ContextMenuShortcut>
         </ContextMenuItem>
@@ -53,18 +58,11 @@ export function WrapperNode({
               Save Page As...
               <ContextMenuShortcut>⇧⌘S</ContextMenuShortcut>
             </ContextMenuItem>
-            <ContextMenuItem>Create Shortcut...</ContextMenuItem>
             <ContextMenuItem>Name Window...</ContextMenuItem>
             <ContextMenuSeparator />
             <ContextMenuItem>Developer Tools</ContextMenuItem>
           </ContextMenuSubContent>
         </ContextMenuSub>
-        <ContextMenuSeparator />
-        <ContextMenuCheckboxItem checked>
-          Show Bookmarks Bar
-          <ContextMenuShortcut>⌘⇧B</ContextMenuShortcut>
-        </ContextMenuCheckboxItem>
-        <ContextMenuCheckboxItem>Show Full URLs</ContextMenuCheckboxItem>
         <ContextMenuSeparator />
         <ContextMenuRadioGroup value="config">
           <ContextMenuLabel inset>Config</ContextMenuLabel>

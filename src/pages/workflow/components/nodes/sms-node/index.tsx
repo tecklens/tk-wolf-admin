@@ -1,5 +1,5 @@
 import React, { memo, useMemo } from 'react'
-import { Handle, Position, useNodeId } from 'reactflow'
+import { Handle, NodeProps, Position, useNodeId } from 'reactflow'
 import {
   IconBug,
   IconCheck,
@@ -17,11 +17,16 @@ import { ChannelTypeEnum } from '@/types/channel'
 import { useWorkflow } from '@/lib/store/workflowStore.ts'
 
 // eslint-disable-next-line react-refresh/only-export-components
-export default memo(({ data, isConnectable }: { isConnectable: boolean, data: NodeDataInterface }) => {
+export default memo((nodeInfo: NodeProps<NodeDataInterface>) => {
+  const { data, isConnectable } = nodeInfo
   const { theme } = useTheme()
   const nodeId = useNodeId()
-  const node = useNode(state => state.node)
   const openModalProvider = useWorkflow(state => state.openModalProvider)
+  const { node, select } = useNode()
+
+  const openSetting = () => {
+    select(nodeInfo)
+  }
 
   const validNode = useMemo(() => validateNode(data, ChannelTypeEnum.SMS), [data])
   const openProvider = () => {
@@ -38,6 +43,8 @@ export default memo(({ data, isConnectable }: { isConnectable: boolean, data: No
         data.onDelete(nodeId ?? '')
       }}
       openProvider={openProvider}
+      openSetting={openSetting}
+      reloadNode={() => data.onReload(nodeId ?? '')}
     >
       <div
         className={`${theme === 'dark' ? 'bg-[#13131a]' : 'bg-white'}

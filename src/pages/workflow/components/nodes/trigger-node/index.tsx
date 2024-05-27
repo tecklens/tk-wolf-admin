@@ -1,21 +1,30 @@
 import { memo } from 'react'
-import { Handle, Position, useNodeId } from 'reactflow'
+import { Handle, NodeProps, Position, useNodeId } from 'reactflow'
 import { IconBolt, IconBug, IconCheck } from '@tabler/icons-react'
 import { useTheme } from '@/components/theme-provider.tsx'
 import { useNode } from '@/lib/store/nodeStore.ts'
-import {WrapperNode} from "@/pages/workflow/components/WrapperNode.tsx";
-import {NodeDataInterface} from "@/types/node-data.interface.ts";
+import { WrapperNode } from '@/pages/workflow/components/WrapperNode.tsx'
+import { NodeDataInterface } from '@/types/node-data.interface.ts'
 
 // eslint-disable-next-line react-refresh/only-export-components
-export default memo(({data, isConnectable}: { isConnectable: boolean, data: NodeDataInterface }) => {
+export default memo((nodeInfo: NodeProps<NodeDataInterface>) => {
+  const { data, isConnectable } = nodeInfo
   const { theme } = useTheme()
   const nodeId = useNodeId()
-  const node = useNode(state => state.node)
+  const { node, select } = useNode()
+
+  const openSetting = () => {
+    select(nodeInfo)
+  }
 
   return (
-    <WrapperNode onDelete={() => {
-      data.onDelete(nodeId ?? '')
-    }}>
+    <WrapperNode
+      onDelete={() => {
+        data.onDelete(nodeId ?? '')
+      }}
+      openSetting={openSetting}
+      reloadNode={() => data.onReload(nodeId ?? '')}
+    >
       <div
         className={`${theme === 'dark' ? 'bg-[#13131a]' : 'bg-white'}
         ${node?.id === nodeId ? 'border-[#66d9e8]' : 'border-red-500'}  
@@ -35,17 +44,17 @@ export default memo(({data, isConnectable}: { isConnectable: boolean, data: Node
           </div>
         </div>
         <Handle
-          type='source'
-          id='tigger-red'
+          type="source"
+          id="tigger-red"
           position={Position.Right}
           className={'w-3 h-3 -right-2 !bg-teal-500 handle-inner'}
           onConnect={(params) => console.log('handle onConnect', params)}
           isConnectable={isConnectable}
         />
         <Handle
-          type='target'
+          type="target"
           position={Position.Left}
-          id='trigger-blue'
+          id="trigger-blue"
           className={'w-3 h-3 -left-2 !bg-blue-500 handle-inner'}
           isConnectable={isConnectable}
         />

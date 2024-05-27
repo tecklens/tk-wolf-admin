@@ -10,13 +10,17 @@ import { Input } from '@/components/ui/input.tsx'
 import { Button } from '@/components/custom/button.tsx'
 import { IconDeviceFloppy } from '@tabler/icons-react'
 import { Editor, EditorRef, EmailEditor, EmailEditorProps } from 'react-email-editor'
-import { reduce } from 'lodash'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { HttpStatusCode } from 'axios'
+import { toast } from '@/components/ui/use-toast.ts'
+import { RepositoryFactory } from '@/api/repository-factory.ts'
+
+const WorkflowRepository = RepositoryFactory.get('wf')
 
 const infoEmailSchema = z.object({
-  name: z.string().min(1, { message: 'Name template is required' }).email(),
+  name: z.string().min(1, { message: 'Name template is required' }),
 })
 
 export type InfoEmailValues = z.infer<typeof infoEmailSchema> & {
@@ -38,7 +42,31 @@ export default function CreateLayout() {
   })
 
   async function onSubmit(data: InfoEmailValues) {
-    console.log(data)
+    emailEditorRef.current?.editor?.exportImage(({ design }) => {
+      console.log(design, "design")
+    }) // 401 error
+
+    return;
+    emailEditorRef.current?.editor?.exportHtml(async (d) => {
+      const rsp = await WorkflowRepository.createEmailTemplate({
+        ...data,
+        design: d.design,
+        designHtml: d.html,
+        free: false,
+        preview: ''
+      })
+
+      if (rsp.status === HttpStatusCode.Ok) {
+        toast({
+          title: 'Create email template request successful',
+        })
+      } else {
+        toast({
+          variant: 'destructive',
+          title: 'An error occurred when submitting a create email template request',
+        })
+      }
+    })
   }
 
   // @ts-ignore
@@ -79,12 +107,13 @@ export default function CreateLayout() {
                 <FormItem className={`space-y-1`}>
                   <FormLabel>Name <span className={'text-red-500'}>*</span></FormLabel>
                   <FormControl>
-                    <Input placeholder="" {...field} />
+                    <Input placeholder="Protect Our Planet" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            <div className={''}></div>
             <div className={'flex justify-end'}>
               <div className={'flex items-center space-x-3'}>
                 <Button type={'submit'}>

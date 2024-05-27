@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react'
+import { useSetting } from '@/lib/store/settingStore.ts'
 
 type Theme = 'dark' | 'light' | 'system'
 
@@ -21,14 +22,16 @@ const initialState: ThemeProviderState = {
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
 
 export function ThemeProvider({
-  children,
-  defaultTheme = 'system',
-  storageKey = 'vite-ui-theme',
-  ...props
-}: ThemeProviderProps) {
+                                children,
+                                defaultTheme = 'system',
+                                storageKey = 'theme',
+                                ...props
+                              }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
+    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme,
   )
+
+  const font = useSetting(state => state.font)
 
   useEffect(() => {
     const root = window.document.documentElement
@@ -58,7 +61,9 @@ export function ThemeProvider({
 
   return (
     <ThemeProviderContext.Provider {...props} value={value}>
-      {children}
+      <div style={{fontFamily: `${font},ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"`}}>
+        {children}
+      </div>
     </ThemeProviderContext.Provider>
   )
 }

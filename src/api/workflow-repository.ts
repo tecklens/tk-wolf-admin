@@ -55,4 +55,7 @@ export default {
   createEmailTemplate(payload: any) {
     return BaseRepository.post(`${resource}/email/template`, payload)
   },
+  updateViewport(payload: any) {
+    return BaseRepository.put(`${resource}/viewport`, payload)
+  },
 }

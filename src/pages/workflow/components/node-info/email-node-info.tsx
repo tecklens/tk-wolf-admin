@@ -23,13 +23,6 @@ export default function EmailNodeInfo({ designHtml }: { designHtml: string }) {
         {/*  Make changes to your node of flow here. Click save when you're done.*/}
         {/*</SheetDescription>*/}
       </SheetHeader>
-      <div
-        className={`flex flex-col space-y-3 my-3 items-center`}>
-        {/*@ts-ignore*/}
-        <DeviceEmulator withDeviceSwitch={false} withRotator={false} withoutChrome={true}>
-          <div dangerouslySetInnerHTML={{ __html: designHtml }}></div>
-        </DeviceEmulator>
-      </div>
       <div className={'p-4'}>
         <Button onClick={() => {
           openEmailEdit({
@@ -37,6 +30,13 @@ export default function EmailNodeInfo({ designHtml }: { designHtml: string }) {
             data: null,
           })
         }}>Edit Message</Button>
+      </div>
+      <div
+        className={`flex flex-col space-y-3 my-3 items-center`}>
+        {/*@ts-ignore*/}
+        <DeviceEmulator withDeviceSwitch={false} withRotator={false} withoutChrome={true}>
+          <div dangerouslySetInnerHTML={{ __html: designHtml }}></div>
+        </DeviceEmulator>
       </div>
     </div>
   )

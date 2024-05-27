@@ -1,4 +1,4 @@
-import {Node as NodeFlow, Edge as EdgeFlow} from 'reactflow'
+import { Node as NodeFlow, Edge as EdgeFlow, Viewport } from 'reactflow'
 
 export interface INode extends NodeFlow {
   _id: string;
@@ -35,6 +35,8 @@ export interface IWorkflowEntity {
 
   nodes: INode[];
   edges: IEdge[];
+
+  viewport: Viewport;
 }
 
 export interface IUpdateWorkflow {

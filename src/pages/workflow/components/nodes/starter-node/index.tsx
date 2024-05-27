@@ -1,12 +1,13 @@
 import { memo } from 'react'
-import { Handle, Position, useNodeId } from 'reactflow'
+import { Handle, NodeProps, Position, useNodeId } from 'reactflow'
 import { IconPlayerPlay } from '@tabler/icons-react'
 import { useTheme } from '@/components/theme-provider.tsx'
 import { useNode } from '@/lib/store/nodeStore.ts'
 import { NodeDataInterface } from '@/types/node-data.interface.ts'
 
 // eslint-disable-next-line react-refresh/only-export-components
-export default memo(({ isConnectable }: { isConnectable: boolean, data: NodeDataInterface }) => {
+export default memo((nodeInfo: NodeProps<NodeDataInterface>) => {
+  const { data, isConnectable } = nodeInfo
   const { theme } = useTheme()
   const nodeId = useNodeId()
   const node = useNode(state => state.node)

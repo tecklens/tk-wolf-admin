@@ -115,7 +115,7 @@ export default function Sidebar2({
         {isCollapsed ? null : <div className={'p-3'}>
           <Select>
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select a fruit"/>
+              <SelectValue placeholder="Select a organization"/>
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>

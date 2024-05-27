@@ -16,12 +16,22 @@ import {
 } from '@/components/ui/form'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { toast } from '@/components/ui/use-toast'
+import { useSetting } from '@/lib/store/settingStore.ts'
+import { useEffect } from 'react'
+import { useTheme } from '@/components/theme-provider.tsx'
+
+const listFonts = [
+  'ui-sans-serif',
+  'Roboto',
+  'Lato',
+  'Raleway',
+]
 
 const appearanceFormSchema = z.object({
   theme: z.enum(['light', 'dark'], {
     required_error: 'Please select a theme.',
   }),
-  font: z.enum(['inter', 'manrope', 'system'], {
+  font: z.enum(['ui-sans-serif', ...listFonts], {
     invalid_type_error: 'Select a font',
     required_error: 'Please select a font.',
   }),
@@ -35,12 +45,16 @@ const defaultValues: Partial<AppearanceFormValues> = {
 }
 
 export function AppearanceForm() {
+  const setting = useSetting()
+  const {theme, setTheme} = useTheme()
   const form = useForm<AppearanceFormValues>({
     resolver: zodResolver(appearanceFormSchema),
     defaultValues,
   })
 
   function onSubmit(data: AppearanceFormValues) {
+    setting.updateSetting(data.font)
+    setTheme(data.theme)
     toast({
       title: 'You submitted the following values:',
       description: (
@@ -50,6 +64,15 @@ export function AppearanceForm() {
       ),
     })
   }
+
+  useEffect(() => {
+    console.log(theme)
+    // @ts-ignore
+    if (setting) form.reset({
+      font: setting.font,
+      theme,
+    })
+  }, [])
 
   return (
     <Form {...form}>
@@ -69,9 +92,10 @@ export function AppearanceForm() {
                     )}
                     {...field}
                   >
-                    <option value='inter'>Inter</option>
-                    <option value='manrope'>Manrope</option>
-                    <option value='system'>System</option>
+                    {listFonts.map(e => (
+                      <option value={e} key={e}>{e}</option>
+
+                    ))}
                   </select>
                 </FormControl>
                 <ChevronDownIcon className='absolute right-3 top-2.5 h-4 w-4 opacity-50' />

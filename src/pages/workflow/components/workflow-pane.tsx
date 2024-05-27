@@ -40,6 +40,7 @@ import EditEmail from '@/pages/workflow/components/edit-email.tsx'
 import SelectProvider from '@/pages/workflow/components/select-provider.tsx'
 import EdgeWithClose from '@/pages/workflow/components/edges/EdgeWithClose.tsx'
 import EditSms from '@/pages/workflow/components/edit-sms.tsx'
+import ViewportChangeLogger from '@/pages/workflow/components/viewport-change-logger.ts'
 
 const WorkflowRepository = RepositoryFactory.get('wf')
 
@@ -94,6 +95,7 @@ export default function WorkflowPane() {
         _workflowId: node._workflowId,
         name: node.name,
         onDelete: (id: string) => deleteNodeById(id),
+        onReload: (id: string) => reloadNode(id),
       },
     }
   }
@@ -365,11 +367,16 @@ export default function WorkflowPane() {
   }, [workflow])
 
   return (
-    <ReactFlowProvider>
+    <>
       <div className="flex-1 h-full flex flex-col" ref={reactFlowWrapper}>
         <ReactFlow
           nodes={nodes}
           edges={edges}
+          defaultViewport={workflow?.viewport ?? {
+            x: 0,
+            y: 0,
+            zoom: 1
+          }}
           connectionLineComponent={ConnectionLine}
           className={'flex-1'}
           zoomOnScroll={false}
@@ -479,6 +486,7 @@ export default function WorkflowPane() {
           }} />
         </DialogContent>
       </Dialog>
-    </ReactFlowProvider>
+      <ViewportChangeLogger />
+    </>
   )
 }

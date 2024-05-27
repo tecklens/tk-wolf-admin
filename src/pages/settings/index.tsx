@@ -72,11 +72,11 @@ const sidebarNavItems = [
     icon: <IconNotification size={18} />,
     href: '/settings/notifications',
   },
-  {
-    title: 'Display',
-    icon: <IconBrowserCheck size={18} />,
-    href: '/settings/display',
-  },
+  // {
+  //   title: 'Display',
+  //   icon: <IconBrowserCheck size={18} />,
+  //   href: '/settings/display',
+  // },
   {
     title: 'Billing',
     icon: <IconExclamationCircle size={18} />,

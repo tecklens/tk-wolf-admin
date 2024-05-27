@@ -8,6 +8,7 @@ export interface NodeDataInterface {
   design: any;
   designHtml: string;
   onDelete: (id: string) => void
+  onReload: (id: string) => void
   delayTime?: number;
   period?: number;
 

@@ -1,5 +1,5 @@
 import React, { memo, useMemo } from 'react'
-import { Handle, Position, useNodeId } from 'reactflow'
+import { Handle, NodeProps, Position, useNodeId } from 'reactflow'
 import { IconBug, IconCheck, IconCircleCheckFilled, IconMailBolt, IconPlugX } from '@tabler/icons-react'
 import { useTheme } from '@/components/theme-provider.tsx'
 import { useNode } from '@/lib/store/nodeStore.ts'
@@ -10,11 +10,16 @@ import { useWorkflow } from '@/lib/store/workflowStore.ts'
 import { ChannelTypeEnum } from '@/types/channel'
 
 // eslint-disable-next-line react-refresh/only-export-components
-export default memo(({ data, isConnectable }: { isConnectable: boolean, data: NodeDataInterface }) => {
+export default memo((nodeInfo: NodeProps<NodeDataInterface>) => {
+  const { data, isConnectable } = nodeInfo
   const { theme } = useTheme()
   const nodeId = useNodeId()
-  const node = useNode(state => state.node)
   const openModalProvider = useWorkflow(state => state.openModalProvider)
+  const { node, select } = useNode()
+
+  const openSetting = () => {
+    select(nodeInfo)
+  }
 
   const validNode = useMemo(() => validateNode(data, 'email'), [data])
 
@@ -32,6 +37,8 @@ export default memo(({ data, isConnectable }: { isConnectable: boolean, data: No
         data.onDelete(nodeId ?? '')
       }}
       openProvider={openProvider}
+      openSetting={openSetting}
+      reloadNode={() => data.onReload(nodeId ?? '')}
     >
       <div
         className={`${theme === 'dark' ? 'bg-[#13131a]' : 'bg-white'}
