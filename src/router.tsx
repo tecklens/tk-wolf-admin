@@ -44,12 +44,6 @@ const router = createBrowserRouter([
             }),
           },
           {
-            path: 'layout/create',
-            lazy: async () => ({
-              Component: (await import('@/pages/layout/create-layout')).default,
-            }),
-          },
-          {
             path: 'members',
             lazy: async () => ({
               Component: (await import('@/pages/members')).default,
@@ -130,6 +124,12 @@ const router = createBrowserRouter([
             ],
           },
         ],
+      },
+      {
+        path: 'layout/create',
+        lazy: async () => ({
+          Component: (await import('@/pages/layout/create-layout')).default,
+        }),
       },
     ]
   },

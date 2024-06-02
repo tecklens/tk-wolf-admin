@@ -57,31 +57,37 @@ export const sidelinks: SideLink[] = [
     icon: <IconCode size={18} />,
   },
   {
+    title: 'Subscription',
+    label: '',
+    href: '/subscription',
+    icon: <IconCode size={18} />,
+  },
+  {
     title: 'Members',
     label: '',
     href: '/members',
     icon: <IconUsers size={18} />,
   },
-  // {
-  //   title: 'Requests',
-  //   label: '10',
-  //   href: '/requests',
-  //   icon: <IconRouteAltLeft size={18} />,
-  //   sub: [
-  //     {
-  //       title: 'Trucks',
-  //       label: '9',
-  //       href: '/trucks',
-  //       icon: <IconTruck size={18} />,
-  //     },
-  //     {
-  //       title: 'Cargos',
-  //       label: '',
-  //       href: '/cargos',
-  //       icon: <IconBoxSeam size={18} />,
-  //     },
-  //   ],
-  // },
+  {
+    title: 'Requests',
+    label: '10',
+    href: '/requests',
+    icon: <IconRouteAltLeft size={18} />,
+    sub: [
+      {
+        title: 'Log trigger',
+        label: '9',
+        href: '/log-trigger',
+        icon: <IconTruck size={18} />,
+      },
+      {
+        title: 'Cargos',
+        label: '',
+        href: '/cargos',
+        icon: <IconBoxSeam size={18} />,
+      },
+    ],
+  },
   {
     title: 'Analysis',
     label: '',
