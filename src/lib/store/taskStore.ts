@@ -2,17 +2,12 @@ import { create } from 'zustand'
 import { RepositoryFactory } from '@/api/repository-factory.ts'
 import { HttpStatusCode } from 'axios'
 import { useToastGlobal } from '@/lib/store/toastStore.ts'
-import { ITask } from '@/types/task.interface.ts'
+import { IPageResponse } from '@/types'
 
 const TriggerRepository = RepositoryFactory.get('trigger')
 
 export interface TaskState {
-  tasks: {
-    page: number,
-    pageSize: number,
-    totalCount: number,
-    data: any[]
-  };
+  tasks: IPageResponse<any>;
   fetchTask: (payload: any) => void;
   errorDetail: any | undefined;
   showError: (e: any) => void;

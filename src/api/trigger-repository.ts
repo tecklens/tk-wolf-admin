@@ -1,5 +1,5 @@
 import BaseRepository from '@/api/base-repository.ts'
-import { IGetProviderRequest, ICreateProviderBodyDto, IProvider } from '@/types/provider.interface.ts'
+import { IPageRequest } from '@/types'
 
 const resource = '/trigger'
 
@@ -9,5 +9,11 @@ export default {
   },
   delTask(id: string) {
     return BaseRepository.delete(`${resource}/task/${id}`)
+  },
+  logs(payload: IPageRequest) {
+    return BaseRepository.get(`${resource}/logs`, { params: payload })
+  },
+  delLog(id: string) {
+    return BaseRepository.delete(`${resource}/log/${id}`)
   },
 }

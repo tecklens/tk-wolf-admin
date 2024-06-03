@@ -30,3 +30,15 @@ export interface IConditions {
   value?: BuilderGroupValues;
   children?: any[];
 }
+
+export interface IPageResponse<T> {
+  page: number,
+  pageSize: number,
+  totalCount: number,
+  data: T[]
+}
+
+export interface IPageRequest {
+  page: number;
+  limit: number;
+}

@@ -32,6 +32,18 @@ const router = createBrowserRouter([
             }),
           },
           {
+            path: 'subscription',
+            lazy: async () => ({
+              Component: (await import('./pages/subscription')).default,
+            }),
+          },
+          {
+            path: 'requests/log-trigger',
+            lazy: async () => ({
+              Component: (await import('./pages/requests/log-trigger')).default,
+            }),
+          },
+          {
             path: 'tasks',
             lazy: async () => ({
               Component: (await import('./pages/tasks')).default,

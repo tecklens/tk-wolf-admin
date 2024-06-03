@@ -125,8 +125,8 @@ export default function LayoutEditor() {
         info.children!.forEach(registerFrame)
         return info.el!
       })
-      .filter((el) => {
-        el.className = 'target'
+      .filter((el, idx) => {
+        el.className = `target target${(targets.length ?? 0) + idx + 1}`
         return el
       })
 
@@ -168,15 +168,13 @@ export default function LayoutEditor() {
     const viewport = getViewport()
     console.log(targets)
     const indexesList = viewport.getSortedIndexesList(
-      targets,
+      selectedTargets,
     )
-    console.log('step 1')
     const indexesListLength = indexesList.length
     let appendIndex = -1
     let scopeId: string = ''
 
     if (!isRestore && indexesListLength) {
-      console.log('step 2')
       const indexes = indexesList[indexesListLength - 1]
 
       const info = viewport.getInfoByIndexes(indexes)
@@ -195,7 +193,7 @@ export default function LayoutEditor() {
   }
 
   function selectEndMaker(rect: any) {
-    const iV = infiniteViewer.current!;
+    const iV = infiniteViewer.current!
     const selectedMarker: any = toolbars.find(e => e.value === selectedMenu)?.maker
     const width = rect.width
     const height = rect.height
@@ -204,11 +202,11 @@ export default function LayoutEditor() {
       return false
     }
     const maker = selectedMarker(memory)
-    const scrollTop = -iV.getScrollTop();
-    const scrollLeft = -iV.getScrollLeft();
+    const scrollTop = -iV.getScrollTop()
+    const scrollLeft = -iV.getScrollLeft()
     const offset = ref.current?.getBoundingClientRect()
-    const top = rect.top - scrollTop - (offset?.top ?? 0);
-    const left = rect.left - scrollLeft - (offset?.left  ?? 0);
+    const top = rect.top - scrollTop - (offset?.top ?? 0)
+    const left = rect.left - scrollLeft - (offset?.left ?? 0)
 
 
     const style = {
@@ -368,8 +366,8 @@ export default function LayoutEditor() {
   }
 
   useEffect(() => {
-    memory.set("background-color", "#4af");
-    memory.set("color", "#333");
+    memory.set('background-color', '#4af')
+    memory.set('color', '#333')
   }, [])
 
   return (
@@ -394,7 +392,7 @@ export default function LayoutEditor() {
                 ables={[DimensionViewable]}
                 dimensionViewable={true}
                 pinchThreshold={20}
-                container={ref.current}
+                // container={ref.current}
                 keepRatio={true}
                 draggable={true}
                 scalable={true}

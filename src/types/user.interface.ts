@@ -11,6 +11,9 @@ export interface UserInterface {
   urls?: string[] | null
 
   plan?: number;
+  workflowGuide?: boolean;
+  billingGuide?: boolean;
+  apiKeyGuide?: boolean;
 }
 
 export interface ICreateUserDto {

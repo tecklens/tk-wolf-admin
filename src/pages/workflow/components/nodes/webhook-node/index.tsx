@@ -27,6 +27,7 @@ export default memo((nodeInfo: NodeProps<NodeDataInterface>) => {
       }}
       disableMenu={['change-provider']}
       openSetting={openSetting}
+      reloadNode={() => data.onReload(nodeId ?? '')}
     >
       <div
         className={`${theme === 'dark' ? 'bg-[#13131a]' : 'bg-white'}

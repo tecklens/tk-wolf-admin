@@ -16,7 +16,7 @@ export default function WorkflowSidebar() {
   }
 
   return (
-    <div className={`absolute right-0 top-0 ${theme === 'dark' ? 'bg-[#1e1e26]' : 'bg-white'} rounded-l flex flex-col space-y-4 p-2`}>
+    <div className={`wf-sidebar absolute right-0 top-0 ${theme === 'dark' ? 'bg-[#1e1e26]' : 'bg-white'} rounded-l flex flex-col space-y-4 p-2`}>
       <DbNodePreview onDragStart={onDragStart} />
       <TriggerNodePreview onDragStart={onDragStart} />
       <DelayNodePreview onDragStart={onDragStart} />

@@ -19,6 +19,7 @@ import { useWorkflow } from '@/lib/store/workflowStore.ts'
 import { throttle } from 'lodash'
 import { getRectOfNodes, getTransformForBounds, useReactFlow } from 'reactflow'
 import { toPng } from 'html-to-image'
+import WorkflowTour from '@/pages/workflow/components/workflow-tour.tsx'
 
 function downloadImage(dataUrl: any, name: string | undefined) {
   const a = document.createElement('a')
@@ -73,13 +74,14 @@ export default function WorkflowContainer() {
 
   return (
     <>
+      <WorkflowTour />
       <div className="flex items-center justify-between space-y-2">
         <div className={'inline-flex space-x-2 items-center'}>
           <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
             {workflow?.name}
           </h1>
         </div>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 wf-toolbar">
           <Button
             disabled={!workflow}
             variant="default"

@@ -17,7 +17,7 @@ import {
   IconSettings,
   IconTruck,
   IconUserShield,
-  IconUsers, IconHierarchy2, IconCode,
+  IconUsers, IconHierarchy2, IconCode, IconUsersGroup,
 } from '@tabler/icons-react'
 
 export interface NavLink {
@@ -50,23 +50,23 @@ export const sidelinks: SideLink[] = [
     href: '/tasks',
     icon: <IconChecklist size={18} />,
   },
-  {
-    title: 'Layout',
-    label: '',
-    href: '/layout',
-    icon: <IconCode size={18} />,
-  },
+  // {
+  //   title: 'Layout',
+  //   label: '',
+  //   href: '/layout',
+  //   icon: <IconCode size={18} />,
+  // },
   {
     title: 'Subscription',
     label: '',
     href: '/subscription',
-    icon: <IconCode size={18} />,
+    icon: <IconUsers size={18} />,
   },
   {
     title: 'Members',
     label: '',
     href: '/members',
-    icon: <IconUsers size={18} />,
+    icon: <IconUsersGroup size={18} />,
   },
   {
     title: 'Requests',
@@ -77,7 +77,7 @@ export const sidelinks: SideLink[] = [
       {
         title: 'Log trigger',
         label: '9',
-        href: '/log-trigger',
+        href: '/requests/log-trigger',
         icon: <IconTruck size={18} />,
       },
       {
