@@ -1,0 +1,25 @@
+.rhombusNode {
+    background: linear-gradient(to top right, orange 50%, transparent 50%) top right,
+    linear-gradient(to top left, orange 50%, transparent 50%) top left,
+    linear-gradient(to bottom right, orange 50%, transparent 50%) bottom right,
+    linear-gradient(to bottom left, orange 50%, transparent 50%) bottom left;
+    background-size: 50% 50%;
+    background-repeat: no-repeat;
+
+    width: 100px; /* 2*sin(120/2)*150 = 260 */
+    height: 100px; /* 2*sin(60/2)*150  = 150 OR 2*cos(120/2)*150  = 150*/
+    display: inline-block;
+    margin: 5px;
+}
+
+.handleTarget {
+    transform: translate(5px, -8px);
+}
+
+.handleSourceYes {
+    transform: translate(-5px, 5px);
+}
+
+.handleSourceNo {
+    transform: translate(-5px, -10px);
+}

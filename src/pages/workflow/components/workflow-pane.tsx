@@ -11,7 +11,6 @@ import {
   Node,
   ReactFlow,
   ReactFlowInstance,
-  ReactFlowProvider,
   useEdgesState,
   useNodesState,
 } from 'reactflow'
@@ -20,7 +19,6 @@ import DbNode from '@/pages/workflow/components/nodes/db-node'
 import EmailNode from '@/pages/workflow/components/nodes/email-node'
 import SmsNode from '@/pages/workflow/components/nodes/sms-node'
 import DelayNode from '@/pages/workflow/components/nodes/delay-node'
-import TriggerNode from '@/pages/workflow/components/nodes/trigger-node'
 import WorkflowSidebar from '@/pages/workflow/components/sidebar.tsx'
 import { DragEvent, type MouseEvent as ReactMouseEvent, useCallback, useEffect, useRef, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
@@ -41,6 +39,7 @@ import SelectProvider from '@/pages/workflow/components/select-provider.tsx'
 import EdgeWithClose from '@/pages/workflow/components/edges/edge-with-close.tsx'
 import EditSms from '@/pages/workflow/components/edit-sms.tsx'
 import ViewportChangeLogger from '@/pages/workflow/components/viewport-change-logger.ts'
+import ConditionNode from '@/pages/workflow/components/nodes/condition-node'
 
 const WorkflowRepository = RepositoryFactory.get('wf')
 
@@ -49,7 +48,7 @@ const nodeTypes = {
   email: EmailNode,
   sms: SmsNode,
   delay: DelayNode,
-  trigger: TriggerNode,
+  condition: ConditionNode,
   webhook: WebhookNode,
   starter: StarterNode,
 }

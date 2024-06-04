@@ -13,5 +13,8 @@ export default {
   },
   createPaymentIndent(payload: any) {
     return BaseRepository.post(`/payment/create-payment-indent`, payload)
+  },
+  updateGuide(type: string) {
+    return BaseRepository.put(`${resource}/guide/${type}`)
   }
 }

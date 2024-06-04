@@ -1,7 +1,7 @@
 import { toast } from '@/components/ui/use-toast'
 import axios from 'axios'
 
-const BASE_DOMAIN = process.env.REACT_APP_BASE_DOMAIN
+export const BASE_DOMAIN = process.env.REACT_APP_BASE_DOMAIN
 export const BASE_URL = `${BASE_DOMAIN}/wolf/v1`
 
 const instance = axios.create({

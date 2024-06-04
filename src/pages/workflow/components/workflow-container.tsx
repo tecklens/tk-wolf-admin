@@ -1,5 +1,5 @@
 import { Button } from '@/components/custom/button.tsx'
-import { IconDownload, IconPlus, IconSettings, IconVariable } from '@tabler/icons-react'
+import { IconDownload, IconPlus, IconSend, IconSettings, IconVariable } from '@tabler/icons-react'
 import {
   Select,
   SelectContent,
@@ -20,6 +20,9 @@ import { throttle } from 'lodash'
 import { getRectOfNodes, getTransformForBounds, useReactFlow } from 'reactflow'
 import { toPng } from 'html-to-image'
 import WorkflowTour from '@/pages/workflow/components/workflow-tour.tsx'
+import { Sheet, SheetContent } from '@/components/ui/sheet.tsx'
+import NodeInfo from '@/pages/workflow/components/node-info'
+import MakeApiContainer from '@/pages/workflow/components/make-api/make-api-container.tsx'
 
 function downloadImage(dataUrl: any, name: string | undefined) {
   const a = document.createElement('a')
@@ -33,6 +36,7 @@ export default function WorkflowContainer() {
   const [openCreate, setOpenCreate] = useState(false)
   const [openSetting, setOpenSetting] = useState(false)
   const [nameCreate, setNameCreate] = useState('')
+  const [openSendApi, setOpenSendApi] = useState(false)
 
   const {
     openEditVariable,
@@ -82,6 +86,13 @@ export default function WorkflowContainer() {
           </h1>
         </div>
         <div className="flex items-center space-x-2 wf-toolbar">
+          <Button
+            onClick={() => setOpenSendApi(true)}
+            className={`hidden md:flex aspect-square`}
+            size={'icon'}
+          >
+            <IconSend />
+          </Button>
           <Button
             disabled={!workflow}
             variant="default"
@@ -169,6 +180,12 @@ export default function WorkflowContainer() {
           <ManageVariables workflow={workflow} onClose={() => setOpenEditVariable(false)} />
         </DialogContent>
       </Dialog>
+      <Sheet open={openSendApi} onOpenChange={() => setOpenSendApi(false)}>
+        <SheetContent className="w-full lg:max-w-[800px] max-w-[500px]">
+          <MakeApiContainer />
+        </SheetContent>
+      </Sheet>
     </>
   )
+
 }

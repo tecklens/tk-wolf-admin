@@ -1,7 +1,9 @@
 import Joyride, { CallBackProps, STATUS, Step } from 'react-joyride';
 import { useUser } from '@/lib/store/userStore.ts'
 import { useState } from 'react'
+import { RepositoryFactory } from '@/api/repository-factory.ts'
 
+const UserRepository = RepositoryFactory.get('user')
 export default function WorkflowTour() {
   const user = useUser(state => state.user)
   const steps: Step = [
@@ -27,13 +29,16 @@ export default function WorkflowTour() {
     event.preventDefault();
   };
 
+  const updateGuide = () => {
+    UserRepository.updateGuide('workflow')
+  }
   const handleJoyrideCallback = (data: CallBackProps) => {
     const { status, type } = data;
     const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
 
     if (finishedStatuses.includes(status)) {
+      updateGuide()
     }
-
   };
 
   return <Joyride
