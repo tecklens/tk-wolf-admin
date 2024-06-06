@@ -43,7 +43,7 @@ export default function SmsNodeInfo({ content }: ISmsNodeInfoProps) {
           })
         }}>Edit Message</Button>
         <div className={'font-semibold text-lg'}>Preview</div>
-        <div className={'border-2 rounded-lg p-3'}>
+        <div className={'border-2 rounded-lg p-3 w-[320px]'}>
           <div className={'flex flex-col h-full justify-end items-end'}>
             <div className={`${theme === 'light' ? 'bg-slate-200' : 'bg-slate-700'} rounded-xl px-4 py-2`}>
               <span>{parseContent()}</span>

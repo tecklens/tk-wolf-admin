@@ -4,6 +4,7 @@ import {RepositoryFactory} from "@/api/repository-factory.ts";
 import {HttpStatusCode} from "axios";
 import {get} from "lodash";
 import {useToastGlobal} from "@/lib/store/toastStore.ts";
+import { useUser } from '@/lib/store/userStore.ts'
 
 const EnvironmentRepository = RepositoryFactory.get('env')
 
@@ -24,8 +25,12 @@ export const useEnv = create<EnvState>((set) => ({
     const rspApiKeys = await EnvironmentRepository.apiKeys()
 
     if (rsp.status === HttpStatusCode.Ok) {
+      const env = rsp.data
+      if (env._organizationId) {
+        useUser.getState().updateCurrentOrg(env._organizationId)
+      }
       set({
-        env: rsp.data
+        env,
       })
     }
 

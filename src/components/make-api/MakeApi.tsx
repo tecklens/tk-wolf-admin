@@ -5,7 +5,7 @@ import {Params} from "./Params";
 import {Body} from "./Body";
 import {ResponseData} from "./ResponseData";
 import {Headers} from "./Headers";
-import {useEffect, useState} from "react";
+import { useEffect, useRef, useState } from 'react'
 import axios, { AxiosError, AxiosResponse } from 'axios'
 import { IMakeApiProps } from './types/api.interface';
 import { defaultHeader } from './constants';
@@ -15,6 +15,7 @@ import { ListHeaderCommon } from '@/components/make-api/constants/ListMethod.ts'
 import { Input } from '@/components/ui/input.tsx'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs.tsx'
 import { Button } from '@/components/custom/button.tsx'
+import { debounce } from 'lodash'
 
 const formSchema = z.object({
   method: z
@@ -37,6 +38,7 @@ const formSchema = z.object({
 const MakeApi = (props: IMakeApiProps) => {
   const [resp, setResp] = useState<AxiosResponse<any, any> | undefined>(undefined)
   const [loading, setLoading] = useState(false)
+  const bodyRef = useRef()
 
   const {control, register, ...form} = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -50,25 +52,28 @@ const MakeApi = (props: IMakeApiProps) => {
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setLoading(true)
-    axios({
-      method: data.method,
-      url: data.url,
-      params: data.params?.reduce((rlt, val) => ({
-        ...rlt,
-        [val.key]: val.value,
-      }), {}),
-      data: data.body,
-      headers: data.headers?.reduce((rlt, val) => ({
-        ...rlt,
-        [val.key]: val.value,
-      }), {}),
-    }).then((resp: AxiosResponse) => {
-      setResp(resp)
-    }).catch((e: AxiosError) => {
-      setResp(e.response)
-    }).finally(() => {
-      setLoading(false)
-    })
+    debounce(() => {
+      console.log(data.body)
+      axios({
+        method: data.method,
+        url: data.url,
+        params: data.params?.reduce((rlt, val) => ({
+          ...rlt,
+          [val.key]: val.value,
+        }), {}),
+        data: data.body,
+        headers: data.headers?.reduce((rlt, val) => ({
+          ...rlt,
+          [val.key]: val.value,
+        }), {}),
+      }).then((resp: AxiosResponse) => {
+        setResp(resp)
+      }).catch((e: AxiosError) => {
+        setResp(e.response)
+      }).finally(() => {
+        setLoading(false)
+      })
+    }, 300)()
   }
 
   useEffect(() => {
@@ -150,7 +155,7 @@ const MakeApi = (props: IMakeApiProps) => {
                   <FormItem className={`flex-1 w-full`}>
                     {/*<FormLabel>Email</FormLabel>*/}
                     <FormControl>
-                      <Body value={field.value} theme={props.theme} onChange={(val) => field.onChange(val)}/>
+                      <Body ref={bodyRef} value={field.value} theme={props.theme} onChange={(val) => field.onChange(val)}/>
                     </FormControl>
                     <FormMessage className={'!mt-0'}/>
                   </FormItem>

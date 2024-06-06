@@ -5,12 +5,13 @@ import { Layout, LayoutBody, LayoutHeader } from '@/components/custom/layout'
 import { DataTable } from './components/data-table'
 import { columns } from './components/columns'
 import { useTask } from '@/lib/store/taskStore.ts'
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { throttle } from 'lodash'
 import { PaginationState } from '@tanstack/react-table'
 import { Dialog, DialogContent } from '@/components/ui/dialog.tsx'
 import { allExpanded, darkStyles, defaultStyles, JsonView } from 'react-json-view-lite'
 import { useTheme } from '@/components/theme-provider.tsx'
+import { NotificationNav } from '@/components/notification/notification-nav.tsx'
 
 export default function Tasks() {
   const { theme } = useTheme()
@@ -41,6 +42,7 @@ export default function Tasks() {
         <Search />
         <div className="ml-auto flex items-center space-x-4">
           <ThemeSwitch />
+          <NotificationNav theme={theme} />
           <UserNav />
         </div>
       </LayoutHeader>

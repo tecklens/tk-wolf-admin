@@ -6,6 +6,7 @@ export enum ChannelTypeEnum {
   PUSH = 'push',
   DELAY = 'delay',
   WEBHOOK = 'webhook',
+  CONDITION = 'condition',
 }
 
 export enum StepTypeEnum {

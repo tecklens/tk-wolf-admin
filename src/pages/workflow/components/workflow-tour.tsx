@@ -6,7 +6,7 @@ import { RepositoryFactory } from '@/api/repository-factory.ts'
 const UserRepository = RepositoryFactory.get('user')
 export default function WorkflowTour() {
   const user = useUser(state => state.user)
-  const steps: Step = [
+  const steps: Array<Step> = [
     {
       target: '.wf-toolbar',
       content: <h2>Let's begin our journey!</h2>,

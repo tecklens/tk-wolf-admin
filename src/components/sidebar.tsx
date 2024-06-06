@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {IconChevronsLeft, IconMenu2, IconX} from '@tabler/icons-react'
+import { IconBike, IconChevronsLeft, IconCircle, IconMenu2, IconX } from '@tabler/icons-react'
 import {Layout, LayoutHeader} from './custom/layout'
 import {Button} from './custom/button'
 import Nav from './nav'
@@ -32,9 +32,11 @@ export default function Sidebar2({
   const [navOpened, setNavOpened] = useState(false)
   const {env, envs} = useEnv(state => state)
   const switchEnv = useUser(state => state.switchEnv)
+  const {fetchOrg, organizations, currentOrg} = useUser(state => state)
 
   /* Make body not scrollable when navBar is opened */
   useEffect(() => {
+    fetchOrg()
     if (navOpened) {
       document.body.classList.add('overflow-hidden')
     } else {
@@ -113,18 +115,16 @@ export default function Sidebar2({
           </Button>
         </LayoutHeader>
         {isCollapsed ? null : <div className={'p-3'}>
-          <Select>
+          <Select value={currentOrg}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select a organization"/>
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectLabel>Fruits</SelectLabel>
-                <SelectItem value="apple">Apple</SelectItem>
-                <SelectItem value="banana">Banana</SelectItem>
-                <SelectItem value="blueberry">Blueberry</SelectItem>
-                <SelectItem value="grapes">Grapes</SelectItem>
-                <SelectItem value="pineapple">Pineapple</SelectItem>
+                <SelectLabel>{organizations.find(e => e._id === currentOrg)?.name}</SelectLabel>
+                {organizations.map(e => (
+                  <SelectItem key={e._id} value={e._id}>{e.name}</SelectItem>
+                ))}
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -137,6 +137,16 @@ export default function Sidebar2({
           isCollapsed={isCollapsed}
           links={sidelinks}
         />
+        <div className={'flex space-x-1 py-2 px-3 items-center cursor-pointer hover:text-green-600 w-full'}>
+          <IconBike size={18}/>
+          <div className={'text-sm flex-1'}>Get Started</div>
+          <div className={'flex space-x-1 text-green-700 dark:text-green-500'}>
+            <IconCircle size={8}/>
+            <IconCircle size={8}/>
+            <IconCircle size={8}/>
+            <IconCircle size={8}/>
+          </div>
+        </div>
         <Tabs value={env?._id} onValueChange={switchEnvThrottle} className={`w-full p-2 ${isCollapsed || !envs ? 'hidden': 'block'}`}>
           <TabsList className="grid w-full grid-cols-2">
             {envs ? envs.map(e => (

@@ -7,7 +7,7 @@ import { columns } from './components/columns'
 import { IconMailBolt, IconPlus } from '@tabler/icons-react'
 import { Button } from '@/components/custom/button.tsx'
 import { initialProvidersList } from '@/utils/providers.ts'
-import { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -29,6 +29,7 @@ import {
 import { useTheme } from '@/components/theme-provider.tsx'
 import UpdateProvider from '@/pages/provider/components/update-provider.tsx'
 import { useProvider } from '@/lib/store/providerStore.ts'
+import { NotificationNav } from '@/components/notification/notification-nav.tsx'
 
 export default function Providers() {
   const [providersList, setProvidersList] = useState(initialProvidersList)
@@ -55,6 +56,7 @@ export default function Providers() {
         <Search />
         <div className="ml-auto flex items-center space-x-4">
           <ThemeSwitch />
+          <NotificationNav theme={theme} />
           <UserNav />
         </div>
       </LayoutHeader>

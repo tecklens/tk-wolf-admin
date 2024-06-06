@@ -7,8 +7,11 @@ import React, { useEffect } from 'react'
 import { useWorkflow } from '@/lib/store/workflowStore.ts'
 import { ReactFlowProvider } from 'reactflow'
 import WorkflowContainer from '@/pages/workflow/components/workflow-container.tsx'
+import { NotificationNav } from '@/components/notification/notification-nav.tsx'
+import { useTheme } from '@/components/theme-provider.tsx'
 
 export default function Workflow() {
+  const {theme} = useTheme()
   const {
     fetchWf,
   }
@@ -26,6 +29,7 @@ export default function Workflow() {
         <div className="ml-auto flex items-center space-x-4">
           <Search />
           <ThemeSwitch />
+          <NotificationNav theme={theme} />
           <UserNav />
         </div>
       </LayoutHeader>

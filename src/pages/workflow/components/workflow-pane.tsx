@@ -406,7 +406,7 @@ export default function WorkflowPane() {
       </div>
       <WorkflowSidebar />
       <Sheet open={nodeSelected} onOpenChange={() => selectNode(null)}>
-        <SheetContent className={'p-0'}>
+        <SheetContent className="w-fit lg:max-w-[800px] max-w-[500px]">
           <NodeInfo
             reloadNode={reloadNode}
             onClose={() => {

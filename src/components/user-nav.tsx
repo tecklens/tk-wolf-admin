@@ -70,7 +70,9 @@ export const UserNav = memo(() => {
               <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
             </DropdownMenuItem>
           </Link>
-          {/*<DropdownMenuItem>New Team</DropdownMenuItem>*/}
+          <Link to={'/contribute/bug-report'}>
+            <DropdownMenuItem>Bug Report</DropdownMenuItem>
+          </Link>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={logout}>

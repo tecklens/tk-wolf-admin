@@ -1,20 +1,17 @@
 import { Outlet } from 'react-router-dom'
-import {
-  IconBrowserCheck,
-  IconExclamationCircle, IconKey,
-  IconNotification,
-  IconPalette,
-  IconTool,
-  IconUser,
-} from '@tabler/icons-react'
+import { IconExclamationCircle, IconKey, IconNotification, IconPalette, IconTool, IconUser } from '@tabler/icons-react'
 import { Search } from '@/components/search'
 import { Separator } from '@/components/ui/separator'
 import ThemeSwitch from '@/components/theme-switch'
 import { UserNav } from '@/components/user-nav'
 import { Layout, LayoutBody, LayoutHeader } from '@/components/custom/layout'
 import SidebarNav from './components/sidebar-nav'
+import { NotificationNav } from '@/components/notification/notification-nav.tsx'
+import React from 'react'
+import { useTheme } from '@/components/theme-provider.tsx'
 
 export default function Settings() {
+  const {theme} = useTheme()
   return (
     <Layout fadedBelow fixedHeight>
       {/* ===== Top Heading ===== */}
@@ -22,6 +19,7 @@ export default function Settings() {
         <Search />
         <div className='ml-auto flex items-center space-x-4'>
           <ThemeSwitch />
+          <NotificationNav theme={theme} />
           <UserNav />
         </div>
       </LayoutHeader>

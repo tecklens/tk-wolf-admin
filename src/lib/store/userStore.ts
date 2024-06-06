@@ -4,6 +4,7 @@ import {RepositoryFactory} from '@/api/repository-factory.ts'
 import {HttpStatusCode} from "axios";
 import {useToastGlobal} from "@/lib/store/toastStore.ts";
 import {useEnv} from "@/lib/store/envStore.ts";
+import { IOrganization } from '@/types/organization.interface.ts'
 
 const AuthRepository = RepositoryFactory.get('auth')
 const UserRepository = RepositoryFactory.get('user')
@@ -12,6 +13,10 @@ export interface IUserStore {
   user: UserInterface | null;
   token: string | undefined;
   signIn: (user: UserInterface) => Promise<boolean>
+  organizations: IOrganization[];
+  currentOrg: string | undefined;
+  fetchOrg: () => void
+  updateCurrentOrg: (orgId: string) => void
   updateUser: () => void
   sendUpdate: (user: UserInterface) => void
   switchEnv: (envId: string) => void
@@ -20,7 +25,9 @@ export interface IUserStore {
 
 const initState = {
   user: null,
-  token: localStorage.getItem("token") ?? undefined
+  token: localStorage.getItem("token") ?? undefined,
+  organizations: [],
+  currentOrg: undefined
 }
 
 export const useUser = create<IUserStore>(
@@ -40,7 +47,6 @@ export const useUser = create<IUserStore>(
     },
     updateUser: async () => {
       const info = await UserRepository.getInfoMe()
-      console.log(info.data)
       useEnv.getState().fetchEnv()
       useEnv.getState().fetchAllEnv()
       set({user: info.data})
@@ -82,6 +88,20 @@ export const useUser = create<IUserStore>(
       } else {
         localStorage.removeItem('token')
       }
+    },
+    fetchOrg: async () => {
+      const rsp = await UserRepository.organizations()
+      if (rsp.status === HttpStatusCode.Ok) {
+        set({
+          organizations: rsp.data
+        })
+      }
+    },
+
+    updateCurrentOrg: (orgId: string) => {
+      set({
+        currentOrg: orgId
+      })
     }
   })
 )

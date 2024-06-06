@@ -1,13 +1,6 @@
 import { Button } from '@/components/custom/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Search } from '@/components/search'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import ThemeSwitch from '@/components/theme-switch'
 import { TopNav } from '@/components/top-nav'
 import { UserNav } from '@/components/user-nav'
@@ -21,6 +14,7 @@ import { ErrorChart } from '@/pages/dashboard/components/error-chart.tsx'
 import { BillingChart } from '@/pages/dashboard/components/billing-chart.tsx'
 import { NotificationNav } from '@/components/notification/notification-nav.tsx'
 import { useTheme } from '@/components/theme-provider.tsx'
+import { Link } from 'react-router-dom'
 
 const AuthS = RepositoryFactory.get('auth')
 
@@ -59,10 +53,16 @@ export default function Dashboard() {
           <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
             Dashboard
           </h1>
-          <div className="flex items-center space-x-2">
-            <Button>Download</Button>
-          </div>
         </div>
+        <Card className={'w-full flex justify-between p-3 items-center'}>
+          <div className={'text-xl font-semibold inline-flex space-x-2'}>
+            <div>Welcome to our website</div>
+            <img src={'/images/congrat-popper.png'} alt={'congrats'} className={'h-6 w-6'} />
+          </div>
+          <Link to={'get-started'}>
+            <Button>Get Started</Button>
+          </Link>
+        </Card>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -194,18 +194,18 @@ const topNav = [
     title: 'Overview',
     href: 'overview',
     isActive: true,
-    target: '_blank'
+    target: '_blank',
   },
   {
     title: 'Document',
     href: 'https://docs.wolf.app',
     isActive: false,
-    target: '_blank'
+    target: '_blank',
   },
   {
     title: 'Pricing',
     href: 'pricing',
     isActive: false,
-    target: '_blank'
+    target: '_blank',
   },
 ]

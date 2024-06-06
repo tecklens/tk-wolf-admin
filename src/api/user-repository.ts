@@ -16,5 +16,8 @@ export default {
   },
   updateGuide(type: string) {
     return BaseRepository.put(`${resource}/guide/${type}`)
+  },
+  organizations() {
+    return BaseRepository.get(`org`)
   }
 }
