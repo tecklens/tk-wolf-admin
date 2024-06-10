@@ -6,10 +6,34 @@ import { NotificationNav } from '@/components/notification/notification-nav.tsx'
 import { UserNav } from '@/components/user-nav.tsx'
 import { useTheme } from '@/components/theme-provider.tsx'
 import AppsProviderGrid from '@/components/provider/provider-grid.tsx'
+import { useState } from 'react'
+import WorkflowGetStarted from '@/pages/get-started/components/WorkflowGetStarted.tsx'
+import { AnimatePresence } from 'framer-motion'
+import EnvironmentGetStarted from '@/pages/get-started/components/EnvironmentGetStarted.tsx'
+import SendNotificationGetStarted from '@/pages/get-started/components/SendNotificationGetStarted.tsx'
 
-
+const tabs = [
+  {
+    title: 'Create Provider',
+    key: 'provider',
+  },
+  {
+    title: 'Create Workflow',
+    key: 'workflow',
+  },
+  {
+    title: 'Environment',
+    key: 'environment',
+  },
+  {
+    title: 'Send notification',
+    key: 'send-noti',
+  },
+]
 export default function GetStarted() {
   const { theme } = useTheme()
+  const [tab, setTab] = useState('provider')
+
   return (
     <Layout>
       {/* ===== Top Heading ===== */}
@@ -29,15 +53,34 @@ export default function GetStarted() {
             Get Started
           </h1>
         </div>
-        <div className={'flex space-x-3 w-full'}>
+        <div className={'flex space-x-3 lg:space-x-6 w-full'}>
           <div className={'flex flex-col space-y-2 gap-6 w-[200px] font-semibold my-6'}>
-            <div className={`${theme === 'light' ? 'bg-green-100' : 'bg-slate-900'} px-5 py-2 rounded-lg cursor-pointer`}>Create Provider</div>
-            <div className={'px-5 py-2 rounded-lg cursor-pointer'}>Create Workflow</div>
-            <div className={'px-5 py-2 rounded-lg cursor-pointer'}>Get API key</div>
-            <div className={'px-5 py-2 rounded-lg cursor-pointer'}>Send notification</div>
+            {tabs.map(e => (
+              <div
+                key={e.key}
+                className={`${tab === e.key
+                  ? theme === 'light'
+                    ? 'bg-green-100'
+                    : 'bg-slate-900'
+                  : 'hover:bg-slate-100 hover:dark:bg-slate-800'} px-5 py-2 rounded-lg cursor-pointer`}
+                onClick={() => setTab(e.key)}
+              >
+                {e.title}
+              </div>
+            ))}
           </div>
-          <div className={'flex-1'}>
-            <AppsProviderGrid />
+          <div className={'flex-1 py-8'}>
+            <AnimatePresence>
+              {tab === 'provider'
+                ? <AppsProviderGrid key={'provider'} />
+                : tab === 'workflow'
+                  ? <WorkflowGetStarted key={'workflow'} />
+                  : tab === 'environment'
+                    ? <EnvironmentGetStarted />
+                    : tab === 'send-noti'
+                      ? <SendNotificationGetStarted />
+                      : null}
+            </AnimatePresence>
           </div>
         </div>
       </LayoutBody>

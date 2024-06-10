@@ -15,21 +15,36 @@ import { BillingChart } from '@/pages/dashboard/components/billing-chart.tsx'
 import { NotificationNav } from '@/components/notification/notification-nav.tsx'
 import { useTheme } from '@/components/theme-provider.tsx'
 import { Link } from 'react-router-dom'
+import { throttle } from 'lodash'
 
 const AuthS = RepositoryFactory.get('auth')
+const AnalS = RepositoryFactory.get('anal')
 
 export default function Dashboard() {
   const [rReq, setRRequest] = useState(0)
+  const [dashboardInfo, setDashboardInfo] = useState<{
+    total_call_api?: number;
+    total_subscriptions?: number;
+    total_money?: number;
+  } | null>(null)
   const { theme } = useTheme()
 
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      const rep = await AuthS.getRemainingRequest()
+  const fetchData = throttle(async () => {
+    const rep = await AuthS.getRemainingRequest()
 
-      if (rep.status === HttpStatusCode.Ok) {
-        setRRequest(rep.data)
-      }
-    }, 5000)
+    if (rep.status === HttpStatusCode.Ok) {
+      setRRequest(rep.data)
+    }
+
+    const rspInfo = await AnalS.dashboard({})
+    if (rspInfo.status === HttpStatusCode.Ok) {
+      setDashboardInfo(rspInfo.data)
+    }
+  }, 500)
+
+  useEffect(() => {
+    fetchData()
+    const interval = setInterval(fetchData, 10000)
 
     return () => clearInterval(interval)
   }, [])
@@ -83,7 +98,7 @@ export default function Dashboard() {
               </svg>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">$45,231.89</div>
+              <div className="text-2xl font-bold">{dashboardInfo?.total_call_api ?? 0}</div>
               <p className="text-xs text-muted-foreground">
                 +20.1% from last month
               </p>

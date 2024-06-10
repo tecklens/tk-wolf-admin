@@ -47,6 +47,7 @@ export function Search() {
         type='search'
         placeholder='Search (Ctrl J)...'
         className='md:w-[100px] lg:w-[300px]'
+        onClick={() => setOpen(true)}
       />
 
       <CommandDialog open={open} onOpenChange={setOpen}>
@@ -56,7 +57,7 @@ export function Search() {
           <CommandGroup heading="Suggestions">
             <CommandItem onSelect={() => onRoute('/workflow')}>
               <IconHierarchy2 className="mr-2 h-4 w-4" />
-              <span>Go to Workflow</span>
+              <span className={'font-semibold'}>Go to Workflow</span>
             </CommandItem>
             <CommandItem onSelect={() => onRoute('/workflow?openCreate=true')}>
               <IconPlus className="mr-2 h-4 w-4" />
@@ -88,7 +89,7 @@ export function Search() {
             </CommandItem>
             <CommandItem onSelect={() => onRoute('/settings/billing')}>
               <IconCreditCard className="mr-2 h-4 w-4" />
-              <span>Go to Billing</span>
+              <span className={'font-semibold'}>Go to Billing</span>
               <CommandShortcut>⌘B</CommandShortcut>
             </CommandItem>
             <CommandItem  onSelect={() => onRoute('/settings')}>

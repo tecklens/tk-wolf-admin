@@ -28,7 +28,7 @@ export default function AccessKeys() {
     <div className="grid w-full max-w-sm items-center gap-1.5">
       <Label htmlFor="api-key">
         <div>API Key</div>
-        <div className={'text-slate-400 text-xs'}>Use this API key to interact with the Novu API</div>
+        <div className={'text-gray-700 text-xs'}>Use this API key to interact with the Wolf API</div>
       </Label>
       <div className={'flex items-center space-x-2'}>
         <Input
@@ -56,7 +56,7 @@ export default function AccessKeys() {
     <div className="grid w-full max-w-sm items-center gap-1.5">
       <Label htmlFor="env-identifier">
         <div>Application Identifier</div>
-        <div className={'text-slate-400 text-xs'}>A public key identifier that can be exposed to the client
+        <div className={'text-gray-700 text-xs'}>A public key identifier that can be exposed to the client
           applications
         </div>
       </Label>
@@ -81,7 +81,7 @@ export default function AccessKeys() {
     <div className="grid w-full max-w-sm items-center gap-1.5">
       <Label htmlFor="api-key">
         <div>Environment ID</div>
-        {/*<div className={'text-slate-400 text-xs'}>A public key identifier that can be exposed to the client*/}
+        {/*<div className={'text-gray-700 text-xs'}>A public key identifier that can be exposed to the client*/}
         {/*  applications*/}
         {/*</div>*/}
       </Label>

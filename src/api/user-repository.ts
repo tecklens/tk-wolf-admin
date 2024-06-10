@@ -19,5 +19,8 @@ export default {
   },
   organizations() {
     return BaseRepository.get(`org`)
+  },
+  submitBug(payload: any) {
+    return BaseRepository.post(`${resource}/bug/submit`, payload)
   }
 }

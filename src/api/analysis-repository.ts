@@ -9,4 +9,9 @@ export default {
       params: payload
     })
   },
+  dashboard(payload: any) {
+    return BaseRepository.get(`${resource}/dashboard`, {
+      params: payload
+    })
+  },
 }

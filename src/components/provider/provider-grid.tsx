@@ -19,6 +19,7 @@ import ThemeSwitch from '@/components/theme-switch'
 import { UserNav } from '@/components/user-nav'
 import { Button } from '@/components/custom/button'
 import { apps } from './data.tsx'
+import { motion } from 'framer-motion'
 
 const appText = new Map<string, string>([
   ['all', 'All Apps'],
@@ -47,7 +48,17 @@ export default function AppsProviderGrid() {
     .filter((app) => app.name.toLowerCase().includes(searchTerm.toLowerCase()))
 
   return (
-    <>
+    <motion.div
+      transition={{
+        tension: 190,
+        friction: 70,
+        mass: 0.4
+      }}
+      initial={{
+        x: '10%'
+      }}
+      animate={{ x: 0 }}
+    >
       {/* ===== Content ===== */}
       <div className="flex flex-col">
         <div className="my-4 flex items-end justify-between sm:my-0 sm:items-center">
@@ -121,6 +132,6 @@ export default function AppsProviderGrid() {
           ))}
         </ul>
       </div>
-    </>
+    </motion.div>
   )
 }
