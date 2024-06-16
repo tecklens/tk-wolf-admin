@@ -10,8 +10,14 @@ export default {
   register(payload: UserInterface) {
     return BaseRepository.post(`${resource}/register`, payload)
   },
-  githubAuth() {
-    return BaseRepository.get(`${resource}/github`)
+  checkGithubAuth() {
+    return BaseRepository.get(`${resource}/github/check`)
+  },
+  checkGoogleAuth() {
+    return BaseRepository.get(`${resource}/google/check`)
+  },
+  googleAuth() {
+    return BaseRepository.get(`${resource}/google`)
   },
   githubAuthCallback(payload: any) {
     return BaseRepository.get(`${resource}/github/callback`, {

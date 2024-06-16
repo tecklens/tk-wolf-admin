@@ -1,24 +1,20 @@
 import { z } from 'zod'
-import { TaskStatus } from '@/types/task.interface.ts'
+import { ISubscription } from '@/types/subscription.interface.ts'
 
 // We're keeping a simple non-relational schema here.
 // IRL, you will have a schema for your data models.
-export const taskSchema = z.object({
-  id: z.string(),
-  _workflowId: z.string(),
-  workflowName: z.string(),
-  _nodeId: z.string(),
-  _providerId: z.string(),
-  providerName: z.string(),
-  channel: z.string(),
-  code: z.string(),
-  name: z.string(),
-  type: z.string(),
-  errorDetail: z.string().optional(),
-  priority: z.string(),
+export const subscriptionSchema = z.object({
+  _id: z.string(),
+  channelId: z.string(),
+  _userId: z.string(),
   email: z.string(),
-  status: z.nativeEnum(TaskStatus),
+  phone: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
+  locale: z.string(),
+  subscribed_at: z.date(),
   createdAt: z.string(),
+  createdBy: z.string().optional(),
 })
 
-export type Task = z.infer<typeof taskSchema>
+export type Subscription = z.infer<typeof subscriptionSchema> & ISubscription

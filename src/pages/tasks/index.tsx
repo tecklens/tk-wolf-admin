@@ -60,7 +60,7 @@ export default function Tasks() {
           <DataTable
             data={tasks.data}
             columns={columns}
-            totalCount={tasks.totalCount}
+            totalCount={tasks.totalCount ?? 0}
             page={page.current}
             onPageChange={throttle((p: PaginationState) => {
               page.current = {

@@ -8,6 +8,7 @@ import ProviderRepository from '@/api/provider-repository.ts'
 import TriggerRepository from '@/api/trigger-repository.ts'
 import AnalysisRepository from '@/api/analysis-repository.ts'
 import NotificationRepository from '@/api/notification-repository.ts'
+import SubscriptionRepository from '@/api/subscription-repository.ts'
 
 const repositories = {
   auth: AuthRepository,
@@ -19,6 +20,7 @@ const repositories = {
   trigger: TriggerRepository,
   anal: AnalysisRepository,
   noti: NotificationRepository,
+  sub: SubscriptionRepository
 }
 
 export const RepositoryFactory = {

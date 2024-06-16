@@ -6,17 +6,14 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { TaskStatus } from '@/types/task.interface.ts'
-import { useTask } from '@/lib/store/taskStore.ts'
 import { RepositoryFactory } from '@/api/repository-factory.ts'
-import { get, throttle } from 'lodash'
+import { throttle } from 'lodash'
 import { HttpStatusCode } from 'axios'
 
-const TriggerRepository = RepositoryFactory.get('trigger')
+const SubscriptionRepository = RepositoryFactory.get('sub')
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>
@@ -26,13 +23,14 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
                                              row,
                                            }: DataTableRowActionsProps<TData>) {
-  const { showError } = useTask()
-
   const del = throttle(async () => {
-    const rsp = await TriggerRepository.delTask(row.getValue('code'))
+    console.log( row.getValue('_id'))
+    const rsp = await SubscriptionRepository.del({
+      subscriptionId: row.getValue('_id')
+    })
 
     if (rsp.status === HttpStatusCode.Ok) {
-      console.log('del task ' + row.getValue('code'))
+      console.log('del task ' + row.getValue('_id'))
     }
   }, 200)
 
@@ -48,12 +46,6 @@ export function DataTableRowActions<TData>({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
-        <DropdownMenuItem
-          className={`${row.getValue('status') === TaskStatus.cancel ? 'block' : 'hidden'}`}
-          onClick={() => showError(get(row.original, 'errorDetail'))}
-        >Show Error</DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuSeparator />
         <DropdownMenuItem onClick={del}>
           Delete
           <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>

@@ -21,7 +21,6 @@ import { getRectOfNodes, getTransformForBounds, useReactFlow } from 'reactflow'
 import { toPng } from 'html-to-image'
 import WorkflowTour from '@/pages/workflow/components/workflow-tour.tsx'
 import { Sheet, SheetContent } from '@/components/ui/sheet.tsx'
-import NodeInfo from '@/pages/workflow/components/node-info'
 import MakeApiContainer from '@/pages/workflow/components/make-api/make-api-container.tsx'
 
 function downloadImage(dataUrl: any, name: string | undefined) {
@@ -88,7 +87,7 @@ export default function WorkflowContainer() {
         <div className="flex items-center space-x-2 wf-toolbar">
           <Button
             onClick={() => setOpenSendApi(true)}
-            className={`hidden md:flex aspect-square`}
+            className={`hidden md:flex aspect-square w-auto`}
             size={'icon'}
           >
             <IconSend />
@@ -96,10 +95,10 @@ export default function WorkflowContainer() {
           <Button
             disabled={!workflow}
             variant="default"
-            className={'aspect-square'}
+            className={'aspect-square w-auto'}
             size={'icon'}
             onClick={() => setOpenEditVariable(true)}><IconVariable /></Button>
-          <Button variant="default" className={'aspect-square'} size={'icon'}
+          <Button variant="default" className={'aspect-square w-auto'} size={'icon'}
                   onClick={() => setOpenSetting(true)}><IconSettings /></Button>
 
           <Select value={workflow?._id} onValueChange={(val) => select(val)}>

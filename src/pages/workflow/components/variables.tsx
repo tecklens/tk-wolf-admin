@@ -1,13 +1,11 @@
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form.tsx'
+import { Form } from '@/components/ui/form.tsx'
 import { Input } from '@/components/ui/input.tsx'
 import { Button } from '@/components/custom/button.tsx'
-import { IconCopy } from '@tabler/icons-react'
-import { IVariable, IWorkflowEntity } from '@/types/workflow.interface.ts'
+import { IWorkflowEntity } from '@/types/workflow.interface.ts'
 import React, { useEffect } from 'react'
-import { Textarea } from '@/components/ui/textarea.tsx'
 import { RepositoryFactory } from '@/api/repository-factory.ts'
 import { AxiosError } from 'axios'
 import { useToast } from '@/components/ui/use-toast.ts'
@@ -24,7 +22,6 @@ import {
 import { CrossCircledIcon } from '@radix-ui/react-icons'
 import { get, reduce } from 'lodash'
 import { Switch } from '@/components/ui/switch.tsx'
-import { Label } from '@/components/ui/label.tsx'
 import { useTheme } from '@/components/theme-provider.tsx'
 
 const WorkflowRepository = RepositoryFactory.get('wf')

@@ -51,7 +51,7 @@ export default function LogTrigger() {
           <DataTable
             data={logs.data}
             columns={columns}
-            totalCount={logs.totalCount}
+            totalCount={logs.totalCount ?? 0}
             page={page.current}
             onPageChange={throttle((p: PaginationState) => {
               page.current = {

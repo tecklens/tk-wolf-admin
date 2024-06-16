@@ -34,7 +34,8 @@ export interface IConditions {
 export interface IPageResponse<T> {
   page: number,
   pageSize: number,
-  totalCount: number,
+  totalCount?: number,
+  total?: number,
   data: T[]
 }
 

@@ -14,6 +14,7 @@ import { RepositoryFactory } from '@/api/repository-factory.ts'
 import { HttpStatusCode } from 'axios'
 import { useAuth } from '@/context/auth.tsx'
 import { throttle } from 'lodash'
+import { BASE_URL } from '@/api/base-repository.ts'
 
 const AuthRepository = RepositoryFactory.get('auth')
 
@@ -62,13 +63,20 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   }
 
   async function checkGithubAuth() {
-    const rsp = await AuthRepository.githubAuth()
+    const rsp = await AuthRepository.checkGithubAuth()
 
     if (rsp.status === HttpStatusCode.Ok) {
       window.location.href = getGitHubUrl(from)
     }
   }
 
+  async function checkGoogleAuth() {
+    const rsp = await AuthRepository.checkGoogleAuth()
+
+    if (rsp.status === HttpStatusCode.Ok) {
+      window.location.replace(BASE_URL+'/auth/google')
+    }
+  }
   const checkToken = throttle(() => {
     if (token && token.length > 0) {
       setToken(token)
@@ -150,6 +158,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                 className="w-full"
                 type="button"
                 loading={isLoading}
+                onClick={checkGoogleAuth}
                 leftSection={<IconBrandGoogle className="h-4 w-4" />}
               >
                 Google

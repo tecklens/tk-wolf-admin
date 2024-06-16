@@ -4,24 +4,22 @@ import { UserNav } from '@/components/user-nav'
 import { Layout, LayoutBody, LayoutHeader } from '@/components/custom/layout'
 import { DataTable } from './components/data-table'
 import { columns } from './components/columns'
-import { useTask } from '@/lib/store/taskStore.ts'
 import { useEffect, useRef } from 'react'
 import { throttle } from 'lodash'
 import { PaginationState } from '@tanstack/react-table'
-import { Dialog, DialogContent } from '@/components/ui/dialog.tsx'
-import { allExpanded, darkStyles, defaultStyles, JsonView } from 'react-json-view-lite'
 import { useTheme } from '@/components/theme-provider.tsx'
+import { useSubscription } from '@/lib/store/subscriptionStore.ts'
 
 export default function Subscription() {
   const { theme } = useTheme()
-  const { tasks, fetchTask, errorDetail, showError } = useTask()
+  const { subscriptions, fetchAllSubscriptions } = useSubscription()
   const page = useRef<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
   })
 
   const fetchData = throttle(() => {
-    fetchTask({
+    fetchAllSubscriptions({
       page: page.current.pageIndex,
       limit: page.current.pageSize,
     })
@@ -33,7 +31,7 @@ export default function Subscription() {
     const intervalId = setInterval(fetchData, 5000)
 
     return () => intervalId && clearInterval(intervalId)
-  }, [fetchTask])
+  }, [fetchAllSubscriptions])
   return (
     <Layout>
       {/* ===== Top Heading ===== */}
@@ -53,9 +51,9 @@ export default function Subscription() {
         </div>
         <div className="-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-x-12 lg:space-y-0">
           <DataTable
-            data={tasks.data}
+            data={subscriptions.data}
             columns={columns}
-            totalCount={tasks.totalCount}
+            totalCount={subscriptions.total ?? 0}
             page={page.current}
             onPageChange={throttle((p: PaginationState) => {
               page.current = {
@@ -66,14 +64,6 @@ export default function Subscription() {
             }, 300)}
           />
         </div>
-        <Dialog open={errorDetail} onOpenChange={() => showError(undefined)}>
-          <DialogContent className="sm:max-w-[885px] flex space-x-4">
-            {typeof errorDetail === 'string' ? <div>{errorDetail}</div>
-              : <JsonView data={errorDetail} shouldExpandNode={allExpanded} style={{
-                ...(theme === 'light' ? defaultStyles : darkStyles),
-              }} />}
-          </DialogContent>
-        </Dialog>
       </LayoutBody>
     </Layout>
   )
