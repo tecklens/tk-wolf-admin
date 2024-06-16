@@ -52,6 +52,12 @@ const router = createBrowserRouter([
             }),
           },
           {
+            path: 'channel/:id',
+            lazy: async () => ({
+              Component: (await import('./pages/subscription/channel')).default,
+            }),
+          },
+          {
             path: 'requests/log-trigger',
             lazy: async () => ({
               Component: (await import('./pages/requests/log-trigger')).default,

@@ -38,7 +38,7 @@ export const columns: ColumnDef<ISubscription>[] = [
       return (
         <div className="flex space-x-2">
           {row.original.channelName &&
-            <Link to={`/channel/${row.original.channelId}`}>
+            <Link to={'/channel'}>
               <Badge variant="outline">{row.original.channelName}</Badge>
             </Link>}
           <span className="max-w-32 truncate font-medium sm:max-w-72 md:max-w-[31rem]">

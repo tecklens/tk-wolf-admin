@@ -43,3 +43,10 @@ export interface IPageRequest {
   page: number;
   limit: number;
 }
+
+export const pageDefault: IPageResponse<any> = {
+  page: 0,
+  pageSize: 0,
+  total: 0,
+  data: []
+}

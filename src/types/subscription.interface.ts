@@ -17,3 +17,14 @@ export interface ISubscription {
 
   channelName?: string;
 }
+
+export interface IChannel {
+  _id?: string;
+  channelName: string;
+  channelDescription: string;
+
+  _userId: string;
+  _organizationId: string;
+
+  createdAt?: Date;
+}

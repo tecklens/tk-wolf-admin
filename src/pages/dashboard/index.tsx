@@ -213,7 +213,7 @@ const topNav = [
   },
   {
     title: 'Document',
-    href: 'https://docs.wolf.app',
+    href: 'https://docs.wolfx.app',
     isActive: false,
     target: '_blank',
   },

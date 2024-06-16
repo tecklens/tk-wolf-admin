@@ -9,6 +9,11 @@ export default {
       params: payload,
     })
   },
+  byChannel(payload: any) {
+    return BaseRepository.get(`${resource}`, {
+      params: payload,
+    })
+  },
 
   del(payload: {
     subscriptionId: string
@@ -16,5 +21,8 @@ export default {
     return BaseRepository.delete(`${resource}/`, {
       params: payload
     })
+  },
+  getChannel(channelId: string) {
+    return BaseRepository.get(`${resource}/channel/${channelId}`)
   },
 }

@@ -4,3 +4,5 @@ export const UserPlan = {
   gold: 2,
   diamond: 3,
 }
+
+export const DOCS_URL = import.meta.env.VITE_DOCS_URL
