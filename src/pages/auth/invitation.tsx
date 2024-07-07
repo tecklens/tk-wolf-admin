@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
-import { HttpStatusCode } from 'axios'
+import { AxiosError, HttpStatusCode } from 'axios'
 import { RepositoryFactory } from '@/api/repository-factory.ts'
 import { throttle } from 'lodash'
 import InviteError from '@/pages/errors/invite-error.tsx'
@@ -28,16 +28,28 @@ export default function Invitation() {
       return
     }
 
-    const rsp = await OrgRepository.getInviteData(id)
-
-    if (rsp.status === HttpStatusCode.Ok) {
-      setInviteInfo(rsp.data)
-      setError(false)
-    } else {
+    try {
+      const rsp = await OrgRepository.getInviteData(id)
+      if (rsp.status === HttpStatusCode.Ok) {
+        setInviteInfo(rsp.data)
+        setError(false)
+      }
+    } catch (e: any) {
+      console.log('abc')
       return (
         setError(true)
       )
     }
+
+    // if (rsp.status === HttpStatusCode.Ok) {
+    //   setInviteInfo(rsp.data)
+    //   setError(false)
+    // } else {
+    //   console.log('abc')
+    //   return (
+    //     setError(true)
+    //   )
+    // }
   }, 200, { trailing: true })
 
   const logout = throttle(() => {
@@ -90,8 +102,8 @@ export default function Invitation() {
               </div>
             </div>
             <div className={'w-full'}>
-              <Link to={`/sign-in`}>
-                <Button className={'w-full'}>Sign in</Button>
+              <Link to={`/sign-in?invite_token=${id}`}>
+                <Button className={'w-full'}>Sign in to continue</Button>
               </Link>
             </div>
           </div>}

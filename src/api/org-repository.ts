@@ -20,6 +20,6 @@ export default {
     return BaseRepository.get(`${resource}/invite/${token}`)
   },
   acceptInvite(token: string) {
-    return BaseRepository.get(`${resource}/invite/${token}/accept`)
+    return BaseRepository.post(`${resource}/invite/${token}/accept`)
   },
 }

@@ -1,16 +1,9 @@
 import { HTMLAttributes, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IconBrandFacebook, IconBrandGithub, IconBrandGoogle } from '@tabler/icons-react'
+import { IconBrandGithub } from '@tabler/icons-react'
 import { z } from 'zod'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/custom/button'
 import { PasswordInput } from '@/components/custom/password-input'
@@ -19,8 +12,10 @@ import { RepositoryFactory } from '@/api/repository-factory.ts'
 import { useToast } from '@/components/ui/use-toast.ts'
 import { AxiosResponse, HttpStatusCode } from 'axios'
 import { useAuth } from '@/context/auth.tsx'
+import { useSearchParams } from 'react-router-dom'
 
 const AuthRepository = RepositoryFactory.get('auth')
+const OrgRepository = RepositoryFactory.get('org')
 
 interface SignUpFormProps extends HTMLAttributes<HTMLDivElement> {
 }
@@ -54,6 +49,8 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const { toast } = useToast()
   const { setToken } = useAuth()
+  const [searchParams] = useSearchParams()
+  const inviteToken = searchParams.get('invite_token')
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -73,7 +70,21 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
       if (rsp.status === HttpStatusCode.Created) {
         setToken(rsp.data.token)
 
-        window.location.href = '/'
+        // * check inviteToken for invite to organization
+        if (inviteToken && inviteToken !== '') {
+          setTimeout(async () => {
+            try {
+              const rsp = await OrgRepository.acceptInvite(inviteToken)
+              if (rsp.status === HttpStatusCode.Ok) {
+                setToken(rsp.data)
+              }
+            } finally {
+              window.location.href = '/'
+            }
+          }, 200)
+        } else {
+          window.location.href = '/'
+        }
       } else {
         toast({
           variant: 'destructive',
@@ -175,15 +186,15 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
               >
                 GitHub
               </Button>
-              <Button
-                variant="outline"
-                className="w-full"
-                type="button"
-                loading={isLoading}
-                leftSection={<IconBrandGoogle className="h-4 w-4" />}
-              >
-                Google
-              </Button>
+              {/*<Button*/}
+              {/*  variant="outline"*/}
+              {/*  className="w-full"*/}
+              {/*  type="button"*/}
+              {/*  loading={isLoading}*/}
+              {/*  leftSection={<IconBrandGoogle className="h-4 w-4" />}*/}
+              {/*>*/}
+              {/*  Google*/}
+              {/*</Button>*/}
             </div>
           </div>
         </form>

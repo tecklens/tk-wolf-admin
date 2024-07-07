@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { IconBike, IconChevronsLeft, IconCircle, IconMenu2, IconX } from '@tabler/icons-react'
 import { Layout, LayoutHeader } from './custom/layout'
 import { Button } from './custom/button'
@@ -34,7 +34,7 @@ export default function Sidebar2({
   const [navOpened, setNavOpened] = useState(false)
   const { env, envs } = useEnv(state => state)
   const switchEnv = useUser(state => state.switchEnv)
-  const { fetchOrg, organizations, currentOrg } = useUser(state => state)
+  const { fetchOrg, organizations, currentOrg, switchOrg } = useUser(state => state)
 
   /* Make body not scrollable when navBar is opened */
   useEffect(() => {
@@ -47,6 +47,10 @@ export default function Sidebar2({
   }, [navOpened])
 
   const switchEnvThrottle = throttle(switchEnv, 100)
+
+  const switchOrgInner = useCallback((orgId: string) => {
+    switchOrg(orgId)
+  }, [])
 
   return (
     <aside
@@ -117,7 +121,7 @@ export default function Sidebar2({
           </Button>
         </LayoutHeader>
         {isCollapsed ? null : <div className={'p-3'}>
-          <Select value={currentOrg}>
+          <Select value={currentOrg} onValueChange={switchOrgInner}>
             <SelectTrigger className="w-full org-switcher">
               <SelectValue placeholder="Select a organization" />
             </SelectTrigger>

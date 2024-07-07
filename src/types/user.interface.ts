@@ -14,6 +14,8 @@ export interface UserInterface {
   workflowGuide?: boolean;
   billingGuide?: boolean;
   apiKeyGuide?: boolean;
+
+  inviteToken?: string | null;
 }
 
 export interface ICreateUserDto {

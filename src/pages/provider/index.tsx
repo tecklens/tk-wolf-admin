@@ -30,12 +30,24 @@ import { useTheme } from '@/components/theme-provider.tsx'
 import UpdateProvider from '@/pages/provider/components/update-provider.tsx'
 import { useProvider } from '@/lib/store/providerStore.ts'
 import { NotificationNav } from '@/components/notification/notification-nav.tsx'
+import { useSearchParams } from 'react-router-dom'
+import { throttle } from 'lodash'
 
 export default function Providers() {
-  const [providersList, setProvidersList] = useState(initialProvidersList)
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [providersList, setProvidersList]
+    = useState(initialProvidersList)
   const [openSelect, setOpenSelect] = useState(false)
   const { theme } = useTheme()
-  const { openEdit, setOpenEdit, providers, fetchProvider, selectedProvider, setSelectedProvider } = useProvider()
+  const {
+    openEdit,
+    setOpenEdit,
+    providers,
+    fetchProvider,
+    selectedProvider,
+    setSelectedProvider,
+  } = useProvider()
+  const openProviderId = searchParams.get('open_provider')
 
   function getLogoFileName(providerId: string) {
     return `/images/providers/${theme}/square/${providerId}.svg`
@@ -45,9 +57,27 @@ export default function Providers() {
     fetchProvider({})
   }, [fetchProvider])
 
+  const openDefaultSelectedProvider = throttle(() => {
+    const ps = Object.values(providersList).reduce((rlt, v) =>  [...rlt,...v], [])
+    console.log(ps)
+    console.log(ps.find(e => e.providerId === openProviderId), openProviderId)
+    setSelectedProvider(ps.find(e => e.providerId === openProviderId))
+    setOpenEdit({
+      open: true,
+      data: undefined,
+    })
+    searchParams.delete('open_provider')
+    setSearchParams(searchParams)
+  }, 300, { leading: true })
+
   useEffect(() => {
     fetchData()
   }, [fetchData])
+
+  useEffect(() => {
+    if (openProviderId && openProviderId !== '')
+      openDefaultSelectedProvider()
+  }, [openProviderId, searchParams])
 
   return (
     <Layout>
@@ -86,7 +116,6 @@ export default function Providers() {
                           {value.map(v => (
                             <CommandItem key={v.providerId} className={'inline-flex space-x-2 w-full'}
                                          onSelect={(vItem) => {
-                                           console.log(v)
                                            console.log('selected provider: ', vItem)
                                            setSelectedProvider(v)
                                            setOpenSelect(false)

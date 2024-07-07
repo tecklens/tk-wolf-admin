@@ -17,14 +17,15 @@ import {
   IconSettings,
   IconTruck,
   IconUserShield,
-  IconUsers, IconHierarchy2, IconCode, IconUsersGroup,
+  IconUsers, IconHierarchy2, IconCode, IconUsersGroup, IconMailAi,
 } from '@tabler/icons-react'
 
 export interface NavLink {
   title: string
   label?: string
-  href: string
-  icon: JSX.Element
+  href?: string
+  icon: any
+  variant?: any
 }
 
 export interface SideLink extends NavLink {
@@ -99,6 +100,12 @@ export const sidelinks: SideLink[] = [
     label: '',
     href: '/provider',
     icon: <IconComponents size={18} />,
+  },
+  {
+    title: 'MailX',
+    label: '',
+    href: '/mailx',
+    icon: <IconMailAi size={18} />,
   },
   // {
   //   title: 'Error Pages',

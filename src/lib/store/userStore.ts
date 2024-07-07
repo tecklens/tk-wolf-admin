@@ -20,6 +20,7 @@ export interface IUserStore {
   updateUser: () => void
   sendUpdate: (user: UserInterface) => void
   switchEnv: (envId: string) => void
+  switchOrg: (orgId: string) => void
   setToken: (token: string) => void
 }
 
@@ -76,6 +77,12 @@ export const useUser = create<IUserStore>(
 
       localStorage.setItem('token', rspToken.data?.token)
       getState().setToken(rspToken.data?.token)
+    },
+    switchOrg: async (orgId: string) => {
+      const rspToken = await AuthRepository.switchOrg(orgId)
+
+      localStorage.setItem('token', rspToken.data)
+      getState().setToken(rspToken.data)
     },
     setToken: async (token) => {
       set({

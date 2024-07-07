@@ -36,4 +36,7 @@ export default {
   getRemainingRequest() {
     return BaseRepository.get(`${resource}/limit/remaining`)
   },
+  switchOrg(organizationId: string) {
+    return BaseRepository.post(`${resource}/organizations/${organizationId}/switch`)
+  }
 }

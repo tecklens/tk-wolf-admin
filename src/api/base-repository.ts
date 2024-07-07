@@ -38,6 +38,7 @@ instance.interceptors.response.use(
     const status = error.response.status
 
     if (status === 401 && !window.location.href?.includes('/sign-in')){
+      debugger
       // let token = await refreshAccessToken()
       // setAccessToken(token)
 
@@ -46,6 +47,7 @@ instance.interceptors.response.use(
 
       // return axios(originalRequest)
       // return errorHandler(error)
+      localStorage.removeItem('token')
       window.location.href = '/sign-in'
       // return errorHandler(error)
     } else return errorHandler(error)

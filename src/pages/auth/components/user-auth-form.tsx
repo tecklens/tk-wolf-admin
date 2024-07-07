@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { Link, useLocation, useSearchParams } from 'react-router-dom'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IconBrandFacebook, IconBrandGithub, IconBrandGoogle } from '@tabler/icons-react'
+import { IconBrandGithub } from '@tabler/icons-react'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/custom/button'
@@ -17,6 +17,7 @@ import { throttle } from 'lodash'
 import { BASE_URL } from '@/api/base-repository.ts'
 
 const AuthRepository = RepositoryFactory.get('auth')
+const OrgRepository = RepositoryFactory.get('org')
 
 interface UserAuthFormProps extends HTMLAttributes<HTMLDivElement> {
 }
@@ -39,9 +40,10 @@ const formSchema = z.object({
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const { signIn } = useUser((state: IUserStore) => state)
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams] = useSearchParams()
   const redirectUrl = searchParams.get('q') ?? '/'
   const token = searchParams.get('token')
+  const inviteToken = searchParams.get('invite_token')
   const location = useLocation()
   const from = ((location.state as any)?.from.pathname as string) || '/profile'
   const { setToken } = useAuth()
@@ -56,9 +58,25 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     // @ts-ignore
-    const rlt = await signIn(data)
+    const rlt = await signIn({
+      ...data
+    })
     if (rlt) {
-      window.location.href = redirectUrl
+      // * check inviteToken for invite to organization
+      if (inviteToken && inviteToken !== '') {
+        setTimeout(async () => {
+          try {
+            const rsp = await OrgRepository.acceptInvite(inviteToken)
+            if (rsp.status === HttpStatusCode.Ok) {
+              setToken(rsp.data)
+            }
+          } finally {
+            window.location.href = redirectUrl
+          }
+        }, 200)
+      } else {
+        window.location.href = redirectUrl
+      }
     }
   }
 
@@ -66,7 +84,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     const rsp = await AuthRepository.checkGithubAuth()
 
     if (rsp.status === HttpStatusCode.Ok) {
-      window.location.href = getGitHubUrl(from)
+      window.location.href = getGitHubUrl(from, inviteToken)
     }
   }
 
@@ -74,19 +92,36 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     const rsp = await AuthRepository.checkGoogleAuth()
 
     if (rsp.status === HttpStatusCode.Ok) {
-      window.location.replace(BASE_URL+'/auth/google')
+      window.location.replace(BASE_URL + '/auth/google')
     }
   }
+
+
   const checkToken = throttle(() => {
     if (token && token.length > 0) {
       setToken(token)
-      window.location.href = redirectUrl
+
+      // * check inviteToken for invite to organization
+      if (inviteToken && inviteToken !== '') {
+        setTimeout(async () => {
+          try {
+            const rsp = await OrgRepository.acceptInvite(inviteToken)
+            if (rsp.status === HttpStatusCode.Ok) {
+              setToken(rsp.data)
+            }
+          } finally {
+            window.location.href = redirectUrl
+          }
+        }, 200)
+      } else {
+        window.location.href = redirectUrl
+      }
     }
-  }, 100)
+  }, 150)
 
   useEffect(() => {
     checkToken()
-  }, [token])
+  }, [token, inviteToken])
 
   return (
     <div className={cn('grid gap-6', className)} {...props}>
@@ -153,16 +188,16 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               >
                 GitHub
               </Button>
-              <Button
-                variant="outline"
-                className="w-full"
-                type="button"
-                loading={isLoading}
-                onClick={checkGoogleAuth}
-                leftSection={<IconBrandGoogle className="h-4 w-4" />}
-              >
-                Google
-              </Button>
+              {/*<Button*/}
+              {/*  variant="outline"*/}
+              {/*  className="w-full"*/}
+              {/*  type="button"*/}
+              {/*  loading={isLoading}*/}
+              {/*  onClick={checkGoogleAuth}*/}
+              {/*  leftSection={<IconBrandGoogle className="h-4 w-4" />}*/}
+              {/*>*/}
+              {/*  Google*/}
+              {/*</Button>*/}
             </div>
           </div>
         </form>

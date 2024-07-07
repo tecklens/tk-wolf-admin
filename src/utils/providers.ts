@@ -1,11 +1,10 @@
-import {ChannelTypeEnum} from "@/types/channel";
-import {IIntegratedProvider} from "@/types";
-import {emailProviders} from "@/providers/channels/email.ts";
-import {smsProviders} from "@/providers/channels/sms.ts";
-import {pushProviders} from "@/providers/channels/push.ts";
-import {inAppProviders} from "@/providers/channels/in-app.ts";
-import {chatProviders} from "@/providers/channels/chat.ts";
-import {IProviderConfig} from "@/providers/provider.interface.ts";
+import { ChannelTypeEnum } from '@/types/channel'
+import { IIntegratedProvider } from '@/types'
+import { emailProviders } from '@/providers/channels/email.ts'
+import { smsProviders } from '@/providers/channels/sms.ts'
+import { pushProviders } from '@/providers/channels/push.ts'
+import { inAppProviders } from '@/providers/channels/in-app.ts'
+import { chatProviders } from '@/providers/channels/chat.ts'
 
 const mapStructure = (listProv: any): IIntegratedProvider[] =>
   listProv.map((providerItem: any) => ({

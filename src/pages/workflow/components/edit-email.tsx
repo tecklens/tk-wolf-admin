@@ -182,7 +182,7 @@ export default function EditEmail({ onClose }: { onClose: () => void }) {
             ...rlt,
             [val.name ?? '']: {
               name: val.name,
-              value: `{{${val.name}}`,
+              value: `{{${val.name}}}`,
               sample: val.defaultValue ?? val.name,
             },
           }), {}),

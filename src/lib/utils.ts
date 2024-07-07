@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function getGitHubUrl(from: string) {
+export function getGitHubUrl(from: string, inviteToken: string | null | undefined) {
   const rootURl = "https://github.com/login/oauth/authorize";
 
   const options = {
@@ -14,7 +14,8 @@ export function getGitHubUrl(from: string) {
     scope: "user:email",
     state: JSON.stringify({
       redirectUrl: from,
-      partnerCode: 'wolf'
+      partnerCode: 'wolf',
+      inviteToken,
     }),
   };
 

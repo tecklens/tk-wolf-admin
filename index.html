@@ -24,7 +24,7 @@
   />
   <meta
     property="og:image"
-    content="https://shadcn-admin.netlify.app/images/shadcn-admin.png"
+    content="https://i.ibb.co/SwT5FFN/preview-wolf.png"
   />
 
   <!-- Twitter -->
@@ -37,7 +37,7 @@
   />
   <meta
     property="twitter:image"
-    content="https://shadcn-admin.netlify.app/images/shadcn-admin.png"
+    content="https://i.ibb.co/SwT5FFN/preview-wolf.png"
   />
 
   <meta name="theme-color" content="#fff" />
@@ -55,5 +55,28 @@
 <body>
 <div id="root"></div>
 <script type="module" src="/src/main.tsx"></script>
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyCgtSWjJFmXd7klKFIIQrDyRSaXiFULr3U",
+    authDomain: "wolfx-app.firebaseapp.com",
+    projectId: "wolfx-app",
+    storageBucket: "wolfx-app.appspot.com",
+    messagingSenderId: "1020375949415",
+    appId: "1:1020375949415:web:d1df0b2bf4a6c09c7bb4c2",
+    measurementId: "G-E7J64L18X3"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
 </body>
 </html>

@@ -16,6 +16,7 @@ import { NotificationNav } from '@/components/notification/notification-nav.tsx'
 import { useTheme } from '@/components/theme-provider.tsx'
 import { Link } from 'react-router-dom'
 import { throttle } from 'lodash'
+import { nFormatter } from '@/utils'
 
 const AuthS = RepositoryFactory.get('auth')
 const AnalS = RepositoryFactory.get('anal')
@@ -100,7 +101,7 @@ export default function Dashboard() {
             <CardContent>
               <div className="text-2xl font-bold">{dashboardInfo?.total_call_api ?? 0}</div>
               <p className="text-xs text-muted-foreground">
-                +20.1% from last month
+                all time
               </p>
             </CardContent>
           </Card>
@@ -125,10 +126,10 @@ export default function Dashboard() {
               </svg>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">+2350</div>
-              <p className="text-xs text-muted-foreground">
-                +180.1% from last month
-              </p>
+              <div className="text-2xl font-bold">{dashboardInfo?.total_subscriptions ?? 0}</div>
+              {/*<p className="text-xs text-muted-foreground">*/}
+              {/*  +180.1% from last month*/}
+              {/*</p>*/}
             </CardContent>
           </Card>
           <Card>
@@ -149,10 +150,10 @@ export default function Dashboard() {
               </svg>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">+12,234</div>
-              <p className="text-xs text-muted-foreground">
-                +19% from last month
-              </p>
+              <div className="text-2xl font-bold">$0</div>
+              {/*<p className="text-xs text-muted-foreground">*/}
+              {/*  +19% from last month*/}
+              {/*</p>*/}
             </CardContent>
           </Card>
           <Card>
@@ -174,7 +175,7 @@ export default function Dashboard() {
               </svg>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">+{rReq}</div>
+              <div className="text-2xl font-bold">+{nFormatter(rReq, 0)}</div>
               <p className="text-xs text-muted-foreground">
                 per month
               </p>
@@ -220,6 +221,12 @@ const topNav = [
   {
     title: 'Pricing',
     href: 'pricing',
+    isActive: false,
+    target: '_blank',
+  },
+  {
+    title: 'Roadmap',
+    href: 'https://wolfx.app/roadmap',
     isActive: false,
     target: '_blank',
   },

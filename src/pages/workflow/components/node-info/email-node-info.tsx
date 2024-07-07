@@ -23,7 +23,7 @@ export default function EmailNodeInfo({ designHtml }: { designHtml: string }) {
         {/*  Make changes to your node of flow here. Click save when you're done.*/}
         {/*</SheetDescription>*/}
       </SheetHeader>
-      <div className={'p-4'}>
+      <div className={'p-4 mb-10'}>
         <Button onClick={() => {
           openEmailEdit({
             open: true,

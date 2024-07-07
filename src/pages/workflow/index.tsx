@@ -63,5 +63,11 @@ const topNav = [
     isActive: false,
     target: '_blank',
   },
+  {
+    title: 'Roadmap',
+    href: 'https://wolfx.app/roadmap',
+    isActive: false,
+    target: '_blank',
+  },
 ]
 

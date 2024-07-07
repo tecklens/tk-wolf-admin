@@ -1,5 +1,5 @@
 import BaseRepository from '@/api/base-repository.ts'
-import { IGetProviderRequest, ICreateProviderBodyDto, IProvider } from '@/types/provider.interface.ts'
+import { ICreateProviderBodyDto, IGetProviderRequest } from '@/types/provider.interface.ts'
 
 const resource = '/provider'
 
@@ -12,5 +12,8 @@ export default {
   },
   list(payload: IGetProviderRequest) {
     return BaseRepository.get(`${resource}/`, { params: payload })
+  },
+  connected() {
+    return BaseRepository.get(`${resource}/connected`)
   },
 }

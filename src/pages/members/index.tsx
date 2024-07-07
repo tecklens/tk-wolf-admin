@@ -167,7 +167,7 @@ export default function Members() {
             </form>
           </Form>
         </div>
-        {members ? members.map(e => {
+        {members ? members.map((e: any) => {
             return (<div className={'w-full inline-flex space-x-3 items-center'} key={e._id}>
               <div>
                 <Avatar>
@@ -185,10 +185,10 @@ export default function Members() {
                 <div className={'px-2 py-1 border text-slate-700 border-slate-500 rounded capitalize'}>{e.roles}</div>
               </div>
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
+                <DropdownMenuTrigger asChild className={``}>
                   <Button
                     variant="ghost"
-                    className={`${e.isDefault ? 'hidden' : 'flex'} h-8 w-8 p-0 data-[state=open]:bg-muted`}
+                    className={`${e.isDefault ? 'hidden' : 'flex'} ${e.memberStatus === 'invited' ? 'block' : 'hidden'} h-8 w-8 p-0 data-[state=open]:bg-muted`}
                   >
                     <DotsHorizontalIcon className="h-4 w-4" />
                     <span className="sr-only">Open menu</span>

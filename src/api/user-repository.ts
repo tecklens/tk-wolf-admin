@@ -22,5 +22,5 @@ export default {
   },
   submitBug(payload: any) {
     return BaseRepository.post(`${resource}/bug/submit`, payload)
-  }
+  },
 }

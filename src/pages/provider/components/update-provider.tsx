@@ -41,10 +41,11 @@ export default function UpdateProvider({ selected, defaultData, onCreateSuccess 
         identifier: z.string().min(5, { message: 'Identifier not found. Please reset browser' }),
         credentials: z.object({
           ...reduce(selected.credentials, (acc, val) => {
-            const req = val.required ? get(z, val.type) : get(z, val.type)().nullable
+            const vType = get(z, val.type)
+            const req = val.required || typeof vType != 'function' ? vType : vType().nullable
             return {
               ...acc,
-              [val.key]: req(),
+              [val.key]: typeof req === 'function' ? req() : req,
             }
           }, {}),
         }),
@@ -101,7 +102,7 @@ export default function UpdateProvider({ selected, defaultData, onCreateSuccess 
 
   return (<div>
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className={'flex flex-col space-y-3'} id={'edit-provider'}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className={'flex flex-col space-y-3 max-h-[70vh] overflow-y-auto'} id={'edit-provider'}>
         <FormField
           control={form.control}
           name="status"
