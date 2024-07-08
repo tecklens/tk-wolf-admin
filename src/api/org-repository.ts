@@ -22,4 +22,10 @@ export default {
   acceptInvite(token: string) {
     return BaseRepository.post(`${resource}/invite/${token}/accept`)
   },
+  updateBrand(payload: any) {
+    return BaseRepository.put(`${resource}/brand`, payload)
+  },
+  getBrand() {
+    return BaseRepository.get(`${resource}/brand`)
+  },
 }

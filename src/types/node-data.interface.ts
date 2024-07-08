@@ -17,5 +17,8 @@ export interface NodeDataInterface {
   method?: string;
 
   //  * sms
-  content?: string;
+  content?: {
+    source: string;
+    plainText: string;
+  };
 }

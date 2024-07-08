@@ -40,6 +40,7 @@ import EdgeWithClose from '@/pages/workflow/components/edges/edge-with-close.tsx
 import EditSms from '@/pages/workflow/components/edit-sms.tsx'
 import ViewportChangeLogger from '@/pages/workflow/components/viewport-change-logger.ts'
 import ConditionNode from '@/pages/workflow/components/nodes/condition-node'
+import MessageNode from '@/pages/workflow/components/nodes/message-node'
 
 const WorkflowRepository = RepositoryFactory.get('wf')
 
@@ -51,6 +52,7 @@ const nodeTypes = {
   condition: ConditionNode,
   webhook: WebhookNode,
   starter: StarterNode,
+  chat: MessageNode,
 }
 
 const edgeTypes = {

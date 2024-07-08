@@ -94,6 +94,12 @@ const router = createBrowserRouter([
             }),
           },
           {
+            path: 'brand',
+            lazy: async () => ({
+              Component: (await import('@/pages/brand')).default,
+            }),
+          },
+          {
             path: 'mailx',
             lazy: async () => ({
               Component: (await import('@/pages/mailx')).default,

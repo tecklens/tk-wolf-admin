@@ -44,6 +44,8 @@ export enum CredentialsKeyEnum {
   imageUrl = 'imageUrl',
   state = 'state',
   externalLink = 'externalLink',
+  chatId = 'chatId',
+  testEnvironment = 'testEnvironment',
 }
 
 export enum EmailProviderIdEnum {
@@ -104,6 +106,7 @@ export enum SmsProviderIdEnum {
 
 export enum ChatProviderIdEnum {
   Slack = 'slack',
+  Telegram = 'telegram',
   Discord = 'discord',
   MsTeams = 'msteams',
   Mattermost = 'mattermost',

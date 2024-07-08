@@ -65,7 +65,7 @@ export default function UpdateProvider({ selected, defaultData, onCreateSuccess 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     if (!selected) return
 
-    let rsp: AxiosResponse;
+    let rsp: AxiosResponse
     if (defaultData && defaultData._id) {
       rsp = await ProviderRepository.update(defaultData._id, {
         ...data,
@@ -102,7 +102,8 @@ export default function UpdateProvider({ selected, defaultData, onCreateSuccess 
 
   return (<div>
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className={'flex flex-col space-y-3 max-h-[70vh] overflow-y-auto'} id={'edit-provider'}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className={'flex flex-col space-y-3 max-h-[70vh] overflow-y-auto'}
+            id={'edit-provider'}>
         <FormField
           control={form.control}
           name="status"
@@ -167,10 +168,17 @@ export default function UpdateProvider({ selected, defaultData, onCreateSuccess 
                   <span className={'text-red-500'}>*</span> : null}</FormLabel>
                 <FormControl>
                   <div className={'flex items-center space-x-2'}>
-                    <Input
-                      placeholder={cre.displayName}
-                      {...field}
-                    />
+                    {cre.type === 'string'
+                      ? <Input
+                        placeholder={cre.displayName}
+                        {...field}
+                      />
+                      : cre.type === 'boolean'
+                        ? <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                        : null}
                   </div>
                 </FormControl>
                 <FormMessage />

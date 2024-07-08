@@ -1,23 +1,17 @@
 import {
-  IconBarrierBlock,
   IconBoxSeam,
+  IconBrandMantine,
   IconChartHistogram,
   IconChecklist,
   IconComponents,
-  IconError404,
-  IconExclamationCircle,
-  IconHexagonNumber1,
-  IconHexagonNumber2,
-  IconHexagonNumber3,
-  IconHexagonNumber4,
+  IconHierarchy2,
   IconLayoutDashboard,
-  IconMessages,
+  IconMailAi,
   IconRouteAltLeft,
-  IconServerOff,
   IconSettings,
   IconTruck,
-  IconUserShield,
-  IconUsers, IconHierarchy2, IconCode, IconUsersGroup, IconMailAi,
+  IconUsers,
+  IconUsersGroup,
 } from '@tabler/icons-react'
 
 export interface NavLink {
@@ -88,6 +82,12 @@ export const sidelinks: SideLink[] = [
         icon: <IconBoxSeam size={18} />,
       },
     ],
+  },
+  {
+    title: 'Brand',
+    label: '',
+    href: '/brand',
+    icon: <IconBrandMantine size={18} />,
   },
   {
     title: 'Analysis',

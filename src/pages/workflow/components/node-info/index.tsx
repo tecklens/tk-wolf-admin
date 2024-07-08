@@ -6,6 +6,7 @@ import DelayNodeInfo from '@/pages/workflow/components/node-info/delay-node-info
 import { ChannelTypeEnum } from '@/types/channel'
 import SmsNodeInfo from '@/pages/workflow/components/node-info/sms-node-info.tsx'
 import ConditionNodeInfo from '@/pages/workflow/components/node-info/condition-node-info.tsx'
+import MessageNodeInfo from '@/pages/workflow/components/node-info/message-node-info.tsx'
 
 export default function NodeInfo({ onClose, reloadNode }: {
   onClose: () => void,
@@ -25,7 +26,9 @@ export default function NodeInfo({ onClose, reloadNode }: {
               ? <SmsNodeInfo content={node.data?.content} />
             : node?.type === ChannelTypeEnum.CONDITION
                 ? <ConditionNodeInfo onClose={onClose} reloadNode={() => reloadNode(node.id)} />
-                : null}
+                : node?.type === ChannelTypeEnum.CHAT
+                  ? <MessageNodeInfo content={node.data?.content} />
+                  : null}
     </div>
   )
 }

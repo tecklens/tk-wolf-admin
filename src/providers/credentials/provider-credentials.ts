@@ -507,6 +507,27 @@ export const slackConfig: IConfigCredentials[] = [
   },
 ];
 
+export const telegramConfig: IConfigCredentials[] = [
+  {
+    key: CredentialsKeyEnum.chatId,
+    displayName: 'Chat Id',
+    type: 'string',
+    required: true,
+  },
+  {
+    key: CredentialsKeyEnum.Token,
+    displayName: 'Token',
+    type: 'string',
+    required: true,
+  },
+  {
+    key: CredentialsKeyEnum.testEnvironment,
+    displayName: 'Is Test Environment',
+    type: 'boolean',
+    required: false,
+  },
+];
+
 export const grafanaOnCallConfig: IConfigCredentials[] = [
   {
     key: CredentialsKeyEnum.alertUid,
