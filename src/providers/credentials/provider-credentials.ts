@@ -520,6 +520,14 @@ export const telegramConfig: IConfigCredentials[] = [
     type: 'string',
     required: true,
   },
+  // {
+  //   key: CredentialsKeyEnum.BaseUrl,
+  //   displayName: 'Base Url',
+  //   description: 'https://api.telegram.org',
+  //   value: 'https://api.telegram.org',
+  //   type: 'string',
+  //   required: true,
+  // },
   {
     key: CredentialsKeyEnum.testEnvironment,
     displayName: 'Is Test Environment',

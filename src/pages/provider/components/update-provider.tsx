@@ -42,7 +42,8 @@ export default function UpdateProvider({ selected, defaultData, onCreateSuccess 
         credentials: z.object({
           ...reduce(selected.credentials, (acc, val) => {
             const vType = get(z, val.type)
-            const req = val.required || typeof vType != 'function' ? vType : vType().nullable
+            const req = (val.required || typeof vType != 'function') ? vType : vType().nullable
+            console.log(val.required)
             return {
               ...acc,
               [val.key]: typeof req === 'function' ? req() : req,
