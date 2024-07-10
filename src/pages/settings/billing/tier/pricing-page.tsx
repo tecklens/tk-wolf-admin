@@ -245,7 +245,7 @@ export default function PricingPage({open}: {open: (plan: number, frequency: str
                 >
                   <Button
                     size="lg"
-                    disabled={user?.plan === tier.value}
+                    disabled={(user?.plan ?? 10) >= tier.value}
                     onClick={() => open(tier.value, frequency.value)}
                     className={cn(
                       'w-full text-black dark:text-white',

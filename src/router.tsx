@@ -179,6 +179,12 @@ const router = createBrowserRouter([
   },
   // Auth routes
   {
+    path: '/payment-success',
+    lazy: async () => ({
+      Component: (await import('./pages/settings/billing/tier/payment-success')).default,
+    }),
+  },
+  {
     path: '/sign-in',
     lazy: async () => ({
       Component: (await import('./pages/auth/sign-in-2')).default,

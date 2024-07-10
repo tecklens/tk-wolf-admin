@@ -1,4 +1,4 @@
-import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js'
+import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import React from 'react'
 import { Button } from '@/components/custom/button.tsx'
 
@@ -21,7 +21,7 @@ const CheckoutForm = () => {
       //`Elements` instance that was used to create the Payment Element
       elements,
       confirmParams: {
-        return_url: 'https://example.com/order/123/complete',
+        return_url: `https://dash.wolfx.app/payment-success`,
       },
     })
 

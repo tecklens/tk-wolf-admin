@@ -40,11 +40,7 @@ export default function BillingSetting() {
     if (loadingSecret || clientSecret) return
     setLoadingSecret(true)
     UserRepository.createPaymentIndent({
-      plan: plan === UserPlan.free ? 'free'
-        : plan === UserPlan.gold ? 'gold'
-          : plan === UserPlan.silver ? 'silver'
-            : plan === UserPlan.diamond ? 'diamond'
-              : '',
+      plan: plan,
       frequency,
     })
       .then(async (result: AxiosResponse) => {
