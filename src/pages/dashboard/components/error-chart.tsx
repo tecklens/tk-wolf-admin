@@ -10,58 +10,8 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { camelCase } from 'lodash'
-import { useState } from 'react'
-
-const data = [
-  {
-    name: 'Jan',
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Feb',
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Mar',
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Apr',
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'May',
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Jun',
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Jul',
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Aug',
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Sep',
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Oct',
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Nov',
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: 'Dec',
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-]
+import { useEffect, useState } from 'react'
+import { useAnalysis } from '@/lib/store/analysisStore'
 
 const periodsType = [
   'hour',
@@ -70,7 +20,12 @@ const periodsType = [
 ]
 
 export function ErrorChart() {
-  const [period, setPeriod] = useState('month')
+  const [period, setPeriod] = useState('day')
+  const { taskErrors, fetchTaskError } = useAnalysis();
+
+  useEffect(() => {
+    fetchTaskError(period, '')
+  }, [period])
 
   return (
     <Card className="col-span-1">
@@ -80,7 +35,7 @@ export function ErrorChart() {
           <div>
             <Select onValueChange={(val) => setPeriod(val)} value={period}>
               <SelectTrigger className="w-[100px] capitalize">
-                <SelectValue className={'capitalize'}/>
+                <SelectValue className={'capitalize'} />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
@@ -96,12 +51,28 @@ export function ErrorChart() {
       </CardHeader>
       <CardContent className="pl-2">
         <ResponsiveContainer width="100%" height={350}>
-          <LineChart width={600} height={300} data={data} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
-            <Line type="monotone" dataKey="total" stroke="#FF5733" />
-            <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-            <XAxis dataKey="name" />
-            <YAxis />
-          </LineChart>
+          {taskErrors.length > 0 ?
+            <LineChart width={600} height={300} data={taskErrors} margin={{ top: 5, right: 10, bottom: 5, left: 0 }}>
+              <Line type="monotone" dataKey="count" stroke="#FF5733" />
+              <CartesianGrid stroke="#ccc" strokeDasharray="3 3" />
+              <XAxis
+                dataKey="date"
+                stroke="#888888"
+                fontSize={11}
+                tickLine={false}
+                axisLine={false}
+              />
+              <YAxis
+                stroke="#888888"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+                tickFormatter={(value) => `${value}`}
+              />
+            </LineChart>
+            : <div className={'h-full flex items-center justify-center'}>No data</div>
+          }
+
         </ResponsiveContainer>
       </CardContent>
     </Card>

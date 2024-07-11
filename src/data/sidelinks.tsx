@@ -75,12 +75,12 @@ export const sidelinks: SideLink[] = [
         href: '/requests/log-trigger',
         icon: <IconTruck size={18} />,
       },
-      {
-        title: 'Cargos',
-        label: '',
-        href: '/cargos',
-        icon: <IconBoxSeam size={18} />,
-      },
+      // {
+      //   title: 'Cargos',
+      //   label: '',
+      //   href: '/cargos',
+      //   icon: <IconBoxSeam size={18} />,
+      // },
     ],
   },
   {
@@ -101,12 +101,12 @@ export const sidelinks: SideLink[] = [
     href: '/provider',
     icon: <IconComponents size={18} />,
   },
-  {
-    title: 'MailX',
-    label: '',
-    href: '/mailx',
-    icon: <IconMailAi size={18} />,
-  },
+  // {
+  //   title: 'MailX',
+  //   label: '',
+  //   href: '/mailx',
+  //   icon: <IconMailAi size={18} />,
+  // },
   // {
   //   title: 'Error Pages',
   //   label: '',

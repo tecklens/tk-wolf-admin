@@ -14,9 +14,11 @@ export interface IAnalData {
 
 export interface AnalysisState {
   logs: IPageResponse<any>;
+  taskErrors: IAnalData[];
   trigger: IAnalData[];
   fetchTriggerData: (period: string, event_type: string) => void;
   fetchLogsTrigger: (payload: IPageRequest) => void;
+  fetchTaskError: (period: string, event_type: string) => void;
 }
 
 export const useAnalysis = create<AnalysisState>((set) => ({
@@ -26,6 +28,7 @@ export const useAnalysis = create<AnalysisState>((set) => ({
     pageSize: 0,
     totalCount: 0
   },
+  taskErrors: [],
   trigger: [],
   fetchTriggerData: async (period: string, event_type: string) => {
     const rsp = await AnalysisRepository.analyse({
@@ -56,6 +59,23 @@ export const useAnalysis = create<AnalysisState>((set) => ({
         title: 'Get Logs of Trigger',
         description: 'Get log request trigger of you is failed.',
         variant: 'destructive'
+      })
+    }
+  },
+  fetchTaskError: async (period: string, event_type: string) => {
+    const rsp = await AnalysisRepository.analyseTaskError({
+      period: period,
+      event_type,
+    })
+
+    if (rsp.status === HttpStatusCode.Ok) {
+      set({
+        taskErrors: rsp.data?.data
+      })
+    } else {
+      useToastGlobal.getState().update({
+        variant: 'destructive',
+        title: 'Get data analyse task execute error failed'
       })
     }
   }

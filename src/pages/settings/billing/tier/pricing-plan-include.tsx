@@ -1,15 +1,4 @@
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/custom/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import {
   Table,
   TableBody,
@@ -18,60 +7,102 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { IconCheck, IconMinus } from '@tabler/icons-react'
+import { IconCircleCheckFilled, IconMinus } from '@tabler/icons-react'
 
 interface PlanFeature {
   type: string;
   features: {
     name: string;
-    free: boolean;
-    startup: boolean;
-    team: boolean;
-    enterprise: boolean;
+    free: boolean | string;
+    startup: boolean | string;
+    team: boolean | string;
+    enterprise: boolean | string;
   }[];
 }
 
 const planFeatures: PlanFeature[] = [
   {
-    type: "Financial data",
+    type: "Usage",
     features: [
       {
-        name: "Open/High/Low/Close",
+        name: "Notifications",
+        free: '1K',
+        startup: '10K',
+        team: '100K',
+        enterprise: '1M',
+      },
+      {
+        name: "Additional Events",
+        free: 'N/A',
+        startup: '$0.001 per additional event over 10k',
+        team: '200RpS',
+        enterprise: '1000rps',
+      },
+      {
+        name: "Trigger Rate Limit (Requests per Second)",
+        free: '5RpS',
+        startup: '50RpS',
+        team: '200RpS',
+        enterprise: '1000RpS',
+      },
+      {
+        name: "Unlimited Workflows",
         free: true,
         startup: true,
         team: true,
         enterprise: true,
       },
       {
-        name: "Price-volume difference indicator	",
+        name: "Unlimited Providers",
         free: true,
         startup: true,
         team: true,
         enterprise: true,
+      },
+      {
+        name: "Subscribers",
+        free: true,
+        startup: true,
+        team: true,
+        enterprise: true,
+      },
+      {
+        name: "Team Members",
+        free: '2 members',
+        startup: '10 members',
+        team: 'Unlimited',
+        enterprise: 'Unlimited',
+      },
+      {
+        name: "Log data retention",
+        free: '7 day',
+        startup: '30 day',
+        team: '30 day',
+        enterprise: '90 day',
       },
     ],
   },
   {
-    type: "On-chain data",
+    type: "Core features",
     features: [
       {
-        name: "Network growth",
+        name: "SSO by Github",
         free: true,
-        startup: false,
+        startup: true,
         team: true,
         enterprise: true,
       },
       {
-        name: "Average token age consumed",
+        name: "End-to-end logs and debugging",
         free: true,
-        startup: false,
+        startup: true,
         team: true,
         enterprise: true,
       },
       {
-        name: "Exchange flow",
+        name: "Edit Wolfx Branding",
         free: false,
-        startup: false,
+        startup: true,
         team: true,
         enterprise: true,
       },
@@ -82,30 +113,44 @@ const planFeatures: PlanFeature[] = [
         team: true,
         enterprise: true,
       },
+      {
+        name: "Translation Management",
+        free: false,
+        startup: 'Comming Soon',
+        team: 'Comming Soon',
+        enterprise: 'Comming Soon',
+      },
     ],
   },
   {
-    type: "Social data",
+    type: "Support",
     features: [
       {
-        name: "Dev activity",
+        name: "Support SLA",
         free: false,
-        startup: true,
-        team: false,
-        enterprise: true,
+        startup: '1 business day',
+        team: '1 business day',
+        enterprise: '1 business day',
       },
       {
-        name: "Topic search",
+        name: "Community via Discord",
         free: true,
         startup: true,
         team: true,
         enterprise: true,
       },
       {
-        name: "Relative social dominance",
-        free: true,
+        name: "Email",
+        free: false,
         startup: true,
-        team: false,
+        team: true,
+        enterprise: true,
+      },
+      {
+        name: "Private Chat",
+        free: false,
+        startup: false,
+        team: true,
         enterprise: true,
       },
     ],
@@ -118,10 +163,11 @@ export default function PricingSectionCards() {
       <div className="container py-8">
         {/* Comparison table */}
         <div className="">
-          <div className="lg:text-center mb-10 lg:mb-20">
+          <div className="lg:text-center mb-10 lg:mb-12">
             <h3 className="text-2xl font-semibold dark:text-white">
               Compare plans
             </h3>
+            <Button variant={'outline'} size={'lg'} className="mt-3">Contact us</Button>
           </div>
           {/* xs to lg */}
           <Table className="hidden lg:table">
@@ -132,7 +178,7 @@ export default function PricingSectionCards() {
                   Free
                 </TableHead>
                 <TableHead className="w-2/12 text-primary text-lg font-medium text-center">
-                  Startup
+                  Business
                 </TableHead>
                 <TableHead className="w-2/12 text-primary text-lg font-medium text-center">
                   Team
@@ -158,38 +204,46 @@ export default function PricingSectionCards() {
                       <TableCell>{feature.name}</TableCell>
                       <TableCell>
                         <div className="mx-auto w-min">
-                          {feature.free ? (
-                            <IconCheck className="h-5 w-5" />
-                          ) : (
-                            <IconMinus className="h-5 w-5" />
-                          )}
+                          {typeof feature.free === 'string' ?
+                            <div className="text-center">{feature.free}</div>
+                            : feature.free ? (
+                              <IconCircleCheckFilled className="h-5 w-5 text-green-600" />
+                            ) : (
+                              <IconMinus className="h-5 w-5" />
+                            )}
                         </div>
                       </TableCell>
                       <TableCell>
                         <div className="mx-auto w-min">
-                          {feature.startup ? (
-                            <IconCheck className="h-5 w-5" />
-                          ) : (
-                            <IconMinus className="h-5 w-5" />
-                          )}
+                          {typeof feature.startup === 'string' ?
+                            <div className="text-center">{feature.startup}</div>
+                            : feature.startup ? (
+                              <IconCircleCheckFilled className="h-5 w-5 text-green-600" />
+                            ) : (
+                              <IconMinus className="h-5 w-5" />
+                            )}
                         </div>
                       </TableCell>
                       <TableCell>
                         <div className="mx-auto w-min">
-                          {feature.team ? (
-                            <IconCheck className="h-5 w-5" />
-                          ) : (
-                            <IconMinus className="h-5 w-5" />
-                          )}
+                          {typeof feature.team === 'string' ?
+                            <div className="text-center">{feature.team}</div>
+                            : feature.team ? (
+                              <IconCircleCheckFilled className="h-5 w-5 text-green-600" />
+                            ) : (
+                              <IconMinus className="h-5 w-5" />
+                            )}
                         </div>
                       </TableCell>
                       <TableCell>
                         <div className="mx-auto w-min">
-                          {feature.enterprise ? (
-                            <IconCheck className="h-5 w-5" />
-                          ) : (
-                            <IconMinus className="h-5 w-5" />
-                          )}
+                          {typeof feature.enterprise === 'string' ?
+                            <div className="text-center">{feature.enterprise}</div>
+                            : feature.enterprise ? (
+                              <IconCircleCheckFilled className="h-5 w-5 text-green-600" />
+                            ) : (
+                              <IconMinus className="h-5 w-5" />
+                            )}
                         </div>
                       </TableCell>
                     </TableRow>
@@ -228,7 +282,7 @@ export default function PricingSectionCards() {
                         </TableCell>
                         <TableCell className="text-right">
                           {feature.enterprise ? (
-                            <IconCheck className="h-5 w-5" />
+                            <IconCircleCheckFilled className="h-5 w-5 text-green-600" />
                           ) : (
                             <IconMinus className="h-5 w-5" />
                           )}
@@ -267,7 +321,7 @@ export default function PricingSectionCards() {
                         </TableCell>
                         <TableCell className="text-right">
                           {feature.startup ? (
-                            <IconCheck className="h-5 w-5" />
+                            <IconCircleCheckFilled className="h-5 w-5 text-green-600" />
                           ) : (
                             <IconMinus className="h-5 w-5" />
                           )}
@@ -306,7 +360,7 @@ export default function PricingSectionCards() {
                         </TableCell>
                         <TableCell className="text-right">
                           {feature.team ? (
-                            <IconCheck className="h-5 w-5" />
+                            <IconCircleCheckFilled className="h-5 w-5 text-green-600" />
                           ) : (
                             <IconMinus className="h-5 w-5" />
                           )}
@@ -345,7 +399,7 @@ export default function PricingSectionCards() {
                         </TableCell>
                         <TableCell className="text-right">
                           {feature.enterprise ? (
-                            <IconCheck className="h-5 w-5" />
+                            <IconCircleCheckFilled className="h-5 w-5 text-green-600" />
                           ) : (
                             <IconMinus className="h-5 w-5" />
                           )}

@@ -1,5 +1,13 @@
 import { Outlet } from 'react-router-dom'
-import { IconExclamationCircle, IconKey, IconNotification, IconPalette, IconTool, IconUser } from '@tabler/icons-react'
+import {
+  IconExclamationCircle,
+  IconKey, IconLockAccess,
+  IconNotification,
+  IconPalette,
+  IconPassword,
+  IconTool,
+  IconUser,
+} from '@tabler/icons-react'
 import { Search } from '@/components/search'
 import { Separator } from '@/components/ui/separator'
 import ThemeSwitch from '@/components/theme-switch'
@@ -59,6 +67,11 @@ const sidebarNavItems = [
     title: 'Account',
     icon: <IconTool size={18} />,
     href: '/settings/account',
+  },
+  {
+    title: 'Change Password',
+    icon: <IconLockAccess size={18} />,
+    href: '/settings/password',
   },
   {
     title: 'Appearance',

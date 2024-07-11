@@ -137,6 +137,12 @@ const router = createBrowserRouter([
                 }),
               },
               {
+                path: 'password',
+                lazy: async () => ({
+                  Component: (await import('./pages/settings/password')).default,
+                }),
+              },
+              {
                 path: 'notifications',
                 lazy: async () => ({
                   Component: (await import('./pages/settings/notifications'))

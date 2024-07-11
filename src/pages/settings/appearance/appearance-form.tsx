@@ -28,7 +28,7 @@ const listFonts = [
 ]
 
 const appearanceFormSchema = z.object({
-  theme: z.enum(['light', 'dark'], {
+  theme: z.enum(['light', 'dark', 'system'], {
     required_error: 'Please select a theme.',
   }),
   font: z.enum(['ui-sans-serif', ...listFonts], {
@@ -40,13 +40,15 @@ const appearanceFormSchema = z.object({
 type AppearanceFormValues = z.infer<typeof appearanceFormSchema>
 
 // This can come from your database or API.
-const defaultValues: Partial<AppearanceFormValues> = {
-  theme: 'light',
-}
+
 
 export function AppearanceForm() {
   const setting = useSetting()
   const {theme, setTheme} = useTheme()
+  const defaultValues: Partial<AppearanceFormValues> = {
+    theme: theme ?? 'system',
+    font: setting.font,
+  }
   const form = useForm<AppearanceFormValues>({
     resolver: zodResolver(appearanceFormSchema),
     defaultValues,
@@ -54,6 +56,7 @@ export function AppearanceForm() {
 
   function onSubmit(data: AppearanceFormValues) {
     setting.updateSetting(data.font)
+    // @ts-ignore
     setTheme(data.theme)
     toast({
       title: 'You submitted the following values:',
@@ -64,15 +67,6 @@ export function AppearanceForm() {
       ),
     })
   }
-
-  useEffect(() => {
-    console.log(theme)
-    // @ts-ignore
-    if (setting) form.reset({
-      font: setting.font,
-      theme,
-    })
-  }, [])
 
   return (
     <Form {...form}>
