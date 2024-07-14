@@ -8,6 +8,9 @@ export default {
   create(payload: IWorkflowEntity) {
     return BaseRepository.post(`${resource}/`, payload)
   },
+  deleteWf(workflowId: string) {
+    return BaseRepository.delete(`${resource}/${workflowId}`)
+  },
   update(payload: IUpdateWorkflow) {
     return BaseRepository.put(`${resource}/`, payload)
   },

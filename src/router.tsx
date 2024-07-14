@@ -143,6 +143,12 @@ const router = createBrowserRouter([
                 }),
               },
               {
+                path: 'password-reset/:txId',
+                lazy: async () => ({
+                  Component: (await import('./pages/settings/password/change-password-step-2')).default,
+                }),
+              },
+              {
                 path: 'notifications',
                 lazy: async () => ({
                   Component: (await import('./pages/settings/notifications'))

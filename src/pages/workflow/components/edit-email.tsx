@@ -191,8 +191,6 @@ export default function EditEmail({ onClose }: { onClose: () => void }) {
                      ref={emailEditorRef}
                      onReady={onReady}
         />
-
-
       </div>
     </>
   )

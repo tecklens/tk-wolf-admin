@@ -3,7 +3,7 @@ import { ChangePassword } from './change-password.tsx'
 import { useUser } from '@/lib/store/userStore.ts'
 import { Link } from 'react-router-dom'
 
-export default function SettingsAccount() {
+export default function SettingsPassword() {
   const {user} = useUser()
 
   return (

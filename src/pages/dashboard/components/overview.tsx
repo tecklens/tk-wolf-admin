@@ -28,7 +28,7 @@ export function Overview() {
   }, [period])
 
   return (
-    <Card className="col-span-1 lg:col-span-4">
+    <Card className="col-span-1">
       <CardHeader>
         <CardTitle className={'flex justify-between'}>
           <div>Overview (Trigger Api Call)</div>

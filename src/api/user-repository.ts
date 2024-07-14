@@ -23,4 +23,10 @@ export default {
   submitBug(payload: any) {
     return BaseRepository.post(`${resource}/bug/submit`, payload)
   },
+  sendChangePassword() {
+    return BaseRepository.post(`${resource}/send-email-change-pass`)
+  },
+  changePassword(payload: any) {
+    return BaseRepository.post(`${resource}/change-pass`, payload)
+  },
 }
