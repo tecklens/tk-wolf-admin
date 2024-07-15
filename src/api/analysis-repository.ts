@@ -13,6 +13,11 @@ export default {
       params: payload
     })
   },
+  analyseBilling(payload: any) {
+    return BaseRepository.get(`${resource}/analyse/billing`, {
+      params: payload
+    })
+  },
   dashboard(payload: any) {
     return BaseRepository.get(`${resource}/dashboard`, {
       params: payload

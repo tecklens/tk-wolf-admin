@@ -59,8 +59,6 @@ export default function Providers() {
 
   const openDefaultSelectedProvider = throttle(() => {
     const ps = Object.values(providersList).reduce((rlt, v) =>  [...rlt,...v], [])
-    console.log(ps)
-    console.log(ps.find(e => e.providerId === openProviderId), openProviderId)
     setSelectedProvider(ps.find(e => e.providerId === openProviderId))
     setOpenEdit({
       open: true,
