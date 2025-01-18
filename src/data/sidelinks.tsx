@@ -29,19 +29,19 @@ export interface SideLink extends NavLink {
 export const sidelinks: SideLink[] = [
   {
     title: 'Dashboard',
-    label: '',
+    // label: '',
     href: '/',
     icon: <IconLayoutDashboard size={18} />,
   },
   {
     title: 'Workflows',
-    label: '5',
+    // label: '5',
     href: '/workflow',
     icon: <IconHierarchy2 size={18} />,
   },
   {
     title: 'Tasks',
-    label: '3',
+    // label: '3',
     href: '/tasks',
     icon: <IconChecklist size={18} />,
   },
@@ -53,25 +53,25 @@ export const sidelinks: SideLink[] = [
   // },
   {
     title: 'Subscription',
-    label: '',
+    // label: '',
     href: '/subscription',
     icon: <IconUsers size={18} />,
   },
   {
     title: 'Members',
-    label: '',
+    // label: '',
     href: '/members',
     icon: <IconUsersGroup size={18} />,
   },
   {
     title: 'Requests',
-    label: '10',
+    // label: '10',
     href: '/requests',
     icon: <IconRouteAltLeft size={18} />,
     sub: [
       {
         title: 'Log trigger',
-        label: '9',
+        // label: '9',
         href: '/requests/log-trigger',
         icon: <IconTruck size={18} />,
       },
@@ -85,13 +85,13 @@ export const sidelinks: SideLink[] = [
   },
   {
     title: 'Brand',
-    label: '',
+    // label: '',
     href: '/brand',
     icon: <IconBrandMantine size={18} />,
   },
   {
     title: 'Analysis',
-    label: '',
+    // label: '',
     href: '/analysis',
     icon: <IconChartHistogram size={18} />,
   },
